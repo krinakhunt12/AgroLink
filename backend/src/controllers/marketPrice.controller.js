@@ -1,4 +1,5 @@
 import axios from 'axios';
+import logger, { LogCategory } from '../utils/logger.js';
 
 // Base URL for the Market Price API
 const MARKET_PRICE_API_BASE_URL = 'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070';
@@ -16,10 +17,19 @@ export const testApiConnection = async (req, res) => {
             limit: 5
         };
 
-        console.log('Testing API with URL:', MARKET_PRICE_API_BASE_URL);
-        console.log('API Key (first 10 chars):', process.env.MARKET_PRICE_API_KEY?.substring(0, 10));
+        logger.externalApiRequest('MarketPriceAPI', 'GET', MARKET_PRICE_API_BASE_URL, {
+            featureName: 'MarketPrice',
+            endpoint: '/api/market-prices/test',
+            apiKeyPrefix: process.env.MARKET_PRICE_API_KEY?.substring(0, 10)
+        });
 
         const response = await axios.get(MARKET_PRICE_API_BASE_URL, { params });
+
+        logger.externalApiResponse('MarketPriceAPI', 'GET', MARKET_PRICE_API_BASE_URL, response.status, {
+            featureName: 'MarketPrice',
+            endpoint: '/api/market-prices/test',
+            recordsReceived: response.data.records?.length || 0
+        });
 
         res.status(200).json({
             success: true,
@@ -37,7 +47,11 @@ export const testApiConnection = async (req, res) => {
             fullResponse: response.data
         });
     } catch (error) {
-        console.error('API Test Error:', error.message);
+        logger.externalApiError('MarketPriceAPI', 'GET', MARKET_PRICE_API_BASE_URL, error, {
+            featureName: 'MarketPrice',
+            endpoint: '/api/market-prices/test'
+        });
+
         res.status(500).json({
             success: false,
             message: 'API connection failed',
