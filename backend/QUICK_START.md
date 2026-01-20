@@ -52,7 +52,7 @@
 
 3. **Update `.env` file**:
    ```env
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/agrolink
+   MONGODB_URI=your url of mongodb
    ```
    Replace `username`, `password`, and `cluster` with your actual values
 
