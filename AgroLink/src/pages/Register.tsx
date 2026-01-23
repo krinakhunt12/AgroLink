@@ -9,9 +9,10 @@ import { useToast } from '../components/Toast';
 
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { GoogleLoginButton } from '../components/Login/GoogleLoginButton';
 
 const Register: React.FC = () => {
-  const { t } = useTranslation(['auth', 'common', 'errors']);
+  const { t, i18n } = useTranslation(['auth', 'common', 'errors']);
   const { register, isRegisterLoading } = useAuth();
   const { showToast } = useToast();
   const [userType, setUserType] = useState<UserType>(UserType.FARMER);
@@ -65,7 +66,8 @@ const Register: React.FC = () => {
       phone: formData.phone,
       password: formData.password,
       userType: userType,
-      location: formData.location || t('errors:register.defaultLocation')
+      location: formData.location || t('errors:register.defaultLocation'),
+      language: i18n.language
     });
   };
 
@@ -182,6 +184,14 @@ const Register: React.FC = () => {
                 {t('auth.registerBtn')}
               </Button>
 
+              <div className="relative flex items-center py-4">
+                <div className="flex-grow border-t border-border-base"></div>
+                <span className="flex-shrink-0 mx-4 text-text-muted text-sm font-bold uppercase tracking-widest">OR</span>
+                <div className="flex-grow border-t border-border-base"></div>
+              </div>
+
+              <GoogleLoginButton userType={userType} text={t('auth.googleRegister')} />
+
               <div className="text-center pt-2">
                 <p className="text-text-muted font-bold text-base">
                   {t('auth.haveAccount')}{' '}
@@ -196,7 +206,7 @@ const Register: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

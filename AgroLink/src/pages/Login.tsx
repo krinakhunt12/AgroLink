@@ -8,6 +8,7 @@ import { useToast } from '../components/Toast';
 
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { GoogleLoginButton } from '../components/Login/GoogleLoginButton';
 
 const Login: React.FC = () => {
   const { t } = useTranslation(['auth', 'common', 'errors']);
@@ -148,6 +149,14 @@ const Login: React.FC = () => {
             >
               <LogIn className="mr-3 w-6 h-6" /> {t('auth.loginBtn')}
             </Button>
+
+            <div className="relative flex items-center py-4">
+              <div className="flex-grow border-t border-border-base"></div>
+              <span className="flex-shrink-0 mx-4 text-text-muted text-sm font-bold uppercase tracking-widest">OR</span>
+              <div className="flex-grow border-t border-border-base"></div>
+            </div>
+
+            <GoogleLoginButton />
           </form>
         </div>
       </div>

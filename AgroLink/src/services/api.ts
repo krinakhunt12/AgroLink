@@ -37,6 +37,7 @@ export const authAPI = {
         password: string;
         userType: 'farmer' | 'buyer';
         location: string;
+        language?: string;
     }) => {
         const data = await apiRequest('/auth/register', {
             method: 'POST',
@@ -66,6 +67,22 @@ export const authAPI = {
         }
 
         return data;
+    },
+
+    // Google Login
+    googleLogin: async (data: { token: string; userType?: 'farmer' | 'buyer' }) => {
+        const response = await apiRequest('/auth/google', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+
+        // Save token to localStorage
+        if (response.token) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(response.user));
+        }
+
+        return response;
     },
 
     // Get current user

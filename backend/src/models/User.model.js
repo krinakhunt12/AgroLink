@@ -10,15 +10,29 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, 'Phone number is required'],
         unique: true,
+        sparse: true, // Allow null/undefined to be unique (if multiple google users don't have phone)
         match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
+    },
+    email: {
+        type: String,
+        unique: true,
+        sparse: true,
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
         minlength: [6, 'Password must be at least 6 characters'],
-        select: false // Don't return password by default
+        select: false
+    },
+    googleId: {
+        type: String,
+        select: false
+    },
+    loginMethod: {
+        type: String,
+        enum: ['manual', 'google'],
+        default: 'manual'
     },
     userType: {
         type: String,
@@ -27,7 +41,7 @@ const userSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        required: [true, 'Location is required']
+        default: 'Not Specified'
     },
     isVerified: {
         type: Boolean,
@@ -58,8 +72,8 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        next();
+    if (!this.isModified('password') || !this.password) {
+        return next();
     }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
