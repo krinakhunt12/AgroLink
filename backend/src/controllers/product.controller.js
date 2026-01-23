@@ -86,9 +86,11 @@ export const createProduct = async (req, res, next) => {
         req.body.farmerName = req.user.name;
         req.body.location = req.user.location;
 
-        // Handle image upload if present
+        // Handle image upload - convert to base64
         if (req.file) {
-            req.body.image = `/uploads/${req.file.filename}`;
+            const base64Image = req.file.buffer.toString('base64');
+            const mimeType = req.file.mimetype;
+            req.body.image = `data:${mimeType};base64,${base64Image}`;
         }
 
         const product = await Product.create(req.body);
@@ -124,9 +126,11 @@ export const updateProduct = async (req, res, next) => {
             });
         }
 
-        // Handle image upload if present
+        // Handle image upload - convert to base64
         if (req.file) {
-            req.body.image = `/uploads/${req.file.filename}`;
+            const base64Image = req.file.buffer.toString('base64');
+            const mimeType = req.file.mimetype;
+            req.body.image = `data:${mimeType};base64,${base64Image}`;
         }
 
         product = await Product.findByIdAndUpdate(req.params.id, req.body, {
