@@ -1,37 +1,72 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-    MOCK_SCHEMES,
-    MOCK_NEWS,
-    MOCK_WEATHER,
-    MOCK_VIDEOS,
-    MARKET_RATES_TICKER,
-    SEO_KEYWORDS
-} from '../constants';
+import { useQuery } from '@tanstack/react-query';
+import { homeService } from '../services/home-service';
+import { SEO_KEYWORDS } from '../constants';
+import AppLogger, { Category } from '../utils/logger';
 
 /**
  * Custom hook for Home page business logic
- * Separates data fetching and state management from UI
+ * Follows hooks-driven design and thin UI principles.
+ * Orchestrates data from multiple TanStack Query hooks.
  */
 export const useHome = () => {
     const { t } = useTranslation();
 
-    // Memoize static data to prevent unnecessary re-renders
-    const stats = useMemo(() => ([
-        { value: '50k+', label: t('stats.farmers'), icon: 'Users' },
-        { value: '10k+', label: t('stats.products'), icon: 'ShoppingBag' },
-        { value: '1.2k+', label: t('stats.villages'), icon: 'MapPin' },
-        { value: '₹5 Cr+', label: t('stats.revenue'), icon: 'IndianRupee' },
-    ]), [t]);
+    // 1. Fetching data using TanStack Query
+    const statsQuery = useQuery({
+        queryKey: ['home', 'stats'],
+        queryFn: () => homeService.getStats()
+    });
 
-    const categories = useMemo(() => ([
-        { name: t('categories.items.grains'), icon: 'Wheat', color: 'bg-amber-100 text-amber-700' },
-        { name: t('categories.items.vegetables'), icon: 'Sprout', color: 'bg-green-100 text-green-700' },
-        { name: t('categories.items.pulses'), icon: 'CheckCircle', color: 'bg-orange-100 text-orange-700' },
-        { name: t('categories.items.spices'), icon: 'TrendingUp', color: 'bg-red-100 text-red-700' },
-        { name: t('categories.items.fruits'), icon: 'Sprout', color: 'bg-pink-100 text-pink-700' },
-        { name: t('categories.items.organic'), icon: 'HeartHandshake', color: 'bg-emerald-100 text-emerald-700' },
-    ]), [t]);
+    const categoriesQuery = useQuery({
+        queryKey: ['home', 'categories'],
+        queryFn: () => homeService.getCategories()
+    });
+
+    const weatherQuery = useQuery({
+        queryKey: ['home', 'weather'],
+        queryFn: () => homeService.getWeather()
+    });
+
+    const schemesQuery = useQuery({
+        queryKey: ['home', 'schemes'],
+        queryFn: () => homeService.getSchemes()
+    });
+
+    const newsQuery = useQuery({
+        queryKey: ['home', 'news'],
+        queryFn: () => homeService.getNews()
+    });
+
+    const videosQuery = useQuery({
+        queryKey: ['home', 'videos'],
+        queryFn: () => homeService.getVideos()
+    });
+
+    const marketRatesQuery = useQuery({
+        queryKey: ['home', 'marketRates'],
+        queryFn: () => homeService.getMarketRates()
+    });
+
+    // 2. Data Transformations (Pure logic)
+    const stats = useMemo(() => {
+        const data = statsQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((s: any) => ({
+            ...s,
+            label: t(s.labelKey)
+        }));
+    }, [statsQuery.data, t]);
+
+    const categories = useMemo(() => {
+        const data = categoriesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((c: any) => ({
+            ...c,
+            name: t(c.nameKey)
+        }));
+    }, [categoriesQuery.data, t]);
 
     const liveFeatures = useMemo(() => ([
         { title: t('liveFeatures.livePrice'), desc: t('liveFeatures.livePriceDesc') },
@@ -39,21 +74,6 @@ export const useHome = () => {
         { title: t('liveFeatures.securePay'), desc: t('liveFeatures.securePayDesc') },
         { title: t('liveFeatures.auction'), desc: t('liveFeatures.auctionDesc') }
     ]), [t]);
-
-    const weatherData = useMemo(() => MOCK_WEATHER, []);
-    const schemes = useMemo(() => MOCK_SCHEMES, []);
-    const news = useMemo(() => MOCK_NEWS, []);
-    const videos = useMemo(() => MOCK_VIDEOS, []);
-    const marketRates = useMemo(() => MARKET_RATES_TICKER.slice(0, 4), []);
-    const seoKeywords = useMemo(() => SEO_KEYWORDS, []);
-
-    const heroContent = useMemo(() => ({
-        tagline: t('hero.tagline'),
-        title: t('hero.title'),
-        subtitle: t('hero.subtitle'),
-        ctaFarmer: t('hero.ctaFarmer'),
-        ctaBuyer: t('hero.ctaBuyer'),
-    }), [t]);
 
     const testimonials = useMemo(() => ([
         {
@@ -70,21 +90,27 @@ export const useHome = () => {
         }
     ]), [t]);
 
-    return {
-        // Translations
-        t,
+    // Log important state transitions
+    useMemo(() => {
+        if (statsQuery.isSuccess) {
+            AppLogger.info(Category.DATA, 'Home page data loaded successfully');
+        }
+    }, [statsQuery.isSuccess]);
 
-        // Data
+    return {
+        t,
         stats,
         categories,
         liveFeatures,
-        weatherData,
-        schemes,
-        news,
-        videos,
-        marketRates,
-        seoKeywords,
-        heroContent,
+        weatherData: Array.isArray(weatherQuery.data) ? weatherQuery.data : [],
+        schemes: Array.isArray(schemesQuery.data) ? schemesQuery.data : [],
+        news: Array.isArray(newsQuery.data) ? newsQuery.data : [],
+        videos: Array.isArray(videosQuery.data) ? videosQuery.data : [],
+        marketRates: Array.isArray(marketRatesQuery.data) ? marketRatesQuery.data : [],
+        seoKeywords: SEO_KEYWORDS,
         testimonials,
+        // Combined loading/error states
+        isLoading: statsQuery.isLoading || categoriesQuery.isLoading || weatherQuery.isLoading,
+        isError: statsQuery.isError || categoriesQuery.isError
     };
 };

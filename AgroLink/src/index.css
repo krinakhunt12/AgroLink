@@ -1,10 +1,109 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand Identity - AgroLink Emerald & Earth Palette */
+  --color-brand-primary: #10b981;
+  /* Emerald 500 */
+  --color-brand-primary-light: #34d399;
+  /* Emerald 400 */
+  --color-brand-primary-dark: #059669;
+  /* Emerald 600 */
+
+  --color-brand-secondary: #78716c;
+  /* Stone 500 */
+
+  /* Layout & Surface Colors */
+  --color-bg-base: #fafaf9;
+  /* Stone 50 */
+  --color-bg-surface: #ffffff;
+  --color-bg-muted: #f5f5f4;
+  /* Stone 100 */
+
+  /* Typography Colors */
+  --color-text-primary: #1c1917;
+  /* Stone 900 */
+  --color-text-secondary: #44403c;
+  /* Stone 800 */
+  --color-text-muted: #78716c;
+  /* Stone 500 */
+  --color-text-on-brand: #ffffff;
+
+  /* Border & Divider Colors */
+  --color-border-base: #e7e5e4;
+  /* Stone 200 */
+  --color-border-subtle: #f5f5f4;
+  /* Stone 100 */
+
+  /* Functional Status Colors */
+  --color-status-success: #10b981;
+  --color-status-error: #ef4444;
+  --color-status-warning: #f59e0b;
+  --color-status-info: #3b82f6;
+
+  /* Enterprise-Grade Visual Tokens */
+  --shadow-theme: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --radius-theme: 0.5rem;
+}
+
+:root {
+  /* Raw CSS variables for direct component consumption if needed */
+  --brand-primary: #10b981;
+  --brand-primary-light: #34d399;
+  --brand-primary-dark: #059669;
+  --brand-secondary: #78716c;
+
+  --bg-base: #fafaf9;
+  --bg-surface: #ffffff;
+  --bg-muted: #f5f5f4;
+
+  --text-primary: #1c1917;
+  --text-secondary: #44403c;
+  --text-muted: #78716c;
+  --text-on-brand: #ffffff;
+
+  --border-base: #e7e5e4;
+  --border-subtle: #f5f5f4;
+
+  --status-success: #10b981;
+  --status-error: #ef4444;
+  --status-warning: #f59e0b;
+  --status-info: #3b82f6;
+
+  --shadow-token: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+}
+
 @layer utilities {
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out forwards;
   }

@@ -8,8 +8,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { CATEGORIES, MARKET_RATES_TICKER } from '../constants';
 import { useMarketplace } from '../hooks/useMarketplace';
-import Button from '../components/ui/Button';
-import { Card, CardContent } from '../components/ui/Card';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
 
 const Marketplace: React.FC = () => {
   const { t } = useTranslation();
@@ -130,7 +130,7 @@ const Marketplace: React.FC = () => {
                       <div className="flex items-center text-gray-400 text-[10px] font-black uppercase tracking-widest mb-4"><MapPin className="w-3 h-3 mr-1" /> {p.location}</div>
 
                       <div className="mb-6 space-y-1">
-                        <p className="text-sm font-bold text-gray-700 flex items-center gap-2"><User size={14} className="text-gray-400" /> {p.farmer?.name || 'ખેડૂત'}</p>
+                        <p className="text-sm font-bold text-gray-700 flex items-center gap-2"><User size={14} className="text-gray-400" /> {p.farmer?.name || t('products:market.farmer')}</p>
                         {p.stock && p.stock < 50 && (
                           <p className="text-[10px] font-black text-red-500 flex items-center gap-1">
                             <Clock size={10} /> {t('market.hurry', { count: p.stock, unit: p.unit.split(' ')[1] })}
@@ -184,7 +184,7 @@ const Marketplace: React.FC = () => {
                     <img src={m.selectedProduct.image} className="w-20 h-20 rounded-2xl object-cover shadow-sm" />
                     <div>
                       <h4 className="font-black text-lg text-gray-900">{m.selectedProduct.name}</h4>
-                      <p className="text-xs text-gray-400 font-black uppercase tracking-widest">{m.selectedProduct.farmer?.name || 'ખેડૂત'}</p>
+                      <p className="text-xs text-gray-400 font-black uppercase tracking-widest">{m.selectedProduct.farmer?.name || t('products:market.farmer')}</p>
                       <p className="text-green-700 font-black mt-1 text-xl">₹{m.selectedProduct.price} <span className="text-[10px] text-gray-400 font-normal">/ {m.selectedProduct.unit}</span></p>
                     </div>
                   </div>

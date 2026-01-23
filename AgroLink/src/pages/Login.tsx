@@ -6,8 +6,11 @@ import { LogIn, Phone, Lock, Sprout, Lightbulb, ArrowLeft, ShieldCheck } from 'l
 import { authAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+
 const Login: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth', 'common', 'errors']);
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -25,13 +28,13 @@ const Login: React.FC = () => {
 
     // Validate form fields
     if (!formData.phone || !formData.password) {
-      showToast('કૃપા કરીને તમામ ફીલ્ડ ભરો', 'error');
+      showToast(t('errors:login.fillAll'), 'error');
       return;
     }
 
     // Validate phone number format (10 digits)
     if (!/^\d{10}$/.test(formData.phone)) {
-      showToast('કૃપા કરીને માન્ય 10 અંકનો ફોન નંબર દાખલ કરો', 'error');
+      showToast(t('errors:login.invalidPhone'), 'error');
       return;
     }
 
@@ -45,7 +48,7 @@ const Login: React.FC = () => {
 
       // Check if login was successful
       if (response.success && response.token && response.user) {
-        showToast(`સ્વાગત છે, ${response.user.name}!`, 'success');
+        showToast(t('errors:login.welcome', { name: response.user.name }), 'success');
 
         // Small delay to show success message before navigation
         setTimeout(() => {
@@ -57,20 +60,20 @@ const Login: React.FC = () => {
           }
         }, 500);
       } else {
-        throw new Error('લોગિન પ્રતિસાદ અમાન્ય છે');
+        throw new Error(t('errors:login.invalidResponse'));
       }
     } catch (error: any) {
       console.error('Login error:', error);
 
       // Handle specific error messages
-      let errorMessage = 'લોગિન નિષ્ફળ. કૃપા કરીને ફરીથી પ્રયાસ કરો.';
+      let errorMessage = t('errors:login.failed');
 
       if (error.message.includes('Invalid credentials')) {
-        errorMessage = 'ફોન નંબર અથવા પાસવર્ડ ખોટો છે';
+        errorMessage = t('errors:login.invalidCredentials');
       } else if (error.message.includes('Phone number already registered')) {
-        errorMessage = 'આ ફોન નંબર પહેલેથી જ નોંધાયેલ છે';
+        errorMessage = t('errors:login.alreadyRegistered');
       } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage = 'નેટવર્ક ભૂલ. કૃપા કરીને તમારું કનેક્શન તપાસો.';
+        errorMessage = t('errors:login.networkError');
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -82,90 +85,88 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
       {/* Background Decorative Elements */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-700"></div>
+      <div className="absolute top-0 right-0 w-80 h-80 bg-brand-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-status-warning/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-700"></div>
 
       {/* Floating Back Button */}
-      <Link to="/" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-green-700 font-bold hover:text-green-800 transition-all bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm hover:shadow group">
+      <Link to="/" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-brand-primary font-black hover:text-brand-primary-dark transition-all bg-bg-surface/80 backdrop-blur px-5 py-2.5 rounded-full shadow-theme border border-border-subtle group">
         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
         <span>{t('nav.home')}</span>
       </Link>
 
-      <div className="max-w-4xl w-full bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse relative z-10 border border-white">
+      <div className="max-w-4xl w-full bg-bg-surface rounded-[40px] shadow-theme-lg overflow-hidden flex flex-col md:flex-row-reverse relative z-10 border border-border-subtle">
         {/* Visual Panel */}
-        <div className="bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 text-green-950 md:w-5/12 p-10 flex flex-col justify-between relative">
+        <div className="bg-gradient-to-br from-brand-primary via-brand-primary-dark to-emerald-900 text-text-on-brand md:w-5/12 p-12 flex flex-col justify-between relative">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" /></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
           </div>
 
           <div className="relative z-10">
-            <Link to="/" className="flex items-center gap-2 mb-10 text-green-950 hover:scale-105 transition-transform w-fit">
-              <div className="bg-white p-2 rounded-2xl shadow-lg">
-                <Sprout size={32} className="text-green-700" />
-              </div>
-              <span className="font-black text-2xl tracking-tighter">ખેડૂત સેતુ</span>
+            <Link to="/" className="flex items-center gap-3 mb-12 text-white hover:scale-105 transition-transform w-fit bg-white/10 p-4 rounded-[24px] backdrop-blur-sm border border-white/10">
+              <Sprout size={32} className="text-status-warning" />
+              <span className="font-black text-2xl tracking-tighter">{t('common:brand')}</span>
             </Link>
 
             <div className="space-y-6">
-              <div className="bg-white/30 backdrop-blur-md p-6 rounded-3xl border border-white/40 shadow-sm">
-                <h3 className="flex items-center gap-2 font-black text-lg mb-2">
-                  <Lightbulb className="text-green-950" /> {t('loginInfo.title')}
+              <div className="bg-white/10 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-inner">
+                <h3 className="flex items-center gap-3 font-black text-xl mb-3">
+                  <Lightbulb className="text-status-warning" /> {t('loginInfo.title')}
                 </h3>
-                <p className="font-medium text-sm leading-relaxed opacity-90">{t('loginInfo.tip')}</p>
+                <p className="font-medium text-sm leading-relaxed text-white/80">{t('loginInfo.tip')}</p>
               </div>
 
-              <div className="flex items-center gap-3 text-green-950/70 font-bold text-xs uppercase tracking-widest pl-4">
-                <ShieldCheck size={16} /> 100% સુરક્ષિત અને વેરિફાઈડ
+              <div className="flex items-center gap-3 text-white/50 font-black text-[10px] uppercase tracking-[0.2em] pl-4">
+                <ShieldCheck size={16} className="text-status-success" /> 100% {t('products:market.verified')}
               </div>
             </div>
           </div>
 
           <div className="relative z-10 mt-10">
-            <p className="text-[10px] font-black uppercase tracking-widest text-green-950/40">© 2024 Khedut Setu</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">© 2024 AGROLINK</p>
           </div>
         </div>
 
         {/* Form Panel */}
-        <div className="md:w-7/12 p-8 md:p-14">
+        <div className="md:w-7/12 p-8 md:p-16">
           <div className="mb-12">
-            <h2 className="text-4xl font-black text-gray-900 tracking-tight">{t('auth.loginTitle')}</h2>
-            <p className="mt-3 text-gray-500 font-medium">
+            <h2 className="text-5xl font-black text-text-primary tracking-tight leading-tight">{t('auth.loginTitle')}</h2>
+            <p className="mt-4 text-text-secondary font-bold text-lg">
               {t('auth.noAccount')}{' '}
-              <Link to="/register" className="font-bold text-green-700 hover:text-green-800 underline underline-offset-4 decoration-2">{t('auth.registerLink')}</Link>
+              <Link to="/register" className="font-black text-brand-primary hover:text-brand-primary-dark underline underline-offset-8 decoration-4">{t('auth.registerLink')}</Link>
             </p>
           </div>
 
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="space-y-6">
               <div className="group">
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-2 group-focus-within:text-green-600 transition-colors">{t('auth.phone')}</label>
+                <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 ml-2 group-focus-within:text-brand-primary transition-colors">{t('auth.phone')}</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-green-600"><Phone size={18} /></div>
-                  <input
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-colors group-focus-within:text-brand-primary z-10"><Phone size={20} /></div>
+                  <Input
                     name="phone"
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl text-gray-900 font-bold focus:outline-none focus:border-green-500 focus:bg-white transition-all placeholder:font-medium"
+                    className="pl-14 py-8 bg-bg-muted/30 border-2 border-border-subtle rounded-[20px] text-text-primary font-black text-lg focus:bg-bg-surface transition-all placeholder:text-text-muted/50"
                     placeholder="9876543210"
                   />
                 </div>
               </div>
 
               <div className="group">
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-2 group-focus-within:text-green-600 transition-colors">{t('auth.password')}</label>
+                <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 ml-2 group-focus-within:text-brand-primary transition-colors">{t('auth.password')}</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-green-600"><Lock size={18} /></div>
-                  <input
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-colors group-focus-within:text-brand-primary z-10"><Lock size={20} /></div>
+                  <Input
                     name="password"
                     type="password"
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl text-gray-900 font-bold focus:outline-none focus:border-green-500 focus:bg-white transition-all placeholder:font-medium"
+                    className="pl-14 py-8 bg-bg-muted/30 border-2 border-border-subtle rounded-[20px] text-text-primary font-black text-lg focus:bg-bg-surface transition-all placeholder:text-text-muted/50"
                     placeholder="********"
                   />
                 </div>
@@ -174,23 +175,20 @@ const Login: React.FC = () => {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center cursor-pointer group">
-                <input type="checkbox" className="w-5 h-5 rounded-lg text-green-600 focus:ring-green-500 border-gray-300 bg-gray-50" />
-                <span className="ml-2 text-sm text-gray-500 font-bold group-hover:text-gray-900 transition-colors">{t('auth.rememberMe')}</span>
+                <input type="checkbox" className="w-5 h-5 rounded-lg text-brand-primary focus:ring-brand-primary border-border-subtle bg-bg-muted" />
+                <span className="ml-3 text-sm text-text-muted font-black uppercase tracking-wider group-hover:text-text-primary transition-colors">{t('auth.rememberMe')}</span>
               </label>
-              <a href="#" className="text-sm font-bold text-green-700 hover:text-green-800 hover:underline">{t('auth.forgotPassword')}</a>
+              <a href="#" className="text-sm font-black text-brand-primary hover:text-brand-primary-dark uppercase tracking-widest">{t('auth.forgotPassword')}</a>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-5 px-4 bg-green-700 hover:bg-green-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-green-700/20 transition-all active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
+              isLoading={loading}
+              className="w-full h-auto py-6 bg-brand-primary hover:bg-brand-primary-dark text-white rounded-[20px] font-black text-xl shadow-xl shadow-brand-primary/20 transition-all hover:-translate-y-1 active:scale-95"
             >
-              {loading ? (
-                <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-              ) : (
-                <span className="flex items-center gap-2"><LogIn size={20} /> {t('auth.loginBtn')}</span>
-              )}
-            </button>
+              <LogIn className="mr-3 w-6 h-6" /> {t('auth.loginBtn')}
+            </Button>
           </form>
         </div>
       </div>

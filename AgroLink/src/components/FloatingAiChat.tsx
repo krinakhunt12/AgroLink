@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User, Sprout, X, MessageCircle, ChevronDown, Sparkles, ExternalLink } from 'lucide-react';
+import { Send, Bot, User, Sprout, X, MessageCircle, ChevronDown, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getAgriculturalAdvice } from '../services/geminiService';
 import type { ChatMessage } from '../types';
-import { SUGGESTED_QUESTIONS } from '../constants';
 
 interface DetailedMessage extends ChatMessage {
   sources?: any[];
@@ -24,7 +23,7 @@ const FloatingAiChat: React.FC = () => {
       setMessages([
         {
           id: '1',
-          text: "રામ રામ! હું તમારો ખેતી મદદનીશ છું. તમને શેની માહિતી જોઈએ છે?",
+          text: t('ai.welcome'),
           sender: 'ai',
           timestamp: new Date()
         }
@@ -82,17 +81,17 @@ const FloatingAiChat: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
       {isOpen && (
-        <div className="pointer-events-auto bg-white rounded-3xl shadow-2xl w-[90vw] md:w-96 h-[500px] max-h-[80vh] flex flex-col overflow-hidden border border-gray-100 mb-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
-          <div className="bg-gradient-to-r from-green-700 to-emerald-700 p-4 text-white flex justify-between items-center shadow-lg">
+        <div className="pointer-events-auto bg-bg-surface rounded-3xl shadow-theme w-[90vw] md:w-96 h-[500px] max-h-[80vh] flex flex-col overflow-hidden border border-border-subtle mb-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className="bg-brand-primary p-4 text-text-on-brand flex justify-between items-center shadow-theme">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md">
                 <Bot size={20} />
               </div>
               <div>
                 <h3 className="font-bold text-sm tracking-tight">{t('ai.title')}</h3>
-                <p className="text-[10px] text-green-100 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                  ગૂગલ સર્ચ ચાલુ છે
+                <p className="text-[10px] text-text-on-brand/80 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-status-success rounded-full animate-pulse"></span>
+                  {t('ai.liveSearch')}
                 </p>
               </div>
             </div>
@@ -101,21 +100,21 @@ const FloatingAiChat: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 bg-stone-50 space-y-4 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 bg-bg-base space-y-4 custom-scrollbar">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`flex items-end max-w-[85%] gap-2 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-[10px] ${msg.sender === 'user' ? 'bg-indigo-600 text-white' : 'bg-green-700 text-white'}`}>
+                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-[10px] ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand' : 'bg-brand-primary text-text-on-brand'}`}>
                     {msg.sender === 'user' ? <User size={12} /> : <Sprout size={12} />}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <div className={`px-4 py-2.5 text-xs rounded-2xl shadow-sm ${msg.sender === 'user' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white text-gray-800 rounded-bl-none border border-gray-100'}`}>
+                    <div className={`px-4 py-2.5 text-xs rounded-2xl shadow-theme ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand rounded-br-none' : 'bg-bg-surface text-text-secondary rounded-bl-none border border-border-subtle'}`}>
                       <p className="whitespace-pre-wrap">{msg.text}</p>
                       {msg.sources && msg.sources.length > 0 && (
-                        <div className="mt-3 pt-2 border-t border-gray-100 flex flex-wrap gap-1">
+                        <div className="mt-3 pt-2 border-t border-border-subtle flex flex-wrap gap-1">
                           {msg.sources.map((chunk: any, i: number) => chunk.web && (
-                            <a key={i} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-green-700 font-bold bg-green-50 px-1.5 py-0.5 rounded border border-green-100 flex items-center gap-1">
-                              સ્ત્રોત <ExternalLink size={8} />
+                            <a key={i} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-brand-primary font-bold bg-brand-primary/10 px-1.5 py-0.5 rounded border border-brand-primary/20 flex items-center gap-1">
+                              {t('ai.source')} <ExternalLink size={8} />
                             </a>
                           ))}
                         </div>
@@ -128,34 +127,47 @@ const FloatingAiChat: React.FC = () => {
             {loading && (
               <div className="flex justify-start">
                 <div className="flex items-end gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-green-700 flex items-center justify-center text-white">
+                  <div className="w-6 h-6 rounded-lg bg-brand-primary flex items-center justify-center text-text-on-brand">
                     <Bot size={12} />
                   </div>
-                  <div className="bg-white p-3 rounded-2xl rounded-bl-none border border-gray-100 shadow-sm flex gap-1">
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                    <div className="w-1.5 h-1.5 bg-green-600 rounded-full animate-bounce"></div>
+                  <div className="bg-bg-surface p-3 rounded-2xl rounded-bl-none border border-border-subtle shadow-theme flex gap-1">
+                    <div className="w-1.5 h-1.5 bg-brand-primary-light rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="w-1.5 h-1.5 bg-brand-primary-dark rounded-full animate-bounce"></div>
                   </div>
                 </div>
+              </div>
+            )}
+            {messages.length === 1 && !loading && (
+              <div className="mb-4 flex flex-wrap gap-2 px-2">
+                {(t('ai.suggestedQuestions', { returnObjects: true }) as string[]).map((q, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(q)}
+                    className="text-[10px] bg-brand-primary/10 text-brand-primary font-bold px-3 py-2 rounded-2xl border border-brand-primary/20 hover:bg-brand-primary hover:text-white transition-all shadow-sm"
+                  >
+                    {q}
+                  </button>
+                ))}
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 bg-white border-t border-gray-100">
-            <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-3xl border border-gray-200 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-50 transition-all shadow-inner">
+          <div className="p-4 bg-bg-surface border-t border-border-subtle">
+            <div className="flex items-center gap-2 bg-bg-muted p-1.5 rounded-3xl border border-border-base focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/10 transition-all shadow-inner">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="તમારો પ્રશ્ન..."
+                placeholder={t('ai.placeholder')}
                 className="flex-1 bg-transparent px-3 text-xs focus:outline-none min-w-0 font-medium"
               />
               <button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || loading}
-                className="p-2.5 bg-green-700 text-white rounded-full hover:bg-green-800 disabled:opacity-50 transition shadow-lg"
+                className="p-2.5 bg-brand-primary text-text-on-brand rounded-full hover:bg-brand-primary-dark disabled:opacity-50 transition shadow-theme"
               >
                 <Send size={14} />
               </button>

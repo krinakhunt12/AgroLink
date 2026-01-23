@@ -2,12 +2,12 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusCircle, Package, MessageSquare, Sparkles, Check, X, Camera, IndianRupee, ExternalLink, Loader2, Trash2 } from 'lucide-react';
 import { useFarmerDashboard } from '../hooks/useFarmerDashboard';
-import Button from '../components/ui/Button';
-import { Card, CardHeader } from '../components/ui/Card';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader } from '../components/ui/card';
 import { CATEGORIES } from '../constants';
 
 const FarmerDashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['dashboard', 'common', 'products']);
   const d = useFarmerDashboard();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +42,7 @@ const FarmerDashboard: React.FC = () => {
               </div>
             ) : d.listings.length === 0 ? (
               <Card className="p-12 text-center">
-                <p className="text-gray-400 font-bold">કોઈ સક્રિય જાહેરાતો નથી.</p>
+                <p className="text-gray-400 font-bold">{t('dashboard.noListings')}</p>
               </Card>
             ) : (
               d.listings.map((item) => (
@@ -77,14 +77,14 @@ const FarmerDashboard: React.FC = () => {
             </h2>
             <Card className="p-8">
               {d.bids.length === 0 ? (
-                <p className="text-gray-400 font-bold text-center py-4">કોઈ બિડ મળી નથી.</p>
+                <p className="text-gray-400 font-bold text-center py-4">{t('dashboard.noBids')}</p>
               ) : (
                 <div className="space-y-8">
                   {d.bids.map((bid) => (
                     <div key={bid._id} className="border-b border-gray-50 pb-6 last:border-0 last:pb-0">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <p className="font-black text-gray-900">{bid.buyer?.name || 'ખરીદનાર'}</p>
+                          <p className="font-black text-gray-900">{bid.buyer?.name || t('dashboard.buyer')}</p>
                           <p className="text-[10px] text-green-600 font-black uppercase tracking-widest">{bid.productName}</p>
                         </div>
                         <div className="text-right">
@@ -215,20 +215,20 @@ const FarmerDashboard: React.FC = () => {
                     value={d.formData.unit}
                     onChange={(e) => d.setFormData({ ...d.formData, unit: e.target.value })}
                   >
-                    <option>પ્રતિ 20 કિલો</option>
-                    <option>પ્રતિ કિલો</option>
-                    <option>પ્રતિ નંગ</option>
+                    <option value="પ્રતિ 20 કિલો">{t('dashboard.form.units.per20kg')}</option>
+                    <option value="પ્રતિ કિલો">{t('dashboard.form.units.perKg')}</option>
+                    <option value="પ્રતિ નંગ">{t('dashboard.form.units.perPiece')}</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">વર્ણન (Description)</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">{t('dashboard.form.description')}</label>
                 <textarea
                   className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-5 py-4 focus:ring-4 ring-green-500/10 focus:border-green-500 focus:bg-white transition-all font-bold min-h-[100px]"
                   value={d.formData.description}
                   onChange={(e) => d.setFormData({ ...d.formData, description: e.target.value })}
-                  placeholder="તમારા પાક વિશે વિગતો લખો..."
+                  placeholder={t('dashboard.form.descriptionPlaceholder')}
                 />
               </div>
 

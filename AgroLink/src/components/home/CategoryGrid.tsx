@@ -26,6 +26,10 @@ const iconMap = {
     HeartHandshake
 };
 
+import { Button } from '../ui/button';
+
+import { Card, CardContent } from '../ui/card';
+
 export const CategoryGrid: React.FC<CategoryGridProps> = React.memo(({
     categories,
     title,
@@ -33,33 +37,33 @@ export const CategoryGrid: React.FC<CategoryGridProps> = React.memo(({
     viewAllText
 }) => {
     return (
-        <section className="py-16 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-end mb-10 border-b border-gray-100 pb-4">
-                    <div>
-                        <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
-                        <p className="text-gray-500 mt-2">{subtitle}</p>
+        <section className="py-24 bg-bg-surface">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-16 pb-8 border-b border-border-subtle/50">
+                    <div className="text-center sm:text-left">
+                        <h2 className="text-4xl font-black text-text-primary tracking-tight">{title}</h2>
+                        <p className="text-text-secondary mt-3 font-medium text-lg">{subtitle}</p>
                     </div>
-                    <Link
-                        to="/market"
-                        className="hidden sm:flex items-center text-green-700 font-bold hover:text-green-800 transition bg-green-50 px-4 py-2 rounded-full"
-                    >
-                        {viewAllText} <ArrowRight className="ml-1 w-5 h-5" />
-                    </Link>
+                    <Button asChild variant="ghost" className="hidden sm:flex bg-brand-primary/5 hover:bg-brand-primary/10 text-brand-primary font-black px-8 py-3 rounded-full transition-all hover:-translate-y-1">
+                        <Link to="/market" className="flex items-center gap-2">
+                            {viewAllText} <ArrowRight className="w-5 h-5" />
+                        </Link>
+                    </Button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-8">
                     {categories.map((cat, idx) => {
                         const Icon = iconMap[cat.icon as keyof typeof iconMap];
                         return (
-                            <Link
-                                to="/market"
-                                key={idx}
-                                className="group flex flex-col items-center bg-gray-50 p-6 rounded-2xl transition-all hover:bg-white hover:shadow-xl hover:shadow-gray-200"
-                            >
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${cat.color}`}>
-                                    {Icon && <Icon size={30} />}
-                                </div>
-                                <h3 className="font-bold text-gray-800 text-center">{cat.name}</h3>
+                            <Link to="/market" key={idx} className="block group">
+                                <Card className="h-full border-none shadow-theme-sm transition-all duration-500 group-hover:shadow-theme-lg group-hover:-translate-y-2 bg-bg-base/50 group-hover:bg-bg-base overflow-hidden relative">
+                                    <div className={`absolute top-0 left-0 w-1.5 h-full ${cat.color} opacity-80`} />
+                                    <CardContent className="flex flex-col items-center justify-center p-10">
+                                        <div className={`w-20 h-20 rounded-[28px] flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 bg-white shadow-theme-sm group-hover:shadow-theme`}>
+                                            {Icon && <Icon size={36} className={`${cat.color.replace('bg-', 'text-').replace('/20', '')}`} />}
+                                        </div>
+                                        <h3 className="font-black text-text-primary text-center text-lg tracking-tight group-hover:text-brand-primary transition-colors">{cat.name}</h3>
+                                    </CardContent>
+                                </Card>
                             </Link>
                         );
                     })}

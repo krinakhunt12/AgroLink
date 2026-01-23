@@ -7,9 +7,9 @@ interface MarketRateRowProps {
 
 export const MarketRateRow: React.FC<MarketRateRowProps> = ({ label, value }) => {
     return (
-        <div className="flex justify-between items-center bg-gray-50/50 p-4 rounded-xl border border-gray-100/50 transition-colors hover:bg-gray-50 text-stone-700">
-            <span className="font-medium text-stone-600 tracking-tight">{label}</span>
-            <span className="font-bold text-emerald-700 tabular-nums">{value}</span>
+        <div className="flex justify-between items-center bg-bg-muted/50 p-5 rounded-2xl border border-border-subtle/30 transition-all hover:bg-bg-muted hover:border-brand-primary/20 group">
+            <span className="font-bold text-text-secondary tracking-tight group-hover:text-text-primary transition-colors">{label}</span>
+            <span className="font-black text-status-success tabular-nums text-lg">{value}</span>
         </div>
     );
 };

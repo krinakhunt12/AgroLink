@@ -8,21 +8,25 @@ interface LiveUpdatesCardProps {
     rates: string[];
 }
 
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../ui/card';
+
 export const LiveUpdatesCard: React.FC<LiveUpdatesCardProps> = ({ title, liveLabel, rates }) => {
     return (
-        <div className="bg-white text-gray-900 rounded-3xl overflow-hidden shadow-sm border border-stone-100 flex flex-col h-full">
-            <div className="bg-stone-50/80 backdrop-blur-sm p-5 border-b border-stone-100 flex justify-between items-center">
-                <span className="font-bold text-lg flex items-center gap-2 text-stone-800">
-                    <TrendingUp className="text-emerald-600 w-5 h-5" />
+        <Card className="bg-bg-surface text-text-primary rounded-[32px] overflow-hidden shadow-theme-lg border-none flex flex-col h-full">
+            <CardHeader className="bg-bg-muted/30 backdrop-blur-sm p-6 border-b border-border-subtle flex flex-row justify-between items-center space-y-0">
+                <CardTitle className="font-extrabold text-xl flex items-center gap-3 text-text-primary">
+                    <div className="p-2 bg-brand-primary/10 rounded-xl">
+                        <TrendingUp className="text-brand-primary w-6 h-6" />
+                    </div>
                     {title}
-                </span>
-                <span className="flex items-center gap-1.5 text-red-500 text-xs font-bold tracking-wider uppercase">
-                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </CardTitle>
+                <span className="flex items-center gap-2 text-status-error text-[10px] font-black tracking-widest uppercase bg-status-error/10 px-3 py-1.5 rounded-full">
+                    <span className="w-2 h-2 bg-status-error rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
                     {liveLabel}
                 </span>
-            </div>
+            </CardHeader>
 
-            <div className="p-6 space-y-3 flex-grow">
+            <CardContent className="p-6 space-y-4 flex-grow">
                 {rates.map((rate, i) => {
                     const [label, value] = rate.split(':');
                     return (
@@ -33,11 +37,11 @@ export const LiveUpdatesCard: React.FC<LiveUpdatesCardProps> = ({ title, liveLab
                         />
                     );
                 })}
-            </div>
+            </CardContent>
 
-            <div className="px-6 py-4 bg-stone-50/30 border-t border-stone-50 text-[10px] text-stone-400 font-medium text-center uppercase tracking-widest">
+            <CardFooter className="px-6 py-5 bg-bg-muted/20 border-t border-border-subtle text-[10px] text-text-muted font-black text-center uppercase tracking-[0.2em]">
                 Data refreshed every 5 minutes
-            </div>
-        </div>
+            </CardFooter>
+        </Card>
     );
 };

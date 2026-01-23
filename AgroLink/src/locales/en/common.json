@@ -1,0 +1,247 @@
+{
+    "nav": {
+        "home": "Home",
+        "market": "Marketplace",
+        "advisor": "Agri Advisor",
+        "register": "Registration",
+        "help": "Help",
+        "login": "Login",
+        "signup": "Join Us",
+        "dashboard": "My Farming"
+    },
+    "hero": {
+        "tagline": "Gujarat's #1 Farmer Marketplace",
+        "title": "Direct from Farmer to Buyer. No Middlemen, Just Profit!",
+        "subtitle": "Farmers get the right price for their hard work, and buyers get fresh farm produce. 'Khedut Setu' means Farmer's Trust.",
+        "ctaFarmer": "Join as Farmer",
+        "ctaBuyer": "Join as Buyer",
+        "learnMore": "How it works?",
+        "slides": [
+            {
+                "title": "Direct trade from Farmer to Customer. No middlemen, full profit!",
+                "subtitle": "Farmers get the right price for their hard work and customers get farm-fresh produce.",
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop"
+            },
+            {
+                "title": "Smart Technology for Modern Farming",
+                "subtitle": "Take advantage of AI-based insights to improve your crop yield and farm management.",
+                "image": "https://images.unsplash.com/photo-1586771107445-d3ec9473d0f7?q=80&w=2000&auto=format&fit=crop"
+            },
+            {
+                "title": "Fresh Crops Directly from Harvest",
+                "subtitle": "Get a wide variety of grains, fruits, and vegetables at the best market prices.",
+                "image": "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2000&auto=format&fit=crop"
+            },
+            {
+                "title": "Empowering Farmers with Modern Tools",
+                "subtitle": "Join over 50,000 farmers using our platform to grow your business.",
+                "image": "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=2000&auto=format&fit=crop"
+            }
+        ]
+    },
+    "stats": {
+        "farmers": "Farmers Joined",
+        "products": "Total Products",
+        "villages": "Villages Covered",
+        "revenue": "Total Trade"
+    },
+    "weather": {
+        "title": "Agri Weather",
+        "subtitle": "Temperature and rainfall forecast for your area",
+        "liveUpdates": "Live Updates"
+    },
+    "videos": {
+        "title": "Smart Farming Videos",
+        "subtitle": "Learn from experts and increase production",
+        "watch": "Watch",
+        "viewAll": "View All Videos"
+    },
+    "download": {
+        "title": "Download Khedut Setu Mobile App",
+        "subtitle": "Market in your pocket. Anytime, anywhere.",
+        "btn": "Download Now"
+    },
+    "schemes": {
+        "title": "Useful Government Schemes",
+        "subtitle": "Your right, your government - Know and benefit",
+        "viewDetails": "View Details"
+    },
+    "news": {
+        "title": "Agri News & Updates",
+        "subtitle": "Latest information for agricultural progress",
+        "readMore": "Read More",
+        "viewAll": "View All News",
+        "share": "Share",
+        "close": "Close",
+        "source": "Source",
+        "market": "Market",
+        "weather": "Weather",
+        "government": "Government",
+        "technology": "Technology",
+        "policy": "Policy",
+        "categories": {
+            "all": "All",
+            "market": "Market",
+            "weather": "Weather",
+            "government": "Government",
+            "technology": "Technology",
+            "policy": "Policy"
+        }
+    },
+    "benefits": {
+        "title": "Why our platform is the best?",
+        "items": {
+            "directTrade": "Direct Trade",
+            "directTradeDesc": "No middlemen (brokers), direct profit to the farmer.",
+            "fairPrice": "Fair Price",
+            "fairPriceDesc": "More returns than the market, cheaper for the buyer.",
+            "freshProduce": "Freshness & Purity",
+            "freshProduceDesc": "Pesticide-free and direct from farm to kitchen.",
+            "securePayment": "Secure Payment",
+            "securePaymentDesc": "100% secure payment, money after delivery."
+        }
+    },
+    "liveFeatures": {
+        "title": "Modern Smart Farming Features",
+        "livePrice": "Live Price & Market Rates",
+        "livePriceDesc": "Know daily market prices of all APMCs of Gujarat.",
+        "gpsSearch": "GPS Based Search",
+        "gpsSearchDesc": "Find farmers and buyers around you on the map.",
+        "securePay": "Secure Payment",
+        "securePayDesc": "Your money stays safe in Escrow account.",
+        "auction": "Live Auction",
+        "auctionDesc": "Auction your crops and get the best bids.",
+        "liveUpdates": "Live Market Price",
+        "liveIndicator": "LIVE"
+    },
+    "testimonials": {
+        "title": "What Farmers & Buyers Say?",
+        "subtitle": "Stories of trust and satisfaction",
+        "farmerName": "Rameshbhai Patel",
+        "farmerRole": "Farmer, Junagadh",
+        "farmerQuote": "Earlier I used to get low prices in market yards. Through Khedut Setu, I sold my mangoes directly in Ahmedabad and earned 20% more profit.",
+        "buyerName": "Minaben Shah",
+        "buyerRole": "Housewife, Ahmedabad",
+        "buyerQuote": "I get pure and fresh vegetables sitting at home. Cheaper than the market and quality is also absolutely best. Farmers' hard work reaches us directly."
+    },
+    "ctaFinal": {
+        "title": "Register for free today and get benefits!",
+        "subtitle": "Join the large family of over 50,000 farmers and customers.",
+        "startBtn": "Start Now",
+        "marketBtn": "View Market"
+    },
+    "footer": {
+        "description": "Khedut Setu is India's largest digital agri-market. Our aim is to make farmers self-reliant and provide pure food to customers.",
+        "linksTitle": "Quick Links",
+        "terms": "Terms & Conditions",
+        "privacy": "Privacy Policy",
+        "security": "Payment Security",
+        "faq": "FAQ",
+        "about": "About Us",
+        "contactTitle": "Contact Us",
+        "rights": "© 2024 Khedut Setu. All rights reserved.",
+        "popularSearches": "Popular Searches"
+    },
+    "help": {
+        "title": "Help Center",
+        "faqTitle": "Frequently Asked Questions (FAQ)",
+        "contactTitle": "Contact Us",
+        "safetyTitle": "Safety Tips",
+        "safetyDesc": "Things to keep in mind while trading online",
+        "tips": [
+            "Never share your OTP or password with anyone.",
+            "Accept delivery only after checking quality.",
+            "Always pay through the app for safety.",
+            "Report immediately if any suspicious farmer or buyer is found."
+        ],
+        "formName": "Your Name",
+        "formMsg": "Your message...",
+        "sendBtn": "Send Message",
+        "helpline": "Helpline",
+        "emailSupport": "Email Support",
+        "hours": "Mon-Sat (9 AM to 6 PM)",
+        "response": "Answer will be received in 24 hours",
+        "faq1": "Is registration free for farmers?",
+        "ans1": "Yes, registration is absolutely free for both farmers and buyers. We do not take any joining fee.",
+        "faq2": "How does payment work?",
+        "ans2": "Buyers pay online into Khedut Setu's secure Escrow account. Once the farmer delivers the goods and the buyer confirms the quality, the money is immediately transferred to the farmer's bank account.",
+        "faq3": "What if I receive poor quality goods?",
+        "ans3": "You can reject the goods at the time of delivery. If you have already accepted it, you can complain within 24 hours. Our team will investigate and if found appropriate, will provide a refund."
+    },
+    "ai": {
+        "title": "Agri Advisor (AI Expert)",
+        "subtitle": "Ask farming questions 24/7",
+        "placeholder": "Write your question here... (e.g. Cotton prices?)",
+        "disclaimer": "AI can provide incorrect information. Always consult an expert.",
+        "suggestions": "Quick Questions:",
+        "liveSearch": "Live - Connected with Google Search",
+        "grounded": "Grounded Search",
+        "searching": "Searching for information...",
+        "sources": "Information Sources:",
+        "welcome": "Ram Ram! I am your farming assistant. What information do you need?",
+        "source": "Source",
+        "suggestedQuestions": [
+            "What are the cotton prices today?",
+            "Tell me about Kesar Mango farming.",
+            "What are the new schemes of Gujarat government?",
+            "Which crop should be planted in monsoon?",
+            "How to control diseases in peanuts?"
+        ]
+    },
+    "about": {
+        "title": "About Khedut Setu",
+        "subtitle": "Convergence of Technology and Tradition",
+        "storyTitle": "Our Story",
+        "storyDesc": "For years, Indian farmers have faced low returns due to middlemen and market uncertainty. The aim of 'Khedut Setu' is to change this system. We have created a digital platform where the farmer is king and the customer gets purity.",
+        "missionTitle": "Our Mission",
+        "missionDesc": "To double farmers' income and bring transparency to agriculture. Connecting every farmer with the world through smartphone.",
+        "visionTitle": "Our Vision",
+        "visionDesc": "An India where farmers are self-reliant and farming becomes a profitable business.",
+        "valuesTitle": "Core Values",
+        "values": {
+            "trust": "Trust",
+            "transparency": "Transparency",
+            "innovation": "Innovation",
+            "community": "Community"
+        },
+        "founded": "Founded",
+        "users": "Users"
+    },
+    "legal": {
+        "introTitle": "1. Introduction",
+        "introDesc": "Welcome to Khedut Setu. By using this platform you agree to our terms. Our aim is to facilitate transparent trade between farmers and buyers.",
+        "farmerTermsTitle": "2. Rules for Farmers",
+        "farmerTerms": [
+            "Providing true and accurate information of your crop is mandatory.",
+            "Posting wrong photos or price will be considered a violation of rules.",
+            "The responsibility of timely delivery after receiving the order will be of the farmer."
+        ],
+        "buyerTermsTitle": "3. Rules for Buyers",
+        "buyerTerms": [
+            "Payment should be done securely through the app only while ordering.",
+            "Check the quality of goods at the time of delivery.",
+            "Inform within 24 hours for any dispute."
+        ],
+        "collectionTitle": "1. Information Collection",
+        "collectionDesc": "We take your name, mobile number, and address only for order processing and delivery.",
+        "usageTitle": "2. Data Usage",
+        "usageDesc": "Your data is secure. We do not sell your data to any third party. It is used only to find farmers or customers near you.",
+        "paymentSecurityTitle": "3. Payment Security",
+        "paymentSecurityDesc": "All your online transactions are encrypted and secure. We do not save your bank details.",
+        "securityAssurance": "Security Assurance",
+        "securityAssuranceDesc": "Khedut Setu complies with IT rules of Government of India and is committed to user security."
+    },
+    "common": {
+        "brand": "Khedut Setu",
+        "loading": "AgroLink is ripening...",
+        "back": "Go Back",
+        "next": "Next",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "phone": "+91 98765 43210",
+        "email": "support@khedutsetu.guj",
+        "address": "Gandhinagar, Gujarat"
+    }
+}

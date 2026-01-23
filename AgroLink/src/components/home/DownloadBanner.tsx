@@ -7,25 +7,29 @@ interface DownloadBannerProps {
     buttonText: string;
 }
 
+import { Button } from '../ui/button';
+
 export const DownloadBanner: React.FC<DownloadBannerProps> = React.memo(({
     title,
     subtitle,
     buttonText
 }) => {
     return (
-        <section className="py-16 bg-white">
+        <section className="py-20 bg-bg-base">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-yellow-400 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-xl">
-                    <div className="md:w-2/3">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-green-900 mb-4">{title}</h2>
-                        <p className="text-green-900/80 text-lg font-medium mb-8">{subtitle}</p>
-                        <button className="bg-green-900 text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0">
-                            <Download size={20} /> {buttonText}
-                        </button>
+                <div className="bg-status-warning rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between shadow-theme-lg border border-brand-primary-light/20 relative overflow-hidden">
+                    <div className="md:w-2/3 relative z-10">
+                        <h2 className="text-3xl md:text-5xl font-black text-brand-primary-dark mb-4">{title}</h2>
+                        <p className="text-brand-primary-dark/70 text-lg font-bold mb-8">{subtitle}</p>
+                        <Button className="bg-brand-primary-dark text-white px-10 py-4 h-auto rounded-full text-lg shadow-xl hover:bg-brand-primary hover:-translate-y-1 transition-all">
+                            <Download className="mr-2 w-5 h-5" /> {buttonText}
+                        </Button>
                     </div>
-                    <div className="mt-8 md:mt-0 md:w-1/3 flex justify-center">
-                        <Smartphone className="w-32 h-32 text-green-900 rotate-12" />
+                    <div className="mt-8 md:mt-0 md:w-1/3 flex justify-center relative z-10">
+                        <Smartphone className="w-48 h-48 text-brand-primary-dark/20 -rotate-12 absolute -right-10 -bottom-10 opacity-50" />
+                        <Smartphone className="w-40 h-40 text-brand-primary-dark rotate-12 drop-shadow-2xl" />
                     </div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                 </div>
             </div>
         </section>

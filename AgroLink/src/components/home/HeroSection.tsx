@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Sprout, ShoppingCart, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { Button } from '../ui/button';
 import { useTranslation } from 'react-i18next';
+import { Sprout, ShoppingCart, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 interface Slide {
     title: string;
     subtitle: string;
     image: string;
 }
+
+import { Badge } from '../ui/badge';
 
 export const HeroSection: React.FC = () => {
     const { t } = useTranslation();
@@ -34,10 +37,10 @@ export const HeroSection: React.FC = () => {
 
     if (!slides || !Array.isArray(slides) || slides.length === 0) {
         return (
-            <section className="relative h-[80vh] flex items-center justify-center bg-green-900 text-white">
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold mb-4">{t('hero.title')}</h1>
-                    <p className="text-xl">{t('hero.subtitle')}</p>
+            <section className="relative h-[80vh] flex items-center justify-center bg-brand-primary-dark text-white">
+                <div className="text-center px-4">
+                    <h1 className="text-5xl font-black mb-6 tracking-tight">{t('hero.title')}</h1>
+                    <p className="text-xl text-white/80 font-medium max-w-2xl mx-auto">{t('hero.subtitle')}</p>
                 </div>
             </section>
         );
@@ -45,7 +48,7 @@ export const HeroSection: React.FC = () => {
 
     return (
         <section
-            className="relative h-[85vh] min-h-[600px] w-full overflow-hidden bg-stone-900 font-sans"
+            className="relative h-[90vh] min-h-[700px] w-full overflow-hidden bg-bg-base font-sans"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
@@ -61,46 +64,44 @@ export const HeroSection: React.FC = () => {
                         <img
                             src={slide.image}
                             alt={slide.title}
-                            className={`h-full w-full object-cover transition-transform duration-[10000ms] ${index === currentSlide ? 'scale-110' : 'scale-100'
+                            className={`h-full w-full object-cover transition-transform duration-[10000ms] brightness-[0.7] ${index === currentSlide ? 'scale-110' : 'scale-100'
                                 }`}
                             loading={index === 0 ? "eager" : "lazy"}
                         />
                         {/* Overlay Gradient for readability */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent"></div>
                     </div>
 
                     {/* Content Overlay */}
-                    <div className="relative z-20 flex h-full items-center px-4 sm:px-6 lg:px-20">
-                        <div className={`max-w-4xl ${index === currentSlide ? 'animate-fade-in' : ''}`}>
-                            <div className="inline-block px-4 py-1.5 mb-6 border border-emerald-400/30 rounded-full bg-emerald-400/10 backdrop-blur-sm">
-                                <span className="text-emerald-400 font-bold tracking-wide text-xs md:text-sm uppercase flex items-center gap-2">
-                                    <Star className="w-4 h-4 fill-emerald-400" />
+                    <div className="relative z-20 flex h-full items-center px-6 sm:px-12 lg:px-24">
+                        <div className={`max-w-4xl transition-all duration-1000 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                            <div className="inline-block mb-8">
+                                <Badge variant="outline" className="px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border-white/20 text-white font-black text-xs md:text-sm uppercase tracking-[0.2em] flex items-center gap-3">
+                                    <Star className="w-4 h-4 text-status-warning fill-status-warning" />
                                     {t('hero.tagline')}
-                                </span>
+                                </Badge>
                             </div>
 
-                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.15] drop-shadow-sm">
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tighter drop-shadow-2xl">
                                 {slide.title}
                             </h1>
-                            <p className="text-lg md:text-xl text-stone-200 mb-10 max-w-2xl leading-relaxed">
+                            <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-2xl leading-relaxed font-medium">
                                 {slide.subtitle}
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Link
-                                    to="/register"
-                                    className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full text-lg transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20"
-                                >
-                                    <Sprout className="w-5 h-5" />
-                                    {t('hero.ctaFarmer')}
-                                </Link>
-                                <Link
-                                    to="/register"
-                                    className="px-8 py-4 bg-white hover:bg-stone-100 text-stone-900 font-bold rounded-full text-lg transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-black/10"
-                                >
-                                    <ShoppingCart className="w-5 h-5" />
-                                    {t('hero.ctaBuyer')}
-                                </Link>
+                            <div className="flex flex-col sm:flex-row gap-6">
+                                <Button asChild size="lg" className="rounded-2xl text-xl h-auto py-6 px-10 bg-brand-primary hover:bg-brand-primary-dark text-white shadow-xl shadow-brand-primary/20 transition-all hover:-translate-y-1">
+                                    <Link to="/register">
+                                        <Sprout className="w-6 h-6 mr-3" />
+                                        {t('hero.ctaFarmer')}
+                                    </Link>
+                                </Button>
+                                <Button asChild variant="outline" size="lg" className="rounded-2xl text-xl h-auto py-6 px-10 bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 transition-all hover:-translate-y-1">
+                                    <Link to="/register">
+                                        <ShoppingCart className="w-6 h-6 mr-3" />
+                                        {t('hero.ctaBuyer')}
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -108,30 +109,34 @@ export const HeroSection: React.FC = () => {
             ))}
 
             {/* Navigation Arrows */}
-            <div className="absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-4 pointer-events-none">
-                <button
+            <div className="absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-6 pointer-events-none">
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={prevSlide}
-                    className="p-3 rounded-full bg-black/20 text-white backdrop-blur-md hover:bg-black/40 transition-all pointer-events-auto group"
+                    className="w-14 h-14 rounded-2xl bg-black/20 text-white backdrop-blur-md hover:bg-black/40 pointer-events-auto border border-white/10 group shadow-2xl"
                     aria-label="Previous slide"
                 >
-                    <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
-                </button>
-                <button
+                    <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={nextSlide}
-                    className="p-3 rounded-full bg-black/20 text-white backdrop-blur-md hover:bg-black/40 transition-all pointer-events-auto group"
+                    className="w-14 h-14 rounded-2xl bg-black/20 text-white backdrop-blur-md hover:bg-black/40 pointer-events-auto border border-white/10 group shadow-2xl"
                     aria-label="Next slide"
                 >
-                    <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
-                </button>
+                    <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
+                </Button>
             </div>
 
             {/* Carousel Indicators (Dots) */}
-            <div className="absolute bottom-10 left-1/2 z-30 flex -translate-x-1/2 gap-3">
+            <div className="absolute bottom-12 left-1/2 z-30 flex -translate-x-1/2 gap-4">
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`h-2 transition-all duration-300 rounded-full ${index === currentSlide ? 'w-12 bg-emerald-500' : 'w-2 bg-white/40 hover:bg-white'
+                        className={`h-2.5 transition-all duration-500 rounded-full shadow-lg ${index === currentSlide ? 'w-16 bg-brand-primary' : 'w-4 bg-white/30 hover:bg-white/60'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
                     />
@@ -139,8 +144,8 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Scroll Indicator */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 animate-bounce opacity-50">
-                <div className="w-1 h-8 rounded-full bg-gradient-to-b from-white to-transparent"></div>
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 animate-bounce opacity-40">
+                <div className="w-1.5 h-10 rounded-full bg-gradient-to-b from-white to-transparent"></div>
             </div>
         </section>
     );

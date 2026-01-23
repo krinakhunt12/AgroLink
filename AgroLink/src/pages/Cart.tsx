@@ -5,13 +5,13 @@ import {
     ShoppingCart, Trash2, Plus, Minus, ArrowRight,
     Tag, Truck, ShieldCheck, AlertCircle, Heart
 } from 'lucide-react';
-import Button from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/button';
+import { Card } from '../components/ui/card';
 import { useCart } from '../hooks/useCart';
 import { useToast } from '../components/Toast';
 
 const Cart: React.FC = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['products', 'errors']);
     const navigate = useNavigate();
     const { showToast } = useToast();
     const cart = useCart();
@@ -27,13 +27,13 @@ const Cart: React.FC = () => {
     const handleCheckout = async () => {
         const user = localStorage.getItem('user');
         if (!user) {
-            showToast("મહેરબાની કરીને ચેકઆઉટ કરતા પહેલા લોગિન કરો.", 'warning');
+            showToast(t('errors:login.failed'), 'warning');
             navigate('/login');
             return;
         }
 
         if (!address) {
-            showToast("મહેરબાની કરીને ડિલિવરી સરનામું લખો.", 'warning');
+            showToast(t('products:cart.addressPlaceholder'), 'warning');
             return;
         }
 
@@ -52,10 +52,10 @@ const Cart: React.FC = () => {
                 <div className="mb-8">
                     <h1 className="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                         <ShoppingCart className="text-green-600" size={36} />
-                        {t('cart.title') || 'તમારી કાર્ટ'}
+                        {t('products:cart.title')}
                     </h1>
                     <p className="text-gray-500 font-medium mt-2">
-                        {cart.items.length} {t('cart.itemsCount') || 'વસ્તુઓ તમારી કાર્ટમાં છે'}
+                        {t('products:cart.itemsCount', { count: cart.items.length })}
                     </p>
                 </div>
 
@@ -63,11 +63,11 @@ const Cart: React.FC = () => {
                     // Empty Cart State
                     <Card className="p-20 text-center">
                         <ShoppingCart className="w-24 h-24 text-gray-200 mx-auto mb-6" />
-                        <h2 className="text-2xl font-black text-gray-400 mb-4">{t('cart.empty') || 'તમારી કાર્ટ ખાલી છે'}</h2>
-                        <p className="text-gray-500 mb-8 font-medium">{t('cart.emptySubtitle') || 'બજારમાંથી ઉત્પાદનો ઉમેરો'}</p>
+                        <h2 className="text-2xl font-black text-gray-400 mb-4">{t('products:cart.empty')}</h2>
+                        <p className="text-gray-500 mb-8 font-medium">{t('products:cart.emptySubtitle')}</p>
                         <Link to="/market">
                             <Button variant="primary" className="px-8 py-4">
-                                {t('market.title') || 'બજાર જુઓ'}
+                                {t('products:market.title')}
                             </Button>
                         </Link>
                     </Card>
@@ -125,13 +125,13 @@ const Cart: React.FC = () => {
                                                     >
                                                         <Plus size={18} />
                                                     </button>
-                                                    <span className="text-xs text-gray-400 font-bold ml-2">/ {item.unit || '20 કિલો'}</span>
+                                                    <span className="text-xs text-gray-400 font-bold ml-2">/ {item.unit}</span>
                                                 </div>
 
                                                 {/* Price */}
                                                 <div className="text-right">
                                                     <p className="text-2xl font-black text-gray-900">₹{item.price * item.quantity}</p>
-                                                    <p className="text-xs text-gray-400 font-bold">₹{item.price} / {item.unit || '20 કિલો'}</p>
+                                                    <p className="text-xs text-gray-400 font-bold">₹{item.price} / {item.unit}</p>
                                                 </div>
                                             </div>
 
@@ -139,7 +139,7 @@ const Cart: React.FC = () => {
                                             {item.stock && item.quantity >= item.stock && (
                                                 <div className="mt-3 flex items-center gap-2 text-red-500 text-xs font-bold">
                                                     <AlertCircle size={14} />
-                                                    મહત્તમ સ્ટોક પહોંચી ગયો
+                                                    {t('products:cart.maxStock')}
                                                 </div>
                                             )}
                                         </div>
@@ -150,7 +150,7 @@ const Cart: React.FC = () => {
                             {/* Continue Shopping */}
                             <Link to="/market" className="block">
                                 <button className="w-full py-4 text-green-700 font-bold hover:bg-green-50 rounded-2xl transition-colors flex items-center justify-center gap-2">
-                                    ← {t('cart.continueShopping') || 'વધારે ખરીદી કરો'}
+                                    ← {t('products:cart.continueShopping')}
                                 </button>
                             </Link>
                         </div>
@@ -158,40 +158,40 @@ const Cart: React.FC = () => {
                         {/* Order Summary */}
                         <div className="lg:col-span-1">
                             <Card className="p-8 sticky top-24">
-                                <h2 className="text-2xl font-black text-gray-900 mb-6">{t('cart.summary') || 'ઓર્ડર સારાંશ'}</h2>
+                                <h2 className="text-2xl font-black text-gray-900 mb-6">{t('products:cart.summary')}</h2>
 
                                 <div className="space-y-4 mb-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">ડિલિવરી સરનામું</label>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{t('products:cart.deliveryAddress')}</label>
                                         <textarea
                                             className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-4 ring-green-500/10 focus:border-green-500 transition-all font-bold text-sm resize-none"
                                             rows={2}
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}
-                                            placeholder="તમારું સરનામું લખો..."
+                                            placeholder={t('products:cart.addressPlaceholder')}
                                         />
                                     </div>
 
                                     <div className="flex justify-between text-gray-600 font-bold">
-                                        <span>{t('cart.subtotal') || 'સબટોટલ'} ({cart.items.length} વસ્તુઓ)</span>
+                                        <span>{t('products:cart.subtotal')} ({cart.items.length} {t('products:cart.items')})</span>
                                         <span>₹{subtotal}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-600 font-bold">
                                         <span className="flex items-center gap-2">
                                             <Truck size={16} />
-                                            {t('cart.deliveryFee') || 'ડિલિવરી ફી'}
+                                            {t('products:cart.deliveryFee')}
                                         </span>
                                         <span>₹{deliveryFee}</span>
                                     </div>
                                     <div className="flex justify-between text-green-600 font-bold">
                                         <span className="flex items-center gap-2">
                                             <Tag size={16} />
-                                            {t('cart.discount') || 'ડિસ્કાઉન્ટ'}
+                                            {t('products:cart.discount')}
                                         </span>
                                         <span>-₹{discount}</span>
                                     </div>
                                     <div className="border-t-2 border-gray-100 pt-4 flex justify-between text-xl font-black text-gray-900">
-                                        <span>{t('cart.total') || 'કુલ'}</span>
+                                        <span>{t('products:cart.total')}</span>
                                         <span>₹{total}</span>
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@ const Cart: React.FC = () => {
                                     onClick={handleCheckout}
                                     isLoading={loading}
                                 >
-                                    {t('cart.checkout') || 'ચેકઆઉટ કરો'}
+                                    {t('products:cart.checkout')}
                                     <ArrowRight size={20} className="ml-2" />
                                 </Button>
 
@@ -210,15 +210,15 @@ const Cart: React.FC = () => {
                                 <div className="space-y-3 pt-6 border-t border-gray-100">
                                     <div className="flex items-center gap-3 text-sm text-gray-600 font-medium">
                                         <ShieldCheck size={18} className="text-green-600" />
-                                        સુરક્ષિત પેમેન્ટ
+                                        {t('products:cart.securePayment')}
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600 font-medium">
                                         <Truck size={18} className="text-green-600" />
-                                        ઝડપી ડિલિવરી
+                                        {t('products:cart.fastDelivery')}
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600 font-medium">
                                         <Tag size={18} className="text-green-600" />
-                                        શ્રેષ્ઠ ભાવ ગેરંટી
+                                        {t('products:cart.bestPrice')}
                                     </div>
                                 </div>
                             </Card>

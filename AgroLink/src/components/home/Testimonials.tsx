@@ -13,40 +13,45 @@ interface TestimonialsProps {
     testimonials: Testimonial[];
 }
 
+import { Card, CardContent } from '../ui/card';
+
 export const Testimonials: React.FC<TestimonialsProps> = React.memo(({
     title,
     subtitle,
     testimonials
 }) => {
     return (
-        <section className="py-20 bg-stone-100">
+        <section className="py-24 bg-stone-50/50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-green-900">{title}</h2>
-                    <p className="mt-3 text-lg text-gray-600">{subtitle}</p>
+                <div className="text-center mb-20">
+                    <h2 className="text-4xl font-extrabold text-brand-primary-dark tracking-tight">{title}</h2>
+                    <p className="mt-4 text-xl text-text-secondary font-medium">{subtitle}</p>
+                    <div className="w-24 h-1.5 bg-status-warning mx-auto mt-6 rounded-full"></div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
                     {testimonials.map((testimonial, idx) => (
-                        <div
+                        <Card
                             key={idx}
-                            className={`bg-white p-10 rounded-3xl shadow-xl border-t-4 ${testimonial.color === 'green' ? 'border-green-500' : 'border-yellow-500'
+                            className={`bg-bg-surface p-2 rounded-[32px] shadow-theme-lg border-t-[6px] transition-all hover:-translate-y-2 ${testimonial.color === 'green' ? 'border-brand-primary' : 'border-status-warning'
                                 }`}
                         >
-                            <p className="text-gray-700 italic mb-8 text-lg leading-relaxed">"{testimonial.quote}"</p>
-                            <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 ${testimonial.color === 'green' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                                    } rounded-full flex items-center justify-center font-bold text-lg`}>
-                                    {testimonial.name.charAt(0)}
+                            <CardContent className="p-10">
+                                <p className="text-text-secondary italic mb-10 text-xl leading-relaxed font-medium">"{testimonial.quote}"</p>
+                                <div className="flex items-center gap-5">
+                                    <div className={`w-14 h-14 ${testimonial.color === 'green' ? 'bg-brand-primary/10 text-brand-primary' : 'bg-status-warning/10 text-status-warning'
+                                        } rounded-2xl flex items-center justify-center font-black text-xl shadow-inner`}>
+                                        {testimonial.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-black text-text-primary text-lg">{testimonial.name}</h4>
+                                        <p className={`text-xs ${testimonial.color === 'green' ? 'text-brand-primary' : 'text-status-warning'
+                                            } font-black uppercase tracking-[0.1em]`}>
+                                            {testimonial.role}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                                    <p className={`text-xs ${testimonial.color === 'green' ? 'text-green-600' : 'text-yellow-600'
-                                        } font-bold uppercase tracking-wider`}>
-                                        {testimonial.role}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
                     ))}
                 </div>
             </div>
