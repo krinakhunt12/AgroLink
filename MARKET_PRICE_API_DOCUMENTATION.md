@@ -23,7 +23,7 @@ Add the following to your `.env` file:
 
 ```env
 # Market Price API (data.gov.in)
-MARKET_PRICE_API_KEY=579b464db66ec23bdd000001ac8e7840678a434e6c77797f9230665b
+MARKET_PRICE_API_KEY=Your API Key
 ```
 
 ### Base URL

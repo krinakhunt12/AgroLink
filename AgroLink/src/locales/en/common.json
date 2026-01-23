@@ -39,6 +39,24 @@
             }
         ]
     },
+    "categories": {
+        "title": "Major Crop Categories",
+        "subtitle": "Discover fresh harvest categorized for your needs",
+        "viewAll": "Browse Marketplace",
+        "items": {
+            "grains": "Essential Grains",
+            "grain": "Essential Grains",
+            "vegetables": "Fresh Vegetables",
+            "vegetable": "Fresh Vegetables",
+            "pulses": "Healthy Pulses",
+            "pulse": "Healthy Pulses",
+            "spices": "Authentic Spices",
+            "spice": "Authentic Spices",
+            "fruits": "Seasonal Fruits",
+            "fruit": "Seasonal Fruits",
+            "organic": "Organic Produce"
+        }
+    },
     "stats": {
         "farmers": "Farmers Joined",
         "products": "Total Products",

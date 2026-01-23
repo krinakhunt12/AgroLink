@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserType } from '../types';
 import { User, Phone, MapPin, Lock, CheckCircle, Sprout, ArrowLeft, ShieldCheck } from 'lucide-react';
-import { authAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../components/Toast';
 
 import { Button } from '../components/ui/button';
@@ -12,10 +12,10 @@ import { Input } from '../components/ui/input';
 
 const Register: React.FC = () => {
   const { t } = useTranslation(['auth', 'common', 'errors']);
-  const navigate = useNavigate();
+  const { register, isRegisterLoading } = useAuth();
   const { showToast } = useToast();
   const [userType, setUserType] = useState<UserType>(UserType.FARMER);
-  const [loading, setLoading] = useState(false);
+  // Remove local loading state
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -27,7 +27,7 @@ const Register: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -60,48 +60,13 @@ const Register: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const response = await authAPI.register({
-        name: formData.name.trim(),
-        phone: formData.phone,
-        password: formData.password,
-        userType: userType,
-        location: formData.location || t('errors:register.defaultLocation')
-      });
-
-      // Check if registration was successful
-      if (response.success && response.token) {
-        showToast(t('errors:register.success'), 'success');
-
-        // Small delay to show success message before navigation
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
-      } else {
-        throw new Error(t('errors:register.invalidResponse'));
-      }
-    } catch (error: any) {
-      console.error('Registration error:', error);
-
-      // Handle specific error messages
-      let errorMessage = t('errors:register.failed');
-
-      if (error.message.includes('Phone number already registered')) {
-        errorMessage = t('errors:register.alreadyRegistered');
-      } else if (error.message.includes('validation')) {
-        errorMessage = t('errors:register.validationError');
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage = t('errors:register.networkError');
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      showToast(errorMessage, 'error');
-    } finally {
-      setLoading(false);
-    }
+    register({
+      name: formData.name.trim(),
+      phone: formData.phone,
+      password: formData.password,
+      userType: userType,
+      location: formData.location || t('errors:register.defaultLocation')
+    });
   };
 
   return (
@@ -210,8 +175,8 @@ const Register: React.FC = () => {
 
               <Button
                 type="submit"
-                disabled={loading}
-                isLoading={loading}
+                disabled={isRegisterLoading}
+                isLoading={isRegisterLoading}
                 className="w-full h-auto py-7 bg-brand-primary hover:bg-brand-primary-dark text-white rounded-[20px] font-black text-2xl shadow-xl shadow-brand-primary/20 transition-all transform hover:-translate-y-1 active:scale-95"
               >
                 {t('auth.registerBtn')}

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingAiChat from './components/FloatingAiChat';
 import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Page imports
 import Home from './pages/Home';
@@ -42,35 +43,42 @@ const AppRouter = () => {
         <>
             <ScrollToTop />
             <Routes>
-                {/* Auth Pages (No Navbar/Footer) */}
+                {/* Auth Pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                {/* Standard Pages (With Navbar/Footer) */}
+                {/* Public Routes */}
                 <Route element={<MainLayout />}>
-                    {/* Home */}
                     <Route path="/" element={<Home />} />
-
-                    {/* Marketplace & Products */}
-                    <Route path="/market" element={<Marketplace />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="/cart" element={<Cart />} />
-
-                    {/* Dashboard */}
-                    <Route path="/dashboard" element={<FarmerDashboard />} />
-
-                    {/* AI & Help */}
-                    <Route path="/ai-advisor" element={<AiAssistant />} />
-                    <Route path="/help" element={<Help />} />
-
-                    {/* Information Pages */}
                     <Route path="/about" element={<About />} />
                     <Route path="/news" element={<News />} />
-
-                    {/* Legal Pages */}
+                    <Route path="/help" element={<Help />} />
+                    <Route path="/ai-advisor" element={<AiAssistant />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
+
+                    {/* Public Market Preview (Optional, or redirect to Login if strict) */}
+                    <Route path="/market" element={<Marketplace />} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
                 </Route>
+
+                {/* Farmer Routes (Protected) */}
+                <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
+                    <Route element={<MainLayout />}>
+                        <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
+                    </Route>
+                </Route>
+
+                {/* Buyer Routes (Protected) */}
+                <Route element={<ProtectedRoute allowedRoles={['buyer']} />}>
+                    <Route element={<MainLayout />}>
+                        <Route path="/buyer/dashboard" element={<Marketplace />} />
+                        <Route path="/cart" element={<Cart />} />
+                    </Route>
+                </Route>
+
+                {/* Fallback - Redirect to Home */}
+                <Route path="*" element={<Home />} />
             </Routes>
         </>
     );

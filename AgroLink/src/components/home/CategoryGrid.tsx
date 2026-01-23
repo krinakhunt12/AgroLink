@@ -57,11 +57,11 @@ export const CategoryGrid: React.FC<CategoryGridProps> = React.memo(({
                             <Link to="/market" key={idx} className="block group">
                                 <Card className="h-full border-none shadow-theme-sm transition-all duration-500 group-hover:shadow-theme-lg group-hover:-translate-y-2 bg-bg-base/50 group-hover:bg-bg-base overflow-hidden relative">
                                     <div className={`absolute top-0 left-0 w-1.5 h-full ${cat.color} opacity-80`} />
-                                    <CardContent className="flex flex-col items-center justify-center p-10">
-                                        <div className={`w-20 h-20 rounded-[28px] flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 bg-white shadow-theme-sm group-hover:shadow-theme`}>
-                                            {Icon && <Icon size={36} className={`${cat.color.replace('bg-', 'text-').replace('/20', '')}`} />}
+                                    <CardContent className="flex flex-col items-center justify-center p-6 sm:p-8">
+                                        <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-[24px] sm:rounded-[28px] flex items-center justify-center mb-5 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 bg-white shadow-theme-sm group-hover:shadow-theme`}>
+                                            {Icon && <Icon size={32} className={`${cat.color.replace('bg-', 'text-').replace('/20', '')}`} />}
                                         </div>
-                                        <h3 className="font-black text-text-primary text-center text-lg tracking-tight group-hover:text-brand-primary transition-colors">{cat.name}</h3>
+                                        <h3 className="font-black text-text-primary text-center text-sm sm:text-lg tracking-tight group-hover:text-brand-primary transition-colors leading-tight px-2">{cat.name}</h3>
                                     </CardContent>
                                 </Card>
                             </Link>

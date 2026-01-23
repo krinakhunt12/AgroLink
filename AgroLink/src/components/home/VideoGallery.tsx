@@ -15,6 +15,7 @@ interface VideoGalleryProps {
     videos: Video[];
 }
 
+import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 
@@ -24,6 +25,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
     viewAllText,
     videos
 }) => {
+    const { t } = useTranslation();
     return (
         <section className="py-28 bg-[#0a0a0a] text-white relative overflow-hidden">
             {/* Background Glow */}
@@ -66,7 +68,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
                                     </div>
                                     <div className="absolute bottom-5 left-5">
                                         <div className="bg-black/40 backdrop-blur-xl px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border border-white/10 text-white shadow-lg">
-                                            {video.views} Views
+                                            {video.views} {t('videos.views')}
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +78,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
                                     </h3>
                                     <div className="flex items-center gap-3">
                                         <span className="w-1.5 h-1.5 rounded-full bg-brand-primary"></span>
-                                        <p className="text-[10px] text-stone-500 font-black uppercase tracking-[0.2em]">Agrolink Tutorial</p>
+                                        <p className="text-[10px] text-stone-500 font-black uppercase tracking-[0.2em]">{t('videos.tutorial')}</p>
                                     </div>
                                 </div>
                             </a>

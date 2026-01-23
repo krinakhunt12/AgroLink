@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { LogIn, Phone, Lock, Sprout, Lightbulb, ArrowLeft, ShieldCheck } from 'lucide-react';
-import { authAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../components/Toast';
 
 import { Button } from '../components/ui/button';
@@ -11,9 +11,8 @@ import { Input } from '../components/ui/input';
 
 const Login: React.FC = () => {
   const { t } = useTranslation(['auth', 'common', 'errors']);
-  const navigate = useNavigate();
+  const { login, isLoginLoading } = useAuth();
   const { showToast } = useToast();
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     phone: '',
     password: ''
@@ -23,7 +22,7 @@ const Login: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form fields
@@ -38,50 +37,10 @@ const Login: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const response = await authAPI.login({
-        phone: formData.phone,
-        password: formData.password
-      });
-
-      // Check if login was successful
-      if (response.success && response.token && response.user) {
-        showToast(t('errors:login.welcome', { name: response.user.name }), 'success');
-
-        // Small delay to show success message before navigation
-        setTimeout(() => {
-          // Navigate based on user type
-          if (response.user.userType === 'farmer') {
-            navigate('/dashboard');
-          } else {
-            navigate('/market');
-          }
-        }, 500);
-      } else {
-        throw new Error(t('errors:login.invalidResponse'));
-      }
-    } catch (error: any) {
-      console.error('Login error:', error);
-
-      // Handle specific error messages
-      let errorMessage = t('errors:login.failed');
-
-      if (error.message.includes('Invalid credentials')) {
-        errorMessage = t('errors:login.invalidCredentials');
-      } else if (error.message.includes('Phone number already registered')) {
-        errorMessage = t('errors:login.alreadyRegistered');
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage = t('errors:login.networkError');
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      showToast(errorMessage, 'error');
-    } finally {
-      setLoading(false);
-    }
+    login({
+      phone: formData.phone,
+      password: formData.password
+    });
   };
 
   return (
@@ -183,8 +142,8 @@ const Login: React.FC = () => {
 
             <Button
               type="submit"
-              disabled={loading}
-              isLoading={loading}
+              disabled={isLoginLoading}
+              isLoading={isLoginLoading}
               className="w-full h-auto py-6 bg-brand-primary hover:bg-brand-primary-dark text-white rounded-[20px] font-black text-xl shadow-xl shadow-brand-primary/20 transition-all hover:-translate-y-1 active:scale-95"
             >
               <LogIn className="mr-3 w-6 h-6" /> {t('auth.loginBtn')}
