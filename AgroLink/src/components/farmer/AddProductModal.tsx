@@ -26,7 +26,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
         name: '',
         category: CATEGORIES[0],
         price: '',
-        unit: 'પ્રતિ 20 કિલો',
+        unit: 'per 20kg',
         description: '',
         image: null as File | null,
         existingImageUrl: '', // For editing display
@@ -52,7 +52,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
                     name: '',
                     category: CATEGORIES[0],
                     price: '',
-                    unit: 'પ્રતિ 20 કિલો',
+                    unit: 'per 20kg',
                     description: '',
                     image: null,
                     existingImageUrl: '',
@@ -70,7 +70,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
 
     const handleSubmit = async () => {
         if (!formData.name || !formData.price || (!formData.image && !formData.existingImageUrl)) {
-            showToast(t('dashboard.form.validation'), 'error');
+            showToast(t('errors:login.fillAll'), 'error');
             return;
         }
 
@@ -93,155 +93,151 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
             }
             onClose();
         } catch (error) {
-            // Error handling is inside the hook mutation callbacks usually, 
-            // but we can add UI specifics here if needed.
+            // Error handling is inside the hook mutation callbacks
         }
     };
 
-    // AI Advice Logic (Moved internally or kept simple)
     const [aiAdvice, setAiAdvice] = useState<string>('');
     const [loadingAi, setLoadingAi] = useState(false);
 
-    // Placeholder for AI Fetch if not imported from hook
     const fetchAiAdvice = async () => {
         if (!formData.name) return;
         setLoadingAi(true);
-        // Simulate or call AI service
         setTimeout(() => {
-            setAiAdvice("Based on current market trends, this price seems competitive."); // Dump placeholder
+            setAiAdvice("Based on current market trends, this price seems competitive."); // Placeholder
             setLoadingAi(false);
         }, 1500);
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-2xl max-h-[85vh] p-0 gap-0 flex flex-col">
-                <DialogHeader className="px-6 py-4 border-b border-border-subtle sticky top-0 bg-white z-10 shrink-0">
-                    <DialogTitle className="text-2xl font-black text-gray-900 tracking-tight">
+            <DialogContent className="sm:max-w-2xl max-h-[90vh] p-0 flex flex-col rounded-lg">
+                <DialogHeader className="px-6 py-4 border-b border-border-base bg-white shrink-0">
+                    <DialogTitle className="text-xl font-bold text-text-primary tracking-tight">
                         {productToEdit ? t('dashboard.edit') : t('dashboard.addNew')}
                     </DialogTitle>
-                    {/* Close button is built-in to DialogContent but we can custom style headers */}
                 </DialogHeader>
 
-                <div className="overflow-y-auto flex-1 px-6 py-6">
-                    <div className="space-y-6">
-                        {/* Image Upload */}
-                        <div
-                            onClick={() => fileInputRef.current?.click()}
-                            className={`border-4 border-dashed rounded-[32px] h-52 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer overflow-hidden relative ${formData.image || formData.existingImageUrl ? 'border-green-500 bg-green-50' : 'border-gray-100 text-gray-400 hover:border-green-200 hover:bg-green-50'}`}
-                        >
-                            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+                <div className="overflow-y-auto flex-1 px-6 py-6 space-y-8">
+                    {/* Image Upload */}
+                    <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className={`border border-dashed rounded-lg h-48 flex flex-col items-center justify-center gap-3 transition-colors cursor-pointer overflow-hidden relative ${formData.image || formData.existingImageUrl ? 'border-brand-primary bg-brand-primary/5' : 'border-border-base bg-bg-muted/30 hover:bg-bg-muted'}`}
+                    >
+                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
-                            {(formData.image || formData.existingImageUrl) ? (
-                                <div className="text-center w-full h-full relative group">
-                                    <img
-                                        src={formData.image ? URL.createObjectURL(formData.image) : formData.existingImageUrl}
-                                        alt="Preview"
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <p className="text-white font-bold">બદલવા માટે ક્લિક કરો</p>
-                                    </div>
+                        {(formData.image || formData.existingImageUrl) ? (
+                            <div className="text-center w-full h-full relative group">
+                                <img
+                                    src={formData.image ? URL.createObjectURL(formData.image) : formData.existingImageUrl}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <p className="text-white font-bold text-xs uppercase tracking-widest">Click to change</p>
                                 </div>
-                            ) : (
-                                <>
-                                    <div className="bg-gray-100 p-4 rounded-full group-hover:bg-green-100 group-hover:text-green-700 transition-colors">
-                                        <Camera size={32} />
-                                    </div>
-                                    <p className="font-black text-sm uppercase tracking-widest">{t('dashboard.form.photo')}</p>
-                                </>
-                            )}
+                            </div>
+                        ) : (
+                            <>
+                                <div className="bg-white p-3 rounded-full border border-border-base shadow-sm">
+                                    <Camera size={24} className="text-text-muted" />
+                                </div>
+                                <p className="font-bold text-[10px] text-text-muted uppercase tracking-widest">{t('dashboard.form.photo')}</p>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">{t('dashboard.form.cropName')}</label>
+                            <input
+                                type="text"
+                                placeholder={t('dashboard.form.placeholderName')}
+                                className="w-full bg-bg-muted/30 border border-border-base rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all font-medium text-sm"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">{t('dashboard.form.category')}</label>
+                            <select
+                                className="w-full bg-bg-muted/30 border border-border-base rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-primary/10 focus:border-brand-primary transition-all font-medium text-sm cursor-pointer"
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            >
+                                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center bg-bg-muted/30 p-4 rounded-md border border-border-base">
+                            <div className="space-y-1">
+                                <p className="font-bold text-sm text-text-primary">{t('dashboard.form.aiAdvice')}</p>
+                                <p className="text-xs text-text-muted">Get smart pricing insights</p>
+                            </div>
+                            <Button variant="secondary" size="sm" onClick={fetchAiAdvice} isLoading={loadingAi} className="h-8 cursor-pointer shadow-sm">
+                                <Sparkles size={12} className="mr-1.5" /> Suggest
+                            </Button>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">{t('dashboard.form.cropName')}</label>
+                        {aiAdvice && (
+                            <div className="bg-brand-primary/5 p-4 rounded-md border border-brand-primary/10 text-xs text-brand-primary">
+                                <p className="whitespace-pre-wrap leading-relaxed font-medium">{aiAdvice}</p>
+                            </div>
+                        )}
+
+                        <div className="flex gap-4">
+                            <div className="relative flex-1">
+                                <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
                                 <input
-                                    type="text"
-                                    placeholder={t('dashboard.form.placeholderName')}
-                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-5 py-4 focus:ring-4 ring-green-500/10 focus:border-green-500 focus:bg-white transition-all font-bold"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    type="number"
+                                    placeholder="0"
+                                    className="w-full bg-white border border-border-base rounded-md py-3 pl-10 pr-4 font-bold text-lg focus:ring-2 ring-brand-primary/10 transition-all outline-none"
+                                    value={formData.price}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">{t('dashboard.form.category')}</label>
-                                <select
-                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-5 py-4 focus:ring-4 ring-green-500/10 focus:border-green-500 focus:bg-white transition-all font-bold"
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                >
-                                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                                </select>
-                            </div>
+                            <select
+                                className="bg-bg-muted/50 border border-border-base rounded-md px-4 font-bold focus:ring-2 ring-brand-primary/10 transition-all cursor-pointer text-sm"
+                                value={formData.unit}
+                                onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+                            >
+                                <option value="per 20kg">{t('dashboard.form.units.per20kg')}</option>
+                                <option value="per kg">{t('dashboard.form.units.perKg')}</option>
+                                <option value="per piece">{t('dashboard.form.units.perPiece')}</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center px-2">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('dashboard.form.price')}</label>
-                                <Button variant="secondary" size="sm" onClick={fetchAiAdvice} isLoading={loadingAi} className="h-8">
-                                    <Sparkles size={12} className="mr-1.5" /> {t('dashboard.form.aiAdvice')}
-                                </Button>
-                            </div>
+                    <div className="space-y-2">
+                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">{t('dashboard.form.description')}</label>
+                        <textarea
+                            className="w-full bg-bg-muted/30 border border-border-base rounded-md px-4 py-3 focus:outline-none focus:ring-2 ring-brand-primary/10 focus:border-brand-primary transition-all font-medium text-sm min-h-[100px]"
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            placeholder={t('dashboard.form.descriptionPlaceholder')}
+                        />
+                    </div>
 
-                            {aiAdvice && (
-                                <div className="bg-yellow-50/50 p-6 rounded-3xl border border-yellow-100 text-sm text-yellow-900 animate-in fade-in duration-500 shadow-sm">
-                                    <p className="whitespace-pre-wrap leading-relaxed font-medium">{aiAdvice}</p>
-                                </div>
-                            )}
-
-                            <div className="flex gap-4">
-                                <div className="relative flex-1">
-                                    <IndianRupee className="absolute left-5 top-4.5 text-gray-300" size={18} />
-                                    <input
-                                        type="number"
-                                        placeholder="1200"
-                                        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl pl-12 pr-5 py-4 focus:ring-4 ring-green-500/10 focus:border-green-500 focus:bg-white transition-all font-bold"
-                                        value={formData.price}
-                                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                    />
-                                </div>
-                                <select
-                                    className="bg-gray-50 border-none rounded-2xl px-6 py-4 font-bold focus:ring-2 ring-green-500 transition-all cursor-pointer"
-                                    value={formData.unit}
-                                    onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                                >
-                                    <option value="પ્રતિ 20 કિલો">{t('dashboard.form.units.per20kg')}</option>
-                                    <option value="પ્રતિ કિલો">{t('dashboard.form.units.perKg')}</option>
-                                    <option value="પ્રતિ નંગ">{t('dashboard.form.units.perPiece')}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">{t('dashboard.form.description')}</label>
-                            <textarea
-                                className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-5 py-4 focus:ring-4 ring-green-500/10 focus:border-green-500 focus:bg-white transition-all font-bold min-h-[100px]"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                placeholder={t('dashboard.form.descriptionPlaceholder')}
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100 transition-colors hover:bg-gray-100/50">
-                            <input
-                                type="checkbox"
-                                checked={formData.isNegotiable}
-                                onChange={(e) => setFormData({ ...formData, isNegotiable: e.target.checked })}
-                                className="w-6 h-6 rounded-lg text-green-700 focus:ring-green-500 border-gray-300 transition-all cursor-pointer"
-                            />
-                            <div>
-                                <p className="font-black text-gray-900 tracking-tight">{t('dashboard.form.negotiable')}</p>
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">{t('dashboard.form.negotiableDesc')}</p>
-                            </div>
+                    <div className="flex items-center gap-4 bg-bg-muted/20 p-4 rounded-md border border-border-base">
+                        <input
+                            type="checkbox"
+                            checked={formData.isNegotiable}
+                            onChange={(e) => setFormData({ ...formData, isNegotiable: e.target.checked })}
+                            className="w-5 h-5 rounded border-border-base text-brand-primary focus:ring-brand-primary cursor-pointer"
+                        />
+                        <div>
+                            <p className="font-bold text-sm text-text-primary uppercase tracking-wide">{t('dashboard.form.negotiable')}</p>
+                            <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider">{t('dashboard.form.negotiableDesc')}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 sticky bottom-0 z-10 shrink-0 flex justify-end gap-3">
-                    <Button variant="outline" onClick={onClose} disabled={isCreating || isUpdating}>Cancel</Button>
-                    <Button variant="primary" onClick={handleSubmit} isLoading={isCreating || isUpdating}>
-                        {productToEdit ? 'Update Product' : t('dashboard.form.submit')}
+                <div className="px-6 py-4 bg-white border-t border-border-base shrink-0 flex justify-end gap-3 rounded-b-lg">
+                    <Button variant="outline" onClick={onClose} disabled={isCreating || isUpdating} className="cursor-pointer">Cancel</Button>
+                    <Button variant="primary" onClick={handleSubmit} isLoading={isCreating || isUpdating} className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold cursor-pointer">
+                        {productToEdit ? 'Save Changes' : t('dashboard.form.submit')}
                     </Button>
                 </div>
             </DialogContent>

@@ -26,6 +26,7 @@
     },
     "general": {
         "error": "Something went wrong",
-        "tryAgain": "Please try again later"
+        "tryAgain": "Please try again later",
+        "resetLinkInvalid": "Invalid or expired reset link"
     }
 }

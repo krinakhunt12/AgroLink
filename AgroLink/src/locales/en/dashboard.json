@@ -33,6 +33,13 @@
         },
         "noListings": "No active listings.",
         "noBids": "No bids found.",
-        "buyer": "Buyer"
+        "buyer": "Buyer",
+        "totalSales": "Total Sales",
+        "followers": "Followers",
+        "cancel": "Cancel",
+        "updateListing": "Update Listing",
+        "clickToChange": "Click to Change",
+        "uploadImage": "Upload crop image",
+        "aiPriceSuggestion": "Based on current market trends, this price seems competitive."
     }
 }

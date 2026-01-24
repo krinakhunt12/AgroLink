@@ -68,3 +68,15 @@ export const useProducts = () => {
         isDeleting: deleteProductMutation.isPending,
     };
 };
+
+export const useProduct = (id: string) => {
+    return useQuery({
+        queryKey: QUERY_KEYS.PRODUCTS.DETAIL(id),
+        queryFn: async () => {
+            const res = await productsAPI.getById(id);
+            return res.data;
+        },
+        enabled: !!id,
+    });
+};
+

@@ -1,19 +1,20 @@
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { LogIn, Phone, Lock, Sprout, Lightbulb, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Phone, Lock, Sprout, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../components/Toast';
 
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { GoogleLoginButton } from '../components/Login/GoogleLoginButton';
+import { ForgotPasswordModal } from '../components/Login/ForgotPasswordModal';
 
 const Login: React.FC = () => {
   const { t } = useTranslation(['auth', 'common', 'errors']);
   const { login, isLoginLoading } = useAuth();
   const { showToast } = useToast();
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     phone: '',
     password: ''
@@ -26,13 +27,11 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form fields
     if (!formData.phone || !formData.password) {
       showToast(t('errors:login.fillAll'), 'error');
       return;
     }
 
-    // Validate phone number format (10 digits)
     if (!/^\d{10}$/.test(formData.phone)) {
       showToast(t('errors:login.invalidPhone'), 'error');
       return;
@@ -45,123 +44,126 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-brand-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-status-warning/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-700"></div>
-
-      {/* Floating Back Button */}
-      <Link to="/" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-brand-primary font-black hover:text-brand-primary-dark transition-all bg-bg-surface/80 backdrop-blur px-5 py-2.5 rounded-full shadow-theme border border-border-subtle group">
-        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-        <span>{t('nav.home')}</span>
-      </Link>
-
-      <div className="max-w-4xl w-full bg-bg-surface rounded-[40px] shadow-theme-lg overflow-hidden flex flex-col md:flex-row-reverse relative z-10 border border-border-subtle">
-        {/* Visual Panel */}
-        <div className="bg-gradient-to-br from-brand-primary via-brand-primary-dark to-emerald-900 text-text-on-brand md:w-5/12 p-12 flex flex-col justify-between relative">
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
-            <svg width="100%" height="100%"><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" /></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
-          </div>
-
-          <div className="relative z-10">
-            <Link to="/" className="flex items-center gap-3 mb-12 text-white hover:scale-105 transition-transform w-fit bg-white/10 p-4 rounded-[24px] backdrop-blur-sm border border-white/10">
-              <Sprout size={32} className="text-status-warning" />
-              <span className="font-black text-2xl tracking-tighter">{t('common:brand')}</span>
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <div className="w-full max-w-[440px] space-y-8">
+        {/* Logo & Header */}
+        <div className="text-center">
+          <Link to="/" className="inline-flex items-center gap-2 mb-6 text-brand-primary">
+            <Sprout size={32} />
+            <span className="text-2xl font-bold tracking-tight">{t('common:brand')}</span>
+          </Link>
+          <h1 className="text-2xl font-bold text-text-primary">{t('auth.loginTitle')}</h1>
+          <p className="mt-2 text-text-secondary text-sm">
+            {t('auth.noAccount')}{' '}
+            <Link to="/register" className="font-semibold text-brand-primary hover:text-brand-primary-dark transition-colors">
+              {t('auth.registerLink')}
             </Link>
-
-            <div className="space-y-6">
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-[32px] border border-white/10 shadow-inner">
-                <h3 className="flex items-center gap-3 font-black text-xl mb-3">
-                  <Lightbulb className="text-status-warning" /> {t('loginInfo.title')}
-                </h3>
-                <p className="font-medium text-sm leading-relaxed text-white/80">{t('loginInfo.tip')}</p>
-              </div>
-
-              <div className="flex items-center gap-3 text-white/50 font-black text-[10px] uppercase tracking-[0.2em] pl-4">
-                <ShieldCheck size={16} className="text-status-success" /> 100% {t('products:market.verified')}
-              </div>
-            </div>
-          </div>
-
-          <div className="relative z-10 mt-10">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">© 2024 AGROLINK</p>
-          </div>
+          </p>
         </div>
 
-        {/* Form Panel */}
-        <div className="md:w-7/12 p-8 md:p-16">
-          <div className="mb-12">
-            <h2 className="text-5xl font-black text-text-primary tracking-tight leading-tight">{t('auth.loginTitle')}</h2>
-            <p className="mt-4 text-text-secondary font-bold text-lg">
-              {t('auth.noAccount')}{' '}
-              <Link to="/register" className="font-black text-brand-primary hover:text-brand-primary-dark underline underline-offset-8 decoration-4">{t('auth.registerLink')}</Link>
-            </p>
-          </div>
-
-          <form className="space-y-8" onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              <div className="group">
-                <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 ml-2 group-focus-within:text-brand-primary transition-colors">{t('auth.phone')}</label>
+        {/* Login Form */}
+        <div className="bg-bg-surface p-8 rounded-lg shadow-theme border border-border-base">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-secondary">
+                  {t('auth.phone')}
+                </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-colors group-focus-within:text-brand-primary z-10"><Phone size={20} /></div>
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+                    <Phone size={18} />
+                  </div>
                   <Input
                     name="phone"
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="pl-14 py-8 bg-bg-muted/30 border-2 border-border-subtle rounded-[20px] text-text-primary font-black text-lg focus:bg-bg-surface transition-all placeholder:text-text-muted/50"
+                    className="pl-10"
                     placeholder="9876543210"
                   />
                 </div>
               </div>
 
-              <div className="group">
-                <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 ml-2 group-focus-within:text-brand-primary transition-colors">{t('auth.password')}</label>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-text-secondary">
+                    {t('auth.password')}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsForgotModalOpen(true)}
+                    className="text-xs font-semibold text-brand-primary hover:text-brand-primary-dark transition-colors"
+                  >
+                    {t('auth.forgotPassword')}
+                  </button>
+                </div>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-colors group-focus-within:text-brand-primary z-10"><Lock size={20} /></div>
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+                    <Lock size={18} />
+                  </div>
                   <Input
                     name="password"
                     type="password"
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="pl-14 py-8 bg-bg-muted/30 border-2 border-border-subtle rounded-[20px] text-text-primary font-black text-lg focus:bg-bg-surface transition-all placeholder:text-text-muted/50"
+                    className="pl-10"
                     placeholder="********"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center cursor-pointer group">
-                <input type="checkbox" className="w-5 h-5 rounded-lg text-brand-primary focus:ring-brand-primary border-border-subtle bg-bg-muted" />
-                <span className="ml-3 text-sm text-text-muted font-black uppercase tracking-wider group-hover:text-text-primary transition-colors">{t('auth.rememberMe')}</span>
+            <div className="flex items-center">
+              <input
+                id="remember_me"
+                type="checkbox"
+                className="h-4 w-4 rounded border-border-base text-brand-primary focus:ring-brand-primary"
+              />
+              <label htmlFor="remember_me" className="ml-2 block text-sm text-text-secondary">
+                {t('auth.rememberMe')}
               </label>
-              <a href="#" className="text-sm font-black text-brand-primary hover:text-brand-primary-dark uppercase tracking-widest">{t('auth.forgotPassword')}</a>
             </div>
 
             <Button
               type="submit"
               disabled={isLoginLoading}
               isLoading={isLoginLoading}
-              className="w-full h-auto py-6 bg-brand-primary hover:bg-brand-primary-dark text-white rounded-[20px] font-black text-xl shadow-xl shadow-brand-primary/20 transition-all hover:-translate-y-1 active:scale-95"
+              className="w-full bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold py-2 rounded-md transition-all shadow-sm"
             >
-              <LogIn className="mr-3 w-6 h-6" /> {t('auth.loginBtn')}
+              {t('auth.loginBtn')}
             </Button>
 
-            <div className="relative flex items-center py-4">
+            <div className="relative flex items-center">
               <div className="flex-grow border-t border-border-base"></div>
-              <span className="flex-shrink-0 mx-4 text-text-muted text-sm font-bold uppercase tracking-widest">OR</span>
+              <span className="flex-shrink-0 mx-4 text-text-muted text-xs font-semibold uppercase tracking-wider">
+                {t('common:or')}
+              </span>
               <div className="flex-grow border-t border-border-base"></div>
             </div>
 
             <GoogleLoginButton />
           </form>
         </div>
+
+        {/* Footer */}
+        <div className="text-center">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
+            <ArrowLeft size={16} />
+            <span>{t('common:nav.home')}</span>
+          </Link>
+        </div>
       </div>
+
+      <ForgotPasswordModal
+        isOpen={isForgotModalOpen}
+        onClose={() => setIsForgotModalOpen(false)}
+      />
     </div>
   );
 };
 
 export default Login;
+
+

@@ -10,12 +10,15 @@ import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
 import AiAssistant from './pages/AiAssistant';
 import Help from './pages/Help';
 import Legal from './pages/Legal';
 import About from './pages/About';
 import News from './pages/News';
 import FarmerDashboard from './pages/FarmerDashboard';
+import AddProduct from './pages/AddProduct';
+import EditProduct from './pages/EditProduct';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
 
@@ -46,6 +49,7 @@ const AppRouter = () => {
                 {/* Auth Pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Public Routes */}
                 <Route element={<MainLayout />}>
@@ -66,8 +70,11 @@ const AppRouter = () => {
                 <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
                     <Route element={<MainLayout />}>
                         <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
+                        <Route path="/farmer/products/add" element={<AddProduct />} />
+                        <Route path="/farmer/products/edit/:id" element={<EditProduct />} />
                     </Route>
                 </Route>
+
 
                 {/* Buyer Routes (Protected) */}
                 <Route element={<ProtectedRoute allowedRoles={['buyer']} />}>

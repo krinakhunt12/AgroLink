@@ -15,7 +15,7 @@ export const useAuth = () => {
     const { i18n } = useTranslation();
 
     // Access user from cache or API
-    const { data: user, isLoading: isUserLoading } = useQuery({
+    const { data: user } = useQuery({
         queryKey: QUERY_KEYS.AUTH.USER,
         queryFn: async () => {
             if (!authAPI.isAuthenticated()) return null;
@@ -115,6 +115,29 @@ export const useAuth = () => {
         navigate('/login');
     };
 
+    // Forgot Password Mutation
+    const forgotPasswordMutation = useMutation({
+        mutationFn: authAPI.forgotPassword,
+        onSuccess: () => {
+            showToast('પાસવર્ડ રીસેટ લિંક તમારા ઈમેલ પર મોકલવામાં આવી છે.', 'success');
+        },
+        onError: (error: any) => {
+            showToast(error.message || 'ઈમેલ મોકલવામાં ભૂલ થઈ.', 'error');
+        }
+    });
+
+    // Reset Password Mutation
+    const resetPasswordMutation = useMutation({
+        mutationFn: ({ token, email, password }: any) => authAPI.resetPassword(token, email, password),
+        onSuccess: () => {
+            showToast('પાસવર્ડ સફળતાપૂર્વક અપડેટ થયો!', 'success');
+            navigate('/login');
+        },
+        onError: (error: any) => {
+            showToast(error.message || 'પાસવર્ડ રીસેટ કરવામાં ભૂલ થઈ.', 'error');
+        }
+    });
+
     return {
         user,
         isAuthenticated,
@@ -125,6 +148,11 @@ export const useAuth = () => {
         isGoogleLoginLoading: googleLoginMutation.isPending,
         register: registerMutation.mutate,
         isRegisterLoading: registerMutation.isPending,
+        forgotPassword: forgotPasswordMutation.mutate,
+        isForgotPasswordLoading: forgotPasswordMutation.isPending,
+        resetPassword: resetPasswordMutation.mutate,
+        isResetPasswordLoading: resetPasswordMutation.isPending,
         logout
     };
 };
+

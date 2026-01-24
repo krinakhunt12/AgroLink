@@ -10,7 +10,7 @@ export const getProducts = async (req, res, next) => {
         // Build query
         let query = {};
 
-        if (category && category !== 'તમામ') {
+        if (category && category !== 'all') {
             query.category = category;
         }
 

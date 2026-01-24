@@ -44,6 +44,7 @@
         "subtitle": "Discover fresh harvest categorized for your needs",
         "viewAll": "Browse Marketplace",
         "items": {
+            "all": "All Items",
             "grains": "Essential Grains",
             "grain": "Essential Grains",
             "vegetables": "Fresh Vegetables",
@@ -54,7 +55,10 @@
             "spice": "Authentic Spices",
             "fruits": "Seasonal Fruits",
             "fruit": "Seasonal Fruits",
-            "organic": "Organic Produce"
+            "organic": "Organic Produce",
+            "dairy": "Dairy Products",
+            "seeds": "Quality Seeds",
+            "tools": "Farm Tools"
         }
     },
     "stats": {
@@ -66,13 +70,22 @@
     "weather": {
         "title": "Agri Weather",
         "subtitle": "Temperature and rainfall forecast for your area",
-        "liveUpdates": "Live Updates"
+        "liveUpdates": "Live Updates",
+        "conditions": {
+            "sunny": "Clear Sky",
+            "cloudy": "Partly Cloudy",
+            "humid": "Humid",
+            "rainy": "Rainy"
+        }
     },
     "videos": {
         "title": "Smart Farming Videos",
         "subtitle": "Learn from experts and increase production",
         "watch": "Watch",
-        "viewAll": "View All Videos"
+        "viewAll": "View All Videos",
+        "expertTutorials": "Expert Tutorials",
+        "noVideosTitle": "No Videos Ripened Yet",
+        "noVideosDesc": "Our AI is still searching for high-quality, practical content for this category. Please check back soon."
     },
     "download": {
         "title": "Download Khedut Setu Mobile App",
@@ -83,6 +96,20 @@
         "title": "Useful Government Schemes",
         "subtitle": "Your right, your government - Know and benefit",
         "viewDetails": "View Details"
+    },
+    "scheme": {
+        "tags": {
+            "new": "NEW",
+            "subsidy": "SUBSIDY"
+        },
+        "pm_kisan": {
+            "title": "PM Kisan Samman Nidhi",
+            "desc": "Annual financial aid of ₹6,000 directly to bank accounts."
+        },
+        "solar_pump": {
+            "title": "Solar Pump Subsidy",
+            "desc": "Up to 80% subsidy for installing solar pumps."
+        }
     },
     "news": {
         "title": "Agri News & Updates",
@@ -105,6 +132,11 @@
             "technology": "Technology",
             "policy": "Policy"
         }
+    },
+    "news_mock": {
+        "cotton_price_surge": "Cotton prices hit record high, farmers rejoice",
+        "heavy_rain_forecast": "Above normal rainfall forecast for Gujarat this year",
+        "drone_subsidy": "Govt to offer 40% subsidy on new drone technology"
     },
     "benefits": {
         "title": "Why our platform is the best?",
@@ -157,6 +189,7 @@
         "faq": "FAQ",
         "about": "About Us",
         "contactTitle": "Contact Us",
+        "supportTitle": "Support",
         "rights": "© 2024 Khedut Setu. All rights reserved.",
         "popularSearches": "Popular Searches"
     },
@@ -195,6 +228,9 @@
         "liveSearch": "Live - Connected with Google Search",
         "grounded": "Grounded Search",
         "searching": "Searching for information...",
+        "analysis": "AI Analysis",
+        "filtering": "Filtering useful content...",
+        "verified": "AI Verified",
         "sources": "Information Sources:",
         "welcome": "Ram Ram! I am your farming assistant. What information do you need?",
         "source": "Source",
@@ -260,6 +296,8 @@
         "edit": "Edit",
         "phone": "+91 98765 43210",
         "email": "support@khedutsetu.guj",
-        "address": "Gandhinagar, Gujarat"
+        "address": "Gandhinagar, Gujarat",
+        "newsTitle": "Agriculture News",
+        "or": "OR"
     }
 }

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Newspaper } from 'lucide-react';
+import { Badge } from '../ui/badge';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 
 interface Scheme {
     tag: string;
@@ -24,10 +27,6 @@ interface SchemesNewsSectionProps {
     news: NewsItem[];
 }
 
-import { Badge } from '../ui/badge';
-import { Card } from '../ui/card';
-import { Button } from '../ui/button';
-
 export const SchemesNewsSection: React.FC<SchemesNewsSectionProps> = React.memo(({
     schemesTitle,
     schemesViewDetailsText,
@@ -37,32 +36,32 @@ export const SchemesNewsSection: React.FC<SchemesNewsSectionProps> = React.memo(
     news
 }) => {
     return (
-        <section className="py-28 bg-bg-base relative overflow-hidden">
-            {/* Background Decorative Element */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-primary/5 rounded-full blur-[100px] -mr-40 -mt-20"></div>
-
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+        <section className="py-20 bg-white border-b border-border-base">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
                     {/* Schemes Section */}
-                    <div className="lg:col-span-7">
-                        <div className="flex items-center gap-4 mb-12">
-                            <div className="p-3 bg-brand-primary/10 rounded-2xl border border-brand-primary/20">
-                                <ArrowRight className="text-brand-primary w-6 h-6" />
-                            </div>
-                            <h2 className="text-4xl font-black text-text-primary tracking-tight">{schemesTitle}</h2>
+                    <div className="lg:col-span-7 space-y-8">
+                        <div className="flex items-center gap-3">
+                            <BookOpen className="text-brand-primary w-6 h-6" />
+                            <h2 className="text-2xl font-bold text-text-primary tracking-tight">{schemesTitle}</h2>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {schemes.map((scheme, idx) => (
-                                <Card key={idx} className="bg-bg-surface p-8 border border-border-subtle shadow-theme-sm hover:shadow-theme-lg transition-all duration-500 group relative overflow-hidden rounded-[32px]">
-                                    <div className="absolute top-0 left-0 w-2 h-full bg-brand-primary/20 group-hover:bg-brand-primary transition-colors duration-500"></div>
-                                    <Badge variant="info" className="text-[10px] font-black uppercase py-1 px-3 tracking-widest bg-status-info/10 text-status-info border-none">
-                                        {scheme.tag}
-                                    </Badge>
-                                    <h3 className="font-black text-text-primary mt-6 text-xl leading-tight group-hover:text-brand-primary transition-colors tracking-tight">{scheme.title}</h3>
-                                    <p className="text-base text-text-secondary mt-4 line-clamp-3 leading-relaxed font-medium">{scheme.desc}</p>
-                                    <Button asChild variant="link" className="text-brand-primary p-0 h-auto font-black mt-8 flex items-center gap-2 group/btn uppercase text-xs tracking-widest">
-                                        <a href={scheme.link} className="flex items-center gap-2">
-                                            {schemesViewDetailsText} <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                                <Card key={idx} className="p-6 border border-border-base bg-bg-surface hover:border-brand-primary/50 transition-colors rounded-lg shadow-sm flex flex-col">
+                                    <div className="flex-1 space-y-3">
+                                        <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-wider bg-status-info/5 text-status-info border-status-info/10">
+                                            {scheme.tag}
+                                        </Badge>
+                                        <h3 className="font-bold text-text-primary text-lg leading-tight group-hover:text-brand-primary transition-colors">
+                                            {scheme.title}
+                                        </h3>
+                                        <p className="text-sm text-text-muted line-clamp-2 leading-relaxed font-medium">
+                                            {scheme.desc}
+                                        </p>
+                                    </div>
+                                    <Button asChild variant="link" className="text-brand-primary p-0 h-auto font-bold mt-6 text-sm flex items-center gap-2 group hover:no-underline">
+                                        <a href={scheme.link}>
+                                            {schemesViewDetailsText} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                                         </a>
                                     </Button>
                                 </Card>
@@ -71,37 +70,35 @@ export const SchemesNewsSection: React.FC<SchemesNewsSectionProps> = React.memo(
                     </div>
 
                     {/* News Section */}
-                    <div className="lg:col-span-5">
-                        <div className="flex items-center gap-4 mb-12">
-                            <div className="p-3 bg-status-success/10 rounded-2xl border border-status-success/20">
-                                <ArrowRight className="text-status-success w-6 h-6 rotate-45" />
-                            </div>
-                            <h2 className="text-4xl font-black text-text-primary tracking-tight">{newsTitle}</h2>
+                    <div className="lg:col-span-5 space-y-8">
+                        <div className="flex items-center gap-3">
+                            <Newspaper className="text-status-success w-6 h-6" />
+                            <h2 className="text-2xl font-bold text-text-primary tracking-tight">{newsTitle}</h2>
                         </div>
-                        <Card className="bg-bg-surface p-10 border border-border-subtle shadow-theme-lg rounded-[40px] relative overflow-hidden">
-                            <div className="space-y-10">
-                                {news.map((item, idx) => (
-                                    <div key={idx} className="flex gap-6 items-start group border-b border-border-subtle last:border-0 pb-8 last:pb-0">
-                                        <div className="bg-status-success/10 p-4 rounded-2xl text-center min-w-[70px] border border-status-success/10 shadow-inner group-hover:bg-status-success group-hover:text-white transition-all duration-500">
-                                            <span className="text-2xl font-black block leading-none mb-1">{item.date.split(' ')[0]}</span>
-                                            <span className="text-[10px] uppercase font-black tracking-tighter opacity-80">{item.date.split(' ')[1]}</span>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-black text-text-primary text-lg leading-snug group-hover:text-status-success transition-colors tracking-tight">
-                                                {item.title}
-                                            </h3>
-                                            <Badge variant="outline" className="text-[10px] mt-4 bg-bg-muted/30 text-text-muted border-none p-1.5 px-3 font-black tracking-[0.1em] uppercase">
-                                                {item.source}
-                                            </Badge>
-                                        </div>
+                        <Card className="border border-border-base bg-bg-surface rounded-lg shadow-sm overflow-hidden divide-y divide-border-subtle">
+                            {news.map((item, idx) => (
+                                <div key={idx} className="p-6 flex gap-4 hover:bg-bg-muted/30 transition-colors group">
+                                    <div className="bg-bg-muted p-2 rounded flex flex-col items-center justify-center min-w-[50px] h-fit border border-border-subtle group-hover:bg-status-success group-hover:border-status-success group-hover:text-white transition-colors">
+                                        <span className="text-base font-bold leading-none">{item.date.split(' ')[0]}</span>
+                                        <span className="text-[10px] uppercase font-bold tracking-tighter opacity-70">{item.date.split(' ')[1]}</span>
                                     </div>
-                                ))}
+                                    <div className="space-y-2">
+                                        <h3 className="font-bold text-text-primary text-sm leading-tight group-hover:text-status-success transition-colors">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                                            {item.source}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="p-4 bg-bg-muted/10">
+                                <Button asChild variant="outline" className="w-full border-border-base font-semibold text-text-secondary hover:bg-bg-muted hover:text-text-primary">
+                                    <Link to="/news">
+                                        {newsViewAllText}
+                                    </Link>
+                                </Button>
                             </div>
-                            <Button asChild variant="outline" className="w-full h-auto py-5 mt-10 rounded-2xl font-black border-2 border-status-success/20 text-status-success hover:bg-status-success hover:text-white transition-all uppercase tracking-widest text-xs">
-                                <Link to="/news">
-                                    {newsViewAllText}
-                                </Link>
-                            </Button>
                         </Card>
                     </div>
                 </div>
@@ -111,3 +108,4 @@ export const SchemesNewsSection: React.FC<SchemesNewsSectionProps> = React.memo(
 });
 
 SchemesNewsSection.displayName = 'SchemesNewsSection';
+

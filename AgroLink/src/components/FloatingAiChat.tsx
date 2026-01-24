@@ -81,21 +81,21 @@ const FloatingAiChat: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
       {isOpen && (
-        <div className="pointer-events-auto bg-bg-surface rounded-3xl shadow-theme w-[90vw] md:w-96 h-[500px] max-h-[80vh] flex flex-col overflow-hidden border border-border-subtle mb-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div className="pointer-events-auto bg-bg-surface rounded-lg shadow-theme w-[90vw] md:w-96 h-[500px] max-h-[80vh] flex flex-col overflow-hidden border border-border-base mb-4">
           <div className="bg-brand-primary p-4 text-text-on-brand flex justify-between items-center shadow-theme">
             <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+              <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
                 <Bot size={20} />
               </div>
               <div>
                 <h3 className="font-bold text-sm tracking-tight">{t('ai.title')}</h3>
                 <p className="text-[10px] text-text-on-brand/80 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-status-success rounded-full animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 bg-status-success rounded-full"></span>
                   {t('ai.liveSearch')}
                 </p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="hover:bg-black/10 p-2 rounded-full transition-colors">
+            <button onClick={() => setIsOpen(false)} className="hover:bg-black/10 p-2 rounded-full transition-colors cursor-pointer">
               <ChevronDown size={20} />
             </button>
           </div>
@@ -104,16 +104,16 @@ const FloatingAiChat: React.FC = () => {
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`flex items-end max-w-[85%] gap-2 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-[10px] ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand' : 'bg-brand-primary text-text-on-brand'}`}>
+                  <div className={`w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand' : 'bg-brand-primary text-text-on-brand'}`}>
                     {msg.sender === 'user' ? <User size={12} /> : <Sprout size={12} />}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <div className={`px-4 py-2.5 text-xs rounded-2xl shadow-theme ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand rounded-br-none' : 'bg-bg-surface text-text-secondary rounded-bl-none border border-border-subtle'}`}>
+                    <div className={`px-4 py-2.5 text-xs rounded-lg shadow-sm ${msg.sender === 'user' ? 'bg-status-info text-text-on-brand rounded-br-none' : 'bg-bg-surface text-text-secondary rounded-bl-none border border-border-base'}`}>
                       <p className="whitespace-pre-wrap">{msg.text}</p>
                       {msg.sources && msg.sources.length > 0 && (
-                        <div className="mt-3 pt-2 border-t border-border-subtle flex flex-wrap gap-1">
+                        <div className="mt-3 pt-2 border-t border-border-base flex flex-wrap gap-1">
                           {msg.sources.map((chunk: any, i: number) => chunk.web && (
-                            <a key={i} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-brand-primary font-bold bg-brand-primary/10 px-1.5 py-0.5 rounded border border-brand-primary/20 flex items-center gap-1">
+                            <a key={i} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-brand-primary font-bold bg-brand-primary/10 px-1.5 py-0.5 rounded border border-brand-primary/20 flex items-center gap-1 cursor-pointer">
                               {t('ai.source')} <ExternalLink size={8} />
                             </a>
                           ))}
@@ -127,13 +127,13 @@ const FloatingAiChat: React.FC = () => {
             {loading && (
               <div className="flex justify-start">
                 <div className="flex items-end gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-brand-primary flex items-center justify-center text-text-on-brand">
+                  <div className="w-6 h-6 rounded-md bg-brand-primary flex items-center justify-center text-text-on-brand">
                     <Bot size={12} />
                   </div>
-                  <div className="bg-bg-surface p-3 rounded-2xl rounded-bl-none border border-border-subtle shadow-theme flex gap-1">
-                    <div className="w-1.5 h-1.5 bg-brand-primary-light rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                    <div className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                    <div className="w-1.5 h-1.5 bg-brand-primary-dark rounded-full animate-bounce"></div>
+                  <div className="bg-bg-surface p-3 rounded-lg rounded-bl-none border border-border-base shadow-sm flex gap-1">
+                    <div className="w-1.5 h-1.5 bg-brand-primary rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-brand-primary rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-brand-primary rounded-full"></div>
                   </div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ const FloatingAiChat: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => handleSend(q)}
-                    className="text-[10px] bg-brand-primary/10 text-brand-primary font-bold px-3 py-2 rounded-2xl border border-brand-primary/20 hover:bg-brand-primary hover:text-white transition-all shadow-sm"
+                    className="text-[10px] bg-brand-primary/10 text-brand-primary font-bold px-3 py-2 rounded-lg border border-brand-primary/20 hover:bg-brand-primary hover:text-white transition-all shadow-sm cursor-pointer"
                   >
                     {q}
                   </button>
@@ -154,8 +154,8 @@ const FloatingAiChat: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 bg-bg-surface border-t border-border-subtle">
-            <div className="flex items-center gap-2 bg-bg-muted p-1.5 rounded-3xl border border-border-base focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/10 transition-all shadow-inner">
+          <div className="p-4 bg-bg-surface border-t border-border-base">
+            <div className="flex items-center gap-2 bg-bg-muted p-1.5 rounded-lg border border-border-base focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/10 transition-all shadow-inner">
               <input
                 type="text"
                 value={input}
@@ -167,7 +167,7 @@ const FloatingAiChat: React.FC = () => {
               <button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || loading}
-                className="p-2.5 bg-brand-primary text-text-on-brand rounded-full hover:bg-brand-primary-dark disabled:opacity-50 transition shadow-theme"
+                className="p-2.5 bg-brand-primary text-text-on-brand rounded-full hover:bg-brand-primary-dark disabled:opacity-50 transition shadow-sm cursor-pointer"
               >
                 <Send size={14} />
               </button>
@@ -176,17 +176,17 @@ const FloatingAiChat: React.FC = () => {
         </div>
       )}
 
-      <button onClick={() => setIsOpen(!isOpen)} className={`pointer-events-auto p-4 rounded-full shadow-2xl transition-all duration-500 hover:scale-110 flex items-center justify-center relative hover:shadow-orange-500/20 ${isOpen ? 'bg-red-500 rotate-90 text-white' : 'bg-gradient-to-tr from-yellow-400 via-orange-500 to-red-500 text-white'}`}>
+      <button onClick={() => setIsOpen(!isOpen)} className={`pointer-events-auto p-4 rounded-full shadow-lg transition-all flex items-center justify-center relative bg-brand-primary text-white cursor-pointer`}>
         {isOpen ? <X size={28} /> : (
           <>
             <MessageCircle size={28} fill="white" className="drop-shadow-sm" />
             <span className="absolute -top-1 -right-1 flex h-4 w-4">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
               <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600 border-2 border-white text-[8px] font-black text-white items-center justify-center uppercase">AI</span>
             </span>
           </>
         )}
       </button>
+
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 3px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }

@@ -1,17 +1,15 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { homeService } from '../services/home-service';
 import { SEO_KEYWORDS } from '../constants';
-import AppLogger, { Category } from '../utils/logger';
 
 /**
  * Custom hook for Home page business logic
- * Follows hooks-driven design and thin UI principles.
- * Orchestrates data from multiple TanStack Query hooks.
  */
 export const useHome = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const [videoCategory, setVideoCategory] = useState('all');
 
     // 1. Fetching data using TanStack Query
     const statsQuery = useQuery({
@@ -39,9 +37,16 @@ export const useHome = () => {
         queryFn: () => homeService.getNews()
     });
 
+    // Dynamic Video Query - Reactive to language and category!
     const videosQuery = useQuery({
-        queryKey: ['home', 'videos'],
-        queryFn: () => homeService.getVideos()
+        queryKey: ['home', 'videos', i18n.language, videoCategory],
+        queryFn: () => {
+            const langPrefix = i18n.language === 'gu' ? 'ગુજરાતી ' : i18n.language === 'hi' ? 'हिंदी ' : '';
+            const categoryTerm = videoCategory === 'all' ? 'farming updates' : videoCategory;
+            const query = `${langPrefix}Indian agriculture ${categoryTerm}`;
+            return homeService.getVideos(query);
+        },
+        staleTime: 5 * 60 * 1000 // 5 minutes
     });
 
     const marketRatesQuery = useQuery({
@@ -49,7 +54,7 @@ export const useHome = () => {
         queryFn: () => homeService.getMarketRates()
     });
 
-    // 2. Data Transformations (Pure logic)
+    // 2. Data Transformations
     const stats = useMemo(() => {
         const data = statsQuery.data;
         if (!Array.isArray(data)) return [];
@@ -68,6 +73,50 @@ export const useHome = () => {
         }));
     }, [categoriesQuery.data, t]);
 
+    const weatherData = useMemo(() => {
+        const data = weatherQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((w: any) => ({
+            ...w,
+            condition: t(w.conditionKey || 'weather.conditions.sunny')
+        }));
+    }, [weatherQuery.data, t]);
+
+    const schemes = useMemo(() => {
+        const data = schemesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((s: any) => ({
+            ...s,
+            tag: t(s.tag),
+            title: t(s.title),
+            desc: t(s.desc)
+        }));
+    }, [schemesQuery.data, t]);
+
+    const news = useMemo(() => {
+        const data = newsQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((n: any) => ({
+            ...n,
+            title: t(n.title)
+        }));
+    }, [newsQuery.data, t]);
+
+    const videos = useMemo(() => {
+        const data = videosQuery.data;
+        if (!Array.isArray(data)) return [];
+        // Important: Don't translate the actual YouTube title using t(), 
+        // as YouTube titles are strings, not keys. 
+        // We just return them as is or with language-specific fallbacks.
+        return data;
+    }, [videosQuery.data]);
+
+    const marketRates = useMemo(() => {
+        const data = marketRatesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data;
+    }, [marketRatesQuery.data]);
+
     const liveFeatures = useMemo(() => ([
         { title: t('liveFeatures.livePrice'), desc: t('liveFeatures.livePriceDesc') },
         { title: t('liveFeatures.gpsSearch'), desc: t('liveFeatures.gpsSearchDesc') },
@@ -80,37 +129,32 @@ export const useHome = () => {
             quote: t('testimonials.farmerQuote'),
             name: t('testimonials.farmerName'),
             role: t('testimonials.farmerRole'),
-            color: 'green'
+            color: 'green' as const
         },
         {
             quote: t('testimonials.buyerQuote'),
             name: t('testimonials.buyerName'),
             role: t('testimonials.buyerRole'),
-            color: 'yellow'
+            color: 'yellow' as const
         }
     ]), [t]);
-
-    // Log important state transitions
-    useMemo(() => {
-        if (statsQuery.isSuccess) {
-            AppLogger.info(Category.DATA, 'Home page data loaded successfully');
-        }
-    }, [statsQuery.isSuccess]);
 
     return {
         t,
         stats,
         categories,
         liveFeatures,
-        weatherData: Array.isArray(weatherQuery.data) ? weatherQuery.data : [],
-        schemes: Array.isArray(schemesQuery.data) ? schemesQuery.data : [],
-        news: Array.isArray(newsQuery.data) ? newsQuery.data : [],
-        videos: Array.isArray(videosQuery.data) ? videosQuery.data : [],
-        marketRates: Array.isArray(marketRatesQuery.data) ? marketRatesQuery.data : [],
+        weatherData,
+        schemes,
+        news,
+        videos,
+        videoCategory,
+        setVideoCategory,
+        marketRates,
         seoKeywords: SEO_KEYWORDS,
         testimonials,
-        // Combined loading/error states
         isLoading: statsQuery.isLoading || categoriesQuery.isLoading || weatherQuery.isLoading,
-        isError: statsQuery.isError || categoriesQuery.isError
+        isError: statsQuery.isError || categoriesQuery.isError,
+        isVideosLoading: videosQuery.isLoading
     };
 };

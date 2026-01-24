@@ -12,19 +12,20 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../ui/c
 
 export const LiveUpdatesCard: React.FC<LiveUpdatesCardProps> = ({ title, liveLabel, rates }) => {
     return (
-        <Card className="bg-bg-surface text-text-primary rounded-[32px] overflow-hidden shadow-theme-lg border-none flex flex-col h-full">
-            <CardHeader className="bg-bg-muted/30 backdrop-blur-sm p-6 border-b border-border-subtle flex flex-row justify-between items-center space-y-0">
-                <CardTitle className="font-extrabold text-xl flex items-center gap-3 text-text-primary">
-                    <div className="p-2 bg-brand-primary/10 rounded-xl">
+        <Card className="bg-bg-surface text-text-primary rounded-lg overflow-hidden shadow-sm border border-border-base flex flex-col h-full">
+            <CardHeader className="bg-bg-muted/30 backdrop-blur-sm p-6 border-b border-border-base flex flex-row justify-between items-center space-y-0">
+                <CardTitle className="font-bold text-xl flex items-center gap-3 text-text-primary">
+                    <div className="p-2 bg-brand-primary/10 rounded-lg">
                         <TrendingUp className="text-brand-primary w-6 h-6" />
                     </div>
                     {title}
                 </CardTitle>
                 <span className="flex items-center gap-2 text-status-error text-[10px] font-black tracking-widest uppercase bg-status-error/10 px-3 py-1.5 rounded-full">
-                    <span className="w-2 h-2 bg-status-error rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
+                    <span className="w-2 h-2 bg-status-error rounded-full"></span>
                     {liveLabel}
                 </span>
             </CardHeader>
+
 
             <CardContent className="p-6 space-y-4 flex-grow">
                 {rates.map((rate, i) => {

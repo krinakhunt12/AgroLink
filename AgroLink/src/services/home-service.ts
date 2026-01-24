@@ -6,6 +6,8 @@ import {
     MARKET_RATES_TICKER
 } from '../constants';
 
+import { youtubeAPI } from './api';
+
 /**
  * Home Service
  * Handles data fetching related to the home page.
@@ -38,10 +40,10 @@ export const homeService = {
     getWeather: async () => {
         try {
             const cities = [
-                { name: "અમદાવાદ (Ahmedabad)", lat: 23.0225, lon: 72.5714, bg: "from-blue-400 to-indigo-500" },
-                { name: "રાજકોટ (Rajkot)", lat: 22.3039, lon: 70.8022, bg: "from-orange-400 to-yellow-500" },
-                { name: "સુરત (Surat)", lat: 21.1702, lon: 72.8311, bg: "from-emerald-400 to-teal-500" },
-                { name: "અમરેલી (Amreli)", lat: 21.6030, lon: 71.2150, bg: "from-rose-400 to-pink-500" }
+                { name: "Ahmedabad", lat: 23.0225, lon: 72.5714, bg: "from-blue-400 to-indigo-500" },
+                { name: "Rajkot", lat: 22.3039, lon: 70.8022, bg: "from-orange-400 to-yellow-500" },
+                { name: "Surat", lat: 21.1702, lon: 72.8311, bg: "from-emerald-400 to-teal-500" },
+                { name: "Amreli", lat: 21.6030, lon: 71.2150, bg: "from-rose-400 to-pink-500" }
             ];
 
             const weatherPromises = cities.map(async (city) => {
@@ -50,24 +52,22 @@ export const homeService = {
                 );
                 const data = await response.json();
 
-                // Map WMO Weather Codes to human readable conditions and icons
-                // 0: Clear, 1-3: Partly Cloudy, 45-48: Fog, 51-65: Rain, etc.
                 const code = data.current.weather_code;
-                let condition = "ચોખ્ખું (Clear)";
+                let conditionKey = "weather.conditions.sunny";
                 let icon = "Sun";
 
                 if (code >= 1 && code <= 3) {
-                    condition = "વાદળછાયું (Cloudy)";
+                    conditionKey = "weather.conditions.cloudy";
                     icon = "Cloud";
                 } else if (code >= 51 || data.current.rain > 0) {
-                    condition = "વરસાદ (Rain)";
+                    conditionKey = "weather.conditions.rainy";
                     icon = "CloudRain";
                 }
 
                 return {
                     city: city.name,
                     temp: `${Math.round(data.current.temperature_2m)}°C`,
-                    condition: condition,
+                    conditionKey: conditionKey,
                     icon: icon,
                     bg: city.bg
                 };
@@ -90,9 +90,17 @@ export const homeService = {
         return MOCK_NEWS;
     },
 
-    getVideos: async () => {
-        await new Promise(resolve => setTimeout(resolve, 900));
-        return MOCK_VIDEOS;
+    getVideos: async (query: string = 'agriculture farming india') => {
+        try {
+            const response = await youtubeAPI.getVideos(query);
+            if (response.success && Array.isArray(response.data)) {
+                return response.data;
+            }
+            return MOCK_VIDEOS;
+        } catch (error) {
+            console.error("Failed to fetch youtube videos:", error);
+            return MOCK_VIDEOS;
+        }
     },
 
     getMarketRates: async () => {

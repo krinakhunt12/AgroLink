@@ -2,7 +2,6 @@ import React from 'react';
 
 // Main Components
 import { HeroSection } from '../components/home/HeroSection';
-import { StatsBar } from '../components/home/StatsBar';
 import { WeatherWidget } from '../components/home/WeatherWidget';
 import { CategoryGrid } from '../components/home/CategoryGrid';
 import { VideoGallery } from '../components/home/VideoGallery';
@@ -24,25 +23,27 @@ import { useHome } from '../hooks/useHome';
 const Home: React.FC = () => {
   const {
     t,
-    stats,
     categories,
     liveFeatures,
     weatherData,
     schemes,
     news,
     videos,
+    videoCategory,
+    setVideoCategory,
     marketRates,
     seoKeywords,
     testimonials,
-    isLoading
+    isLoading,
+    isVideosLoading
   } = useHome();
 
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-bg-base z-[100] flex items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="mt-4 text-brand-primary-dark font-bold animate-pulse">{t('common.loading')}</p>
+          <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-text-muted font-semibold">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -51,13 +52,10 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen font-sans bg-bg-base">
 
-      {/* 1. Hero Section - Full width carousel */}
+      {/* 1. Hero Section - Direct & Professional */}
       <HeroSection />
 
-      {/* 2. Stats Bar - Floating overlay */}
-      <StatsBar stats={stats} />
-
-      {/* 3. Weather Widget - Live updates */}
+      {/* 2. Weather Widget - Live updates */}
       <WeatherWidget
         weatherData={weatherData}
         title={t('weather.title')}
@@ -77,8 +75,10 @@ const Home: React.FC = () => {
       <VideoGallery
         title={t('videos.title')}
         subtitle={t('videos.subtitle')}
-        viewAllText={t('videos.viewAll')}
         videos={videos}
+        currentCategory={videoCategory}
+        onCategoryChange={setVideoCategory}
+        isLoading={isVideosLoading}
       />
 
       {/* 6. Schemes & News - Updates for farmers */}

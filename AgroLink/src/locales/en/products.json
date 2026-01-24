@@ -30,7 +30,9 @@
         "bidSuccessMsg": "Your bid has reached the farmer. They will contact you soon.",
         "close": "Close",
         "farmer": "Farmer",
-        "farmerPrice": "Farmer's Price"
+        "farmerPrice": "Farmer's Price",
+        "sortBy": "Sort By",
+        "bidInterest": "I am interested in this product and would like to place a bid."
     },
     "detail": {
         "back": "Back to Market",
@@ -87,6 +89,7 @@
         "securePayment": "Secure Payment",
         "fastDelivery": "Fast Delivery",
         "bestPrice": "Best Price Guarantee",
-        "maxStock": "Maximum stock reached"
+        "maxStock": "Maximum stock reached",
+        "items": "items"
     }
 }

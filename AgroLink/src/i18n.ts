@@ -10,6 +10,14 @@ import enProducts from "./locales/en/products.json";
 import enErrors from "./locales/en/errors.json";
 import enNews from "./locales/en/news.json";
 
+// Hindi Locales
+import hiCommon from "./locales/hi/common.json";
+import hiAuth from "./locales/hi/auth.json";
+import hiDashboard from "./locales/hi/dashboard.json";
+import hiProducts from "./locales/hi/products.json";
+import hiErrors from "./locales/hi/errors.json";
+import hiNews from "./locales/hi/news.json";
+
 // Gujarati Locales
 import guCommon from "./locales/gu/common.json";
 import guAuth from "./locales/gu/auth.json";
@@ -30,6 +38,14 @@ i18n
         products: enProducts,
         errors: enErrors,
         news: enNews
+      },
+      hi: {
+        common: hiCommon,
+        auth: hiAuth,
+        dashboard: hiDashboard,
+        products: hiProducts,
+        errors: hiErrors,
+        news: hiNews
       },
       gu: {
         common: guCommon,

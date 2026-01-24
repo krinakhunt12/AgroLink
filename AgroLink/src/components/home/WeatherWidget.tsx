@@ -1,12 +1,12 @@
 import React from 'react';
 import { Sun, Cloud, CloudRain } from 'lucide-react';
+import { Card } from '../ui/card';
 
 interface WeatherItem {
     city: string;
     condition: string;
     temp: string;
     icon: string;
-    bg: string;
 }
 
 interface WeatherWidgetProps {
@@ -18,15 +18,12 @@ interface WeatherWidgetProps {
 
 const getWeatherIcon = (iconName: string) => {
     switch (iconName) {
-        case 'Sun': return <Sun className="w-10 h-10 text-white drop-shadow-md" />;
-        case 'Cloud': return <Cloud className="w-10 h-10 text-white drop-shadow-md" />;
-        case 'CloudRain': return <CloudRain className="w-10 h-10 text-white drop-shadow-md" />;
-        default: return <Sun className="w-10 h-10 text-white drop-shadow-md" />;
+        case 'Sun': return <Sun className="w-8 h-8 text-status-warning" />;
+        case 'Cloud': return <Cloud className="w-8 h-8 text-text-muted" />;
+        case 'CloudRain': return <CloudRain className="w-8 h-8 text-status-info" />;
+        default: return <Sun className="w-8 h-8 text-status-warning" />;
     }
 };
-
-import { Badge } from '../ui/badge';
-import { Card } from '../ui/card';
 
 export const WeatherWidget: React.FC<WeatherWidgetProps> = React.memo(({
     weatherData,
@@ -35,53 +32,39 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = React.memo(({
     liveUpdatesLabel
 }) => {
     return (
-        <section className="py-24 bg-bg-surface relative overflow-hidden">
-            {/* Decorative Background */}
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand-primary/5 rounded-full blur-[120px] -ml-80 -mt-40 pointer-events-none"></div>
-
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-                <div className="text-center mb-16">
-                    <div className="flex items-center justify-center gap-3 mb-6">
-                        <Badge variant="secondary" className="bg-status-info/10 text-status-info border-none px-4 py-1.5 rounded-full font-black text-[10px] tracking-widest uppercase flex items-center gap-2">
-                            <span className="w-2 h-2 bg-status-info rounded-full animate-pulse"></span>
+        <section className="py-20 bg-bg-base overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-status-info font-bold text-xs uppercase tracking-wider">
+                            <span className="w-2 h-2 bg-status-info rounded-full"></span>
                             {liveUpdatesLabel}
-                        </Badge>
+                        </div>
+                        <h2 className="text-3xl font-bold text-text-primary tracking-tight">{title}</h2>
+                        <p className="text-text-muted text-lg max-w-xl">{subtitle}</p>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black text-text-primary tracking-tight leading-tight">{title}</h2>
-                    <p className="text-text-secondary mt-4 font-medium text-lg md:text-xl max-w-2xl mx-auto">{subtitle}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {weatherData.length > 0 ? (
                         weatherData.map((w, idx) => (
-                            <Card key={idx} className={`relative overflow-hidden border-none shadow-theme-sm hover:shadow-theme-lg transition-all duration-500 group hover:-translate-y-2 rounded-[32px] p-8 bg-gradient-to-br ${w.bg} text-white`}>
-                                {/* Glassmorphism Effect Overlay */}
-                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                                <div className="flex justify-between items-start relative z-10">
+                            <Card key={idx} className="p-6 bg-bg-surface border-border-base shadow-sm hover:border-brand-primary/50 transition-colors rounded-lg flex flex-col justify-between h-40">
+                                <div className="flex justify-between items-start">
                                     <div>
-                                        <h3 className="font-black text-xl mb-2 tracking-tight drop-shadow-sm">{w.city}</h3>
-                                        <Badge variant="outline" className="bg-white/10 border-white/20 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full">
-                                            {w.condition}
-                                        </Badge>
+                                        <h3 className="font-bold text-text-primary text-lg">{w.city}</h3>
+                                        <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">{w.condition}</p>
                                     </div>
-                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner group-hover:scale-110 transition-transform duration-500">
-                                        {getWeatherIcon(w.icon)}
-                                    </div>
+                                    {getWeatherIcon(w.icon)}
                                 </div>
-
-                                <div className="mt-10 relative z-10">
-                                    <div className="flex items-baseline gap-1">
-                                        <span className="text-5xl font-black tracking-tighter drop-shadow-lg">{w.temp}</span>
-                                        <span className="text-white/60 font-bold text-sm tracking-widest uppercase">Live Now</span>
-                                    </div>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-3xl font-bold text-text-primary">{w.temp}</span>
+                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Live Now</span>
                                 </div>
                             </Card>
                         ))
                     ) : (
-                        // Skeleton/Fallback state handled by global loading, but safe to have something here
                         Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="h-48 bg-bg-muted animate-pulse rounded-[32px]"></div>
+                            <div key={i} className="h-40 bg-bg-muted rounded-lg"></div>
                         ))
                     )}
                 </div>
@@ -91,3 +74,4 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = React.memo(({
 });
 
 WeatherWidget.displayName = 'WeatherWidget';
+

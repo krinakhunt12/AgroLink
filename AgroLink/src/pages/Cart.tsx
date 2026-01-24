@@ -173,7 +173,7 @@ const Cart: React.FC = () => {
                                     </div>
 
                                     <div className="flex justify-between text-gray-600 font-bold">
-                                        <span>{t('products:cart.subtotal')} ({cart.items.length} {t('products:cart.items')})</span>
+                                        <span>{t('products:cart.subtotal')} ({cart.items.length} {t('products:cart.items') || 'items'})</span>
                                         <span>₹{subtotal}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-600 font-bold">
