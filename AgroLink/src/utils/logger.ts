@@ -4,24 +4,28 @@
  * Replaces console.log with structured, trackable logs
  */
 
-export enum LogLevel {
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-  SUCCESS = 'SUCCESS'
-}
+export const LogLevel = {
+  DEBUG: 'DEBUG',
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS'
+} as const;
 
-export enum LogCategory {
-  API = 'API',
-  UI = 'UI',
-  AUTH = 'AUTH',
-  NAVIGATION = 'NAVIGATION',
-  DATA = 'DATA',
-  PERFORMANCE = 'PERFORMANCE',
-  USER_ACTION = 'USER_ACTION',
-  SYSTEM = 'SYSTEM'
-}
+export type LogLevel = typeof LogLevel[keyof typeof LogLevel];
+
+export const LogCategory = {
+  API: 'API',
+  UI: 'UI',
+  AUTH: 'AUTH',
+  NAVIGATION: 'NAVIGATION',
+  DATA: 'DATA',
+  PERFORMANCE: 'PERFORMANCE',
+  USER_ACTION: 'USER_ACTION',
+  SYSTEM: 'SYSTEM'
+} as const;
+
+export type LogCategory = typeof LogCategory[keyof typeof LogCategory];
 
 interface LogMetadata {
   featureName?: string;

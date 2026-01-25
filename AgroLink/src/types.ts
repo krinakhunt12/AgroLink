@@ -15,6 +15,7 @@ export interface Product {
   isVerified?: boolean;
   stock?: number;
   description?: string;
+  farmerName?: string;
   status?: 'active' | 'sold';
   farmer?: {
     id: string;
@@ -53,4 +54,14 @@ export interface ChatMessage {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+}
+
+export interface Video {
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  publishedAt: string;
+  channel: string;
+  category: string;
 }

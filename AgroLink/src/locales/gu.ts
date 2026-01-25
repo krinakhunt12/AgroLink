@@ -16,7 +16,29 @@ export const gu = {
     subtitle: "ખેડૂતોને તેમની મહેનતનો સાચો ભાવ મળે, અને ખરીદદારોને ખેતરનો તાજો માલ. 'ખેડૂત સેતુ' એટલે ખેડૂતોનો વિશ્વાસ.",
     ctaFarmer: "ખેડૂત તરીકે જોડાવ",
     ctaBuyer: "ખરીદદાર તરીકે જોડાવ",
-    learnMore: "આ કેવી રીતે કામ કરે છે?"
+    learnMore: "આ કેવી રીતે કામ કરે છે?",
+    slides: [
+      {
+        title: "ખેડૂતથી ગ્રાહક સીધો વેપાર. વચેટિયા વગર, પૂરો નફો!",
+        subtitle: "ખેડૂતોને તેમની મહેનતનો યોગ્ય ભાવ મળે છે અને ગ્રાહકોને ખેત-તાજી પેદાશ મળે છે.",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "આધુનિક ખેતી માટે સ્માર્ટ ટેકનોલોજી",
+        subtitle: "તમારા પાકની ઉપજ અને ફાર્મ મેનેજમેન્ટને સુધારવા માટે AI-આધારિત આંતરદૃષ્ટિનો લાભ લો.",
+        image: "https://images.unsplash.com/photo-1586771107445-d3ec9473d0f7?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "લણણીથી સીધા તાજા પાક",
+        subtitle: "બજારના શ્રેષ્ઠ ભાવે અનાજ, ફળો અને શાકભાજીની વિશાળ વિવિધતા મેળવો.",
+        image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "આધુનિક સાધનો સાથે ખેડૂતોનું સશક્તિકરણ",
+        subtitle: "અમારા પ્લેટફોર્મનો ઉપયોગ કરીને 50,000 થી વધુ ખેડૂતો સાથે જોડાઈને તમારા વ્યવસાયને આગળ વધારો.",
+        image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=2000&auto=format&fit=crop"
+      }
+    ]
   },
   stats: {
     farmers: "ખેડૂતો જોડાયા",
@@ -107,7 +129,8 @@ export const gu = {
     securePayDesc: "તમારા પૈસા Escrow એકાઉન્ટમાં સુરક્ષિત રહે છે.",
     auction: "લાઈવ હરાજી",
     auctionDesc: "તમારા પાકની હરાજી કરો અને શ્રેષ્ઠ બોલી મેળવો.",
-    liveUpdates: "લાઇવ બજાર ભાવ"
+    liveUpdates: "લાઇવ બજાર ભાવ",
+    liveIndicator: "LIVE"
   },
   testimonials: {
     title: "ખેડૂતો અને ખરીદદારો શું કહે છે?",

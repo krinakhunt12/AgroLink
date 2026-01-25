@@ -1,69 +1,134 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sprout, ShoppingCart, Star } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Sprout, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface HeroSectionProps {
-    tagline: string;
-    title: string;
-    subtitle: string;
-    ctaFarmer: string;
-    ctaBuyer: string;
-}
+export const HeroSection: React.FC = () => {
+    const { t } = useTranslation('common');
+    const [currentSlide, setCurrentSlide] = useState(0);
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
-    tagline,
-    title,
-    subtitle,
-    ctaFarmer,
-    ctaBuyer
-}) => {
-    const [titlePart1, titlePart2] = title.split('.');
+    // Get slides from translation
+    const slides = t('hero.slides', { returnObjects: true }) as Array<{
+        title: string;
+        subtitle: string;
+        image: string;
+    }>;
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 6000);
+        return () => clearInterval(timer);
+    }, [slides.length]);
+
+    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
     return (
-        <section className="relative bg-green-900 text-white overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-36">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-green-800 to-emerald-900"></div>
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-                    <div className="text-center lg:text-left flex flex-col items-center lg:items-start animate-slide-up">
-                        <div className="inline-block px-4 py-1.5 mb-6 border border-yellow-400/50 rounded-full bg-yellow-400/10 backdrop-blur-sm">
-                            <span className="text-yellow-300 font-bold tracking-wide text-xs md:text-sm uppercase flex items-center gap-2">
-                                <Star className="w-4 h-4 fill-yellow-300" />
-                                {tagline}
-                            </span>
-                        </div>
-
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                            <span className="text-white block">{titlePart1}</span>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 block mt-2">
-                                {titlePart2}
-                            </span>
-                        </h1>
-
-                        <p className="text-lg md:text-xl mb-10 max-w-2xl text-green-100 font-medium leading-relaxed">
-                            {subtitle}
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <Link to="/register" className="px-8 py-4 bg-green-500 hover:bg-green-400 text-white font-bold rounded-full text-lg transition shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 hover:-translate-y-1">
-                                <Sprout className="w-5 h-5" />
-                                {ctaFarmer}
-                            </Link>
-                            <Link to="/register" className="px-8 py-4 bg-white text-green-900 font-bold rounded-full text-lg transition shadow-lg hover:shadow-xl hover:bg-gray-50 flex items-center justify-center gap-2 hover:-translate-y-1">
-                                <ShoppingCart className="w-5 h-5" />
-                                {ctaBuyer}
-                            </Link>
-                        </div>
+        <section className="relative bg-white border-b border-border-base overflow-hidden h-[600px] md:h-[700px]">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={currentSlide}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                >
+                    {/* Background Image with Overlay */}
+                    <div className="absolute inset-0">
+                        <img
+                            src={slides[currentSlide].image}
+                            alt={slides[currentSlide].title}
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-white/40" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent" />
                     </div>
 
-                    <div className="relative hidden lg:block h-[600px] w-full animate-fade-in delay-200">
-                        <div className="absolute top-0 right-0 w-[85%] h-[75%] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/10 z-10 transform rotate-2">
-                            <img src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Farmer" className="w-full h-full object-cover" />
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 h-full flex items-center">
+                        <div className="max-w-2xl space-y-6 md:space-y-8">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2, duration: 0.6 }}
+                            >
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-[10px] font-bold uppercase tracking-widest mb-4">
+                                    {t('hero.tagline')}
+                                </div>
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-text-primary leading-[1.1] tracking-tight">
+                                    {slides[currentSlide].title}
+                                </h1>
+                            </motion.div>
+
+                            <motion.p
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4, duration: 0.6 }}
+                                className="text-base md:text-lg text-text-secondary leading-relaxed max-w-lg"
+                            >
+                                {slides[currentSlide].subtitle}
+                            </motion.p>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.6, duration: 0.6 }}
+                                className="flex flex-col sm:flex-row gap-4 pt-4"
+                            >
+                                <Button asChild size="lg" className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold rounded shadow-sm h-12 px-8 cursor-pointer border-none">
+                                    <Link to="/register" className="flex items-center gap-2">
+                                        <Sprout size={18} />
+                                        {t('hero.ctaFarmer')}
+                                    </Link>
+                                </Button>
+                                <Button asChild variant="outline" size="lg" className="bg-white/80 backdrop-blur-sm border-border-base text-text-primary font-bold rounded shadow-sm h-12 px-8 cursor-pointer hover:bg-bg-muted">
+                                    <Link to="/market" className="flex items-center gap-2">
+                                        <ShoppingCart size={18} />
+                                        {t('hero.ctaBuyer')}
+                                    </Link>
+                                </Button>
+                            </motion.div>
                         </div>
+                    </div>
+                </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation Controls */}
+            <div className="absolute bottom-12 left-0 right-0 z-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <div className="flex gap-2">
+                        {slides.map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setCurrentSlide(idx)}
+                                className={`h-1.5 transition-all rounded-full cursor-pointer ${currentSlide === idx ? 'w-8 bg-brand-primary' : 'w-2 bg-text-muted/30'}`}
+                                aria-label={`Go to slide ${idx + 1}`}
+                            />
+                        ))}
                     </div>
                 </div>
+            </div>
+
+            <div className="absolute right-8 bottom-12 z-20 flex gap-4">
+                <button
+                    onClick={prevSlide}
+                    className="p-3 rounded-full bg-white/80 hover:bg-white text-text-primary border border-border-base shadow-sm transition-colors cursor-pointer"
+                    aria-label="Previous Slide"
+                >
+                    <ChevronLeft size={20} />
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="p-3 rounded-full bg-white/80 hover:bg-white text-text-primary border border-border-base shadow-sm transition-colors cursor-pointer"
+                    aria-label="Next Slide"
+                >
+                    <ChevronRight size={20} />
+                </button>
             </div>
         </section>
     );
 };
+

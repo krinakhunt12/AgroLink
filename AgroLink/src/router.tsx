@@ -3,19 +3,22 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingAiChat from './components/FloatingAiChat';
 import ScrollToTop from './components/ScrollToTop';
-import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './components/layouts/DashboardLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Public Pages
 import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
 import AiAssistant from './pages/AiAssistant';
 import Help from './pages/Help';
 import Legal from './pages/Legal';
 import About from './pages/About';
 import News from './pages/News';
+import AddProduct from './pages/AddProduct';
+import EditProduct from './pages/EditProduct';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
 
@@ -55,6 +58,7 @@ const AppRouter = () => {
                 {/* Auth Pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Public Pages with Navbar/Footer */}
                 <Route element={<MainLayout />}>
@@ -68,6 +72,28 @@ const AppRouter = () => {
                     <Route path="/news" element={<News />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
+
+                    {/* Public Market Preview (Optional, or redirect to Login if strict) */}
+                    <Route path="/market" element={<Marketplace />} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
+                </Route>
+
+                {/* Farmer Routes (Protected) */}
+                <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
+                    <Route element={<MainLayout />}>
+                        <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
+                        <Route path="/farmer/products/add" element={<AddProduct />} />
+                        <Route path="/farmer/products/edit/:id" element={<EditProduct />} />
+                    </Route>
+                </Route>
+
+
+                {/* Buyer Routes (Protected) */}
+                <Route element={<ProtectedRoute allowedRoles={['buyer']} />}>
+                    <Route element={<MainLayout />}>
+                        <Route path="/buyer/dashboard" element={<Marketplace />} />
+                        <Route path="/cart" element={<Cart />} />
+                    </Route>
                 </Route>
 
                 {/* ============= FARMER DASHBOARD (Protected) ============= */}
@@ -111,6 +137,9 @@ const AppRouter = () => {
                 {/* ============= FALLBACK ============= */}
 
                 <Route path="*" element={<Navigate to="/" replace />} />
+
+                {/* Fallback - Redirect to Home */}
+                <Route path="*" element={<Home />} />
             </Routes>
         </>
     );

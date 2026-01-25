@@ -1,11 +1,31 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { authAPI } from '../services/api';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 interface ProtectedRouteProps {
-    children: React.ReactNode;
-    requiredRole?: 'farmer' | 'buyer';
+    allowedRoles?: string[];
 }
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
+    const { isAuthenticated, role } = useAuth();
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (allowedRoles && role && !allowedRoles.includes(role)) {
+        // Redirect to appropriate dashboard if role doesn't match
+        if (role === 'farmer') {
+            return <Navigate to="/farmer/dashboard" replace />;
+        } else {
+            return <Navigate to="/buyer/dashboard" replace />;
+        }
+    }
+
+    return <Outlet />;
+};
+
+export default ProtectedRoute;
+
 
 /**
  * ProtectedRoute Component
@@ -13,23 +33,3 @@ interface ProtectedRouteProps {
  * Protects routes that require authentication
  * Optionally checks for specific user roles
  */
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
-    const location = useLocation();
-    const isAuthenticated = authAPI.isAuthenticated();
-    const user = authAPI.getCurrentUser();
-
-    // If not authenticated, redirect to login
-    if (!isAuthenticated) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-
-    // If role is required and doesn't match, redirect to appropriate dashboard
-    if (requiredRole && user?.userType !== requiredRole) {
-        const redirectPath = user?.userType === 'farmer' ? '/dashboard' : '/buyer/dashboard';
-        return <Navigate to={redirectPath} replace />;
-    }
-
-    return <>{children}</>;
-};
-
-export default ProtectedRoute;

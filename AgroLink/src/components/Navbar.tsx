@@ -1,89 +1,117 @@
-
 import React, { useState } from 'react';
-import { Menu, X, Sprout } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { Menu, X, Sprout, ArrowRight } from 'lucide-react';
+import { NavLink, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NAV_ITEMS } from '../constants';
 import LanguageSwitcher from './LanguageSwitcher';
+import { Button } from '../components/ui/button';
+import { Drawer, DrawerContent, DrawerTrigger, DrawerClose } from '../components/ui/drawer';
+import { useAuth } from '../hooks/useAuth';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuth();
 
   return (
-    <nav className="bg-gradient-to-r from-green-700 to-green-800 text-white shadow-lg sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
+    <nav className="bg-white border-b border-border-base sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <NavLink to="/" className="flex items-center gap-2 group">
-              <div className="bg-white rounded-full p-1.5 group-hover:rotate-12 transition-transform duration-300">
-                 <Sprout className="h-6 w-6 text-green-700" />
-              </div>
-              <span className="font-bold text-xl tracking-wider group-hover:text-yellow-300 transition-colors">ખેડૂત સેતુ</span>
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <NavLink to="/" className="flex-shrink-0 flex items-center gap-2 mr-8">
+              <Sprout className="h-7 w-7 text-brand-primary" />
+              <span className="font-bold text-xl text-text-primary tracking-tight">{t('common.brand')}</span>
             </NavLink>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-1">
-            <div className="flex items-baseline space-x-1">
+            <div className="hidden md:ml-6 md:flex md:space-x-4 h-full items-center">
               {NAV_ITEMS.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                      isActive
-                        ? 'bg-white text-green-800 shadow-md transform scale-105'
-                        : 'text-green-50 hover:bg-green-600/50 hover:text-white'
+                    `px-3 py-2 text-sm font-semibold transition-colors border-b-2 h-full flex items-center ${isActive
+                      ? 'border-brand-primary text-brand-primary'
+                      : 'border-transparent text-text-secondary hover:text-text-primary hover:border-border-base'
                     }`
                   }
                 >
-                  <item.icon className="w-4 h-4" />
                   {t(item.translationKey)}
                 </NavLink>
               ))}
             </div>
-            <div className="ml-4 pl-4 border-l border-green-600/50">
-               <LanguageSwitcher />
-            </div>
           </div>
-          
-          <div className="-mr-2 flex md:hidden items-center gap-3">
+
+          <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-green-100 hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-800 focus:ring-white"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            <div className="h-6 w-px bg-border-base mx-2"></div>
+            {isAuthenticated ? (
+              <Button asChild className="bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-md shadow-sm h-9 px-4 cursor-pointer">
+                <Link to={user?.userType === 'farmer' ? '/farmer/dashboard' : '/buyer/dashboard'}>
+                  {t('nav.dashboard')}
+                </Link>
+              </Button>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Button asChild variant="ghost" className="text-text-secondary hover:text-text-primary font-semibold text-sm cursor-pointer">
+                  <Link to="/login">{t('nav.login')}</Link>
+                </Button>
+                <Button asChild className="bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-md shadow-sm h-9 px-4 cursor-pointer">
+                  <Link to="/register" className="flex items-center gap-2">
+                    {t('nav.signup')} <ArrowRight size={14} />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
+
+          <div className="flex items-center md:hidden gap-3">
+            <LanguageSwitcher />
+            <Drawer open={isOpen} onOpenChange={setIsOpen}>
+              <DrawerTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-text-secondary cursor-pointer">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="bg-white border-t p-4 pb-8 h-[80vh]">
+                <div className="flex justify-between items-center mb-8">
+                  <span className="font-bold text-xl text-text-primary">{t('common.brand')}</span>
+                  <DrawerClose asChild>
+                    <Button variant="ghost" size="icon" className="cursor-pointer"><X size={24} /></Button>
+                  </DrawerClose>
+                </div>
+                <div className="space-y-2">
+                  {NAV_ITEMS.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `px-4 py-3 rounded-md text-base font-bold flex items-center transition-colors cursor-pointer ${isActive
+                          ? 'bg-brand-primary/10 text-brand-primary'
+                          : 'text-text-secondary hover:bg-bg-muted'
+                        }`
+                      }
+                    >
+                      {t(item.translationKey)}
+                    </NavLink>
+                  ))}
+                  <div className="pt-4 border-t border-border-base mt-4 space-y-3">
+                    <Button asChild variant="outline" className="w-full h-12 rounded-md font-bold text-text-primary border-border-base cursor-pointer">
+                      <Link to="/login" onClick={() => setIsOpen(false)}>{t('nav.login')}</Link>
+                    </Button>
+                    <Button asChild className="w-full h-12 rounded-md font-bold bg-brand-primary text-white cursor-pointer">
+                      <Link to="/register" onClick={() => setIsOpen(false)}>{t('nav.signup')}</Link>
+                    </Button>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
+
         </div>
       </div>
-
-      {isOpen && (
-        <div className="md:hidden bg-green-800 border-t border-green-700">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `block px-3 py-3 rounded-md text-base font-medium flex items-center gap-3 ${
-                    isActive
-                      ? 'bg-green-900 text-white border-l-4 border-yellow-400'
-                      : 'text-green-100 hover:bg-green-700'
-                  }`
-                }
-              >
-                <item.icon className="w-5 h-5" />
-                {t(item.translationKey)}
-              </NavLink>
-            ))}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
 
 export default Navbar;
+

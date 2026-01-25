@@ -1,0 +1,32 @@
+{
+    "login": {
+        "fillAll": "Please fill all fields",
+        "invalidPhone": "Please enter a valid 10-digit phone number",
+        "welcome": "Welcome, {{name}}!",
+        "invalidResponse": "Invalid login response",
+        "failed": "Login failed. Please try again.",
+        "invalidCredentials": "Incorrect phone number or password",
+        "alreadyRegistered": "This phone number is already registered",
+        "networkError": "Network error. Please check your connection."
+    },
+    "register": {
+        "fillAll": "Please fill all fields",
+        "invalidPhone": "Please enter a valid 10-digit phone number",
+        "passwordMismatch": "Passwords do not match",
+        "invalidName": "Please enter a valid name (at least 3 characters)",
+        "passwordShort": "Password must be at least 6 characters",
+        "locationRequired": "Please enter your location",
+        "defaultLocation": "Gujarat",
+        "agreeTerms": "Please agree to the Terms & Policies",
+        "success": "Registration Successful! Please login now.",
+        "invalidResponse": "Registration response is invalid",
+        "alreadyRegistered": "This phone number is already registered. Please login.",
+        "validationError": "Please fill all fields correctly",
+        "failed": "Registration failed. Please try again."
+    },
+    "general": {
+        "error": "Something went wrong",
+        "tryAgain": "Please try again later",
+        "resetLinkInvalid": "Invalid or expired reset link"
+    }
+}

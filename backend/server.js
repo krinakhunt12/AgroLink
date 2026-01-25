@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -15,10 +15,8 @@ import productRoutes from './src/routes/product.routes.js';
 import bidRoutes from './src/routes/bid.routes.js';
 import categoryRoutes from './src/routes/category.routes.js';
 import orderRoutes from './src/routes/order.routes.js';
+import youtubeRoutes from './src/routes/youtube.routes.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
-
-// Load environment variables
-dotenv.config();
 
 // Initialize Express app
 const app = express();
@@ -29,7 +27,7 @@ connectDB();
 // Middleware
 app.use(helmet()); // Security headers
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:5174'],
     credentials: true
 }));
 app.use(compression()); // Compress responses
@@ -60,6 +58,7 @@ app.use('/api/bids', bidRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/market-prices', marketPriceRoutes);
+app.use("/api/youtube", youtubeRoutes);
 
 // 404 handler
 app.use((req, res) => {

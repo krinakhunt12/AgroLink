@@ -1,17 +1,21 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User, Sprout, MessageCircle, AlertCircle, ExternalLink, Search } from 'lucide-react';
+import { Send, Bot, User, Sprout, AlertCircle, ExternalLink, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getAgriculturalAdvice } from '../services/geminiService';
 import type { ChatMessage } from '../types';
-import { SUGGESTED_QUESTIONS } from '../constants';
 
 interface DetailedMessage extends ChatMessage {
   sources?: any[];
 }
 
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Card } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+
 const AiAssistant: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'ai']);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<DetailedMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -21,12 +25,12 @@ const AiAssistant: React.FC = () => {
     setMessages([
       {
         id: '1',
-        text: "નમસ્તે ખેડૂત મિત્રો! હું તમારો AI કૃષિ સલાહકાર છું. આજે હું તમને કેવી રીતે મદદ કરી શકું?",
+        text: t('ai.welcome'),
         sender: 'ai',
         timestamp: new Date()
       }
     ]);
-  }, []);
+  }, [t]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -75,53 +79,58 @@ const AiAssistant: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-0 md:p-6 h-[calc(100vh-80px)] flex flex-col font-sans bg-stone-50">
-      <div className="bg-gradient-to-r from-green-700 via-green-800 to-emerald-900 p-5 md:rounded-t-3xl shadow-xl flex items-center justify-between text-white z-10 shrink-0">
+    <div className="max-w-4xl mx-auto p-0 md:p-6 h-[calc(100vh-80px)] flex flex-col font-sans bg-bg-base">
+      <Card className="bg-white p-6 border-b border-border-base rounded-none md:rounded-lg shadow-sm flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
-          <div className="bg-white/20 p-2.5 rounded-2xl backdrop-blur-md border border-white/20 shadow-inner group">
-            <Bot className="text-white w-7 h-7 group-hover:rotate-12 transition-transform" />
+          <div className="bg-brand-primary/10 p-3 rounded-lg flex items-center justify-center text-brand-primary">
+            <Bot size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight">{t('ai.title')}</h2>
-            <p className="text-xs text-green-100 flex items-center gap-1.5 opacity-90">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              {t('ai.liveSearch')}
-            </p>
+            <h2 className="text-xl font-bold text-text-primary tracking-tight">{t('ai.title')}</h2>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="w-1.5 h-1.5 bg-status-success rounded-full"></span>
+              <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest">
+                {t('ai.liveSearch')}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="hidden sm:flex items-center gap-2 bg-black/10 px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-bold uppercase tracking-widest">
-          <Search size={12} className="text-yellow-400" /> {t('ai.grounded')}
-        </div>
-      </div>
+        <Badge variant="outline" className="hidden sm:flex items-center gap-2 bg-bg-muted/50 px-3 py-1.5 rounded-md border-border-base text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+          <Search size={14} className="text-text-muted" /> {t('ai.grounded')}
+        </Badge>
+      </Card>
 
-      <div className="flex-1 overflow-y-auto bg-white/40 backdrop-blur-sm p-4 space-y-6 md:border-x md:border-gray-100 relative custom-scrollbar">
+      <div className="flex-1 overflow-y-auto bg-white/50 backdrop-blur-sm p-6 space-y-8 md:border-x border-border-base relative custom-scrollbar">
         {messages.map((msg) => (
-          <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-            <div className={`flex items-end max-w-[90%] sm:max-w-[80%] gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-              <div className={`w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm border ${msg.sender === 'user' ? 'bg-indigo-600 border-indigo-700 text-white' : 'bg-green-700 border-green-800 text-white'}`}>
-                {msg.sender === 'user' ? <User size={18} /> : <Sprout size={18} />}
+          <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`flex items-start max-w-[95%] sm:max-w-[85%] gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border shadow-sm ${msg.sender === 'user' ? 'bg-brand-primary border-brand-primary-dark text-white' : 'bg-white border-border-base text-brand-primary'}`}>
+                {msg.sender === 'user' ? <User size={16} /> : <Sprout size={16} />}
               </div>
-              <div className="flex flex-col gap-1">
-                <div className={`px-5 py-4 text-sm leading-relaxed shadow-sm ${msg.sender === 'user' ? 'bg-indigo-600 text-white rounded-3xl rounded-tr-none' : 'bg-white text-gray-800 rounded-3xl rounded-tl-none border border-gray-100'}`}>
-                  <p className="whitespace-pre-wrap">{msg.text}</p>
+              <div className="flex flex-col gap-1.5">
+                <div className={`px-5 py-3.5 text-sm leading-relaxed shadow-sm ${msg.sender === 'user' ? 'bg-brand-primary text-white rounded-lg rounded-tr-none' : 'bg-white text-text-primary rounded-lg rounded-tl-none border border-border-base'}`}>
+                  <p className="whitespace-pre-wrap font-medium">{msg.text}</p>
                   {msg.sources && msg.sources.length > 0 && (
-                    <div className="mt-4 pt-3 border-t border-gray-100">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-                        <ExternalLink size={10} /> {t('ai.sources')}
+                    <div className="mt-4 pt-3 border-t border-border-base">
+                      <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <ExternalLink size={12} /> {t('ai.sources')}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {msg.sources.map((chunk: any, i: number) => (
                           chunk.web && (
-                            <a key={i} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="bg-gray-50 hover:bg-green-50 text-[10px] text-green-700 font-bold px-2 py-1 rounded border border-gray-200 hover:border-green-200 flex items-center gap-1">
-                              {chunk.web.title || "લિંક"} <ExternalLink size={8} />
-                            </a>
+                            <Badge key={i} variant="outline" className="bg-bg-muted/30 hover:bg-bg-muted text-brand-primary font-bold px-2 py-1 rounded border-border-base cursor-pointer">
+                              <a href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 max-w-[120px]">
+                                <span className="truncate">{chunk.web.title || t('ai.source')}</span>
+                                <ExternalLink size={10} />
+                              </a>
+                            </Badge>
                           )
                         ))}
                       </div>
                     </div>
                   )}
                 </div>
-                <div className={`text-[10px] text-gray-400 font-medium px-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                <div className={`text-[10px] text-text-muted font-bold uppercase tracking-widest px-1 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
                   {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>
@@ -129,16 +138,18 @@ const AiAssistant: React.FC = () => {
           </div>
         ))}
         {loading && (
-          <div className="flex justify-start animate-in fade-in">
-            <div className="flex items-end gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-green-700 flex items-center justify-center text-white">
-                <Bot size={18} />
+          <div className="flex justify-start">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-white border border-border-base flex items-center justify-center text-brand-primary shadow-sm">
+                <Bot size={16} />
               </div>
-              <div className="flex items-center gap-2 bg-white px-5 py-4 rounded-3xl rounded-tl-none border border-gray-100 shadow-sm">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce"></div>
-                <span className="text-xs text-gray-400 font-bold ml-2 italic">{t('ai.searching')}</span>
+              <div className="flex items-center gap-3 bg-white px-5 py-3.5 rounded-lg rounded-tl-none border border-border-base shadow-sm">
+                <div className="flex gap-1.5">
+                  <div className="w-1.5 h-1.5 bg-border-base rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-border-base rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-border-base rounded-full"></div>
+                </div>
+                <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest ml-1">{t('ai.searching')}</span>
               </div>
             </div>
           </div>
@@ -146,28 +157,36 @@ const AiAssistant: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-white p-5 md:rounded-b-3xl md:border md:border-t-0 shadow-2xl relative z-10">
+      <div className="bg-white p-6 md:rounded-b-lg md:border md:border-t-0 shadow-sm relative z-10">
         {messages.length === 1 && !loading && (
           <div className="mb-6 flex flex-wrap justify-center gap-2">
-            {SUGGESTED_QUESTIONS.map((q, idx) => (
-              <button key={idx} onClick={() => handleSend(q)} className="bg-green-50 hover:bg-green-100 text-green-800 text-[11px] font-bold px-4 py-2 rounded-2xl border border-green-100 transition-all hover:-translate-y-0.5">
+            {(t('ai.suggestedQuestions', { returnObjects: true }) as string[]).map((q, idx) => (
+              <button key={idx} onClick={() => handleSend(q)} className="bg-bg-muted/50 hover:bg-bg-muted text-brand-primary text-[11px] font-bold px-4 py-2 rounded-lg border border-border-base transition-colors cursor-pointer">
                 {q}
               </button>
             ))}
           </div>
         )}
-        <div className="flex items-center gap-4 bg-gray-50 p-2 rounded-3xl border border-gray-200 focus-within:border-green-500 transition-all">
-          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={t('ai.placeholder')} className="flex-1 bg-transparent py-3 px-4 text-sm focus:outline-none font-medium" />
-          <button onClick={() => handleSend()} disabled={loading || !input.trim()} className="bg-green-700 text-white p-4 rounded-2xl hover:bg-green-800 disabled:opacity-40 transition-all shadow-lg">
-            <Send size={20} />
-          </button>
+        <div className="flex items-center gap-3 bg-bg-muted/50 p-1.5 rounded-lg border border-border-base focus-within:ring-2 focus-within:ring-brand-primary/10 focus-within:border-brand-primary transition-all">
+          <Input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={t('ai.placeholder')}
+            className="flex-1 bg-transparent border-none shadow-none focus:ring-0 text-sm font-medium px-4"
+          />
+          <Button size="icon" onClick={() => handleSend()} disabled={loading || !input.trim()} className="bg-brand-primary text-white w-10 h-10 rounded-md hover:bg-brand-primary-dark transition-colors cursor-pointer shadow-sm">
+            <Send size={18} />
+          </Button>
         </div>
-        <div className="flex items-center justify-center gap-1.5 mt-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-          <AlertCircle size={12} className="text-amber-500" /> {t('ai.disclaimer')}
+        <div className="flex items-center justify-center gap-2 mt-4 text-[10px] text-text-muted font-bold uppercase tracking-widest">
+          <AlertCircle size={14} className="text-status-warning" /> {t('ai.disclaimer')}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default AiAssistant;

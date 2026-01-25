@@ -34,9 +34,11 @@ export const authAPI = {
     register: async (userData: {
         name: string;
         phone: string;
+        email?: string;
         password: string;
         userType: 'farmer' | 'buyer';
         location: string;
+        language?: string;
     }) => {
         const data = await apiRequest('/auth/register', {
             method: 'POST',
@@ -68,6 +70,22 @@ export const authAPI = {
         return data;
     },
 
+    // Google Login
+    googleLogin: async (data: { token: string; userType?: 'farmer' | 'buyer' }) => {
+        const response = await apiRequest('/auth/google', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+
+        // Save token to localStorage
+        if (response.token) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(response.user));
+        }
+
+        return response;
+    },
+
     // Get current user
     getMe: async () => {
         return await apiRequest('/auth/me');
@@ -88,6 +106,22 @@ export const authAPI = {
     getCurrentUser: () => {
         const user = localStorage.getItem('user');
         return user ? JSON.parse(user) : null;
+    },
+
+    // Forgot password
+    forgotPassword: async (email: string) => {
+        return await apiRequest('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+        });
+    },
+
+    // Reset password
+    resetPassword: async (resetToken: string, email: string, password: string) => {
+        return await apiRequest(`/auth/reset-password/${resetToken}?email=${email}`, {
+            method: 'PUT',
+            body: JSON.stringify({ password }),
+        });
     },
 };
 
@@ -268,6 +302,14 @@ export const categoriesAPI = {
     },
 };
 
+// YouTube API
+export const youtubeAPI = {
+    getVideos: async (query?: string) => {
+        const endpoint = `/youtube/videos${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+        return await apiRequest(endpoint);
+    },
+};
+
 export default {
     auth: authAPI,
     products: productsAPI,
@@ -275,4 +317,5 @@ export default {
     orders: ordersAPI,
     users: usersAPI,
     categories: categoriesAPI,
+    youtube: youtubeAPI,
 };

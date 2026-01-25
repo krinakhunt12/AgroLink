@@ -1,37 +1,121 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-    MOCK_SCHEMES,
-    MOCK_NEWS,
-    MOCK_WEATHER,
-    MOCK_VIDEOS,
-    MARKET_RATES_TICKER,
-    SEO_KEYWORDS
-} from '../constants';
+import { useQuery } from '@tanstack/react-query';
+import { homeService } from '../services/home-service';
+import { SEO_KEYWORDS } from '../constants';
 
 /**
  * Custom hook for Home page business logic
- * Separates data fetching and state management from UI
  */
 export const useHome = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const [videoCategory, setVideoCategory] = useState('all');
 
-    // Memoize static data to prevent unnecessary re-renders
-    const stats = useMemo(() => ([
-        { value: '50k+', label: t('stats.farmers'), icon: 'Users' },
-        { value: '10k+', label: t('stats.products'), icon: 'ShoppingBag' },
-        { value: '1.2k+', label: t('stats.villages'), icon: 'MapPin' },
-        { value: '₹5 Cr+', label: t('stats.revenue'), icon: 'IndianRupee' },
-    ]), [t]);
+    // 1. Fetching data using TanStack Query
+    const statsQuery = useQuery({
+        queryKey: ['home', 'stats'],
+        queryFn: () => homeService.getStats()
+    });
 
-    const categories = useMemo(() => ([
-        { name: t('categories.items.grains'), icon: 'Wheat', color: 'bg-amber-100 text-amber-700' },
-        { name: t('categories.items.vegetables'), icon: 'Sprout', color: 'bg-green-100 text-green-700' },
-        { name: t('categories.items.pulses'), icon: 'CheckCircle', color: 'bg-orange-100 text-orange-700' },
-        { name: t('categories.items.spices'), icon: 'TrendingUp', color: 'bg-red-100 text-red-700' },
-        { name: t('categories.items.fruits'), icon: 'Sprout', color: 'bg-pink-100 text-pink-700' },
-        { name: t('categories.items.organic'), icon: 'HeartHandshake', color: 'bg-emerald-100 text-emerald-700' },
-    ]), [t]);
+    const categoriesQuery = useQuery({
+        queryKey: ['home', 'categories'],
+        queryFn: () => homeService.getCategories()
+    });
+
+    const weatherQuery = useQuery({
+        queryKey: ['home', 'weather'],
+        queryFn: () => homeService.getWeather()
+    });
+
+    const schemesQuery = useQuery({
+        queryKey: ['home', 'schemes'],
+        queryFn: () => homeService.getSchemes()
+    });
+
+    const newsQuery = useQuery({
+        queryKey: ['home', 'news'],
+        queryFn: () => homeService.getNews()
+    });
+
+    // Dynamic Video Query - Reactive to language and category!
+    const videosQuery = useQuery({
+        queryKey: ['home', 'videos', i18n.language, videoCategory],
+        queryFn: () => {
+            const langPrefix = i18n.language === 'gu' ? 'ગુજરાતી ' : i18n.language === 'hi' ? 'हिंदी ' : '';
+            const categoryTerm = videoCategory === 'all' ? 'farming updates' : videoCategory;
+            const query = `${langPrefix}Indian agriculture ${categoryTerm}`;
+            return homeService.getVideos(query);
+        },
+        staleTime: 5 * 60 * 1000 // 5 minutes
+    });
+
+    const marketRatesQuery = useQuery({
+        queryKey: ['home', 'marketRates'],
+        queryFn: () => homeService.getMarketRates()
+    });
+
+    // 2. Data Transformations
+    const stats = useMemo(() => {
+        const data = statsQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((s: any) => ({
+            ...s,
+            label: t(s.labelKey)
+        }));
+    }, [statsQuery.data, t]);
+
+    const categories = useMemo(() => {
+        const data = categoriesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((c: any) => ({
+            ...c,
+            name: t(c.nameKey)
+        }));
+    }, [categoriesQuery.data, t]);
+
+    const weatherData = useMemo(() => {
+        const data = weatherQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((w: any) => ({
+            ...w,
+            condition: t(w.conditionKey || 'weather.conditions.sunny')
+        }));
+    }, [weatherQuery.data, t]);
+
+    const schemes = useMemo(() => {
+        const data = schemesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((s: any) => ({
+            ...s,
+            tag: t(s.tag),
+            title: t(s.title),
+            desc: t(s.desc)
+        }));
+    }, [schemesQuery.data, t]);
+
+    const news = useMemo(() => {
+        const data = newsQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data.map((n: any) => ({
+            ...n,
+            title: t(n.title)
+        }));
+    }, [newsQuery.data, t]);
+
+    const videos = useMemo(() => {
+        const data = videosQuery.data;
+        if (!Array.isArray(data)) return [];
+        // Important: Don't translate the actual YouTube title using t(), 
+        // as YouTube titles are strings, not keys. 
+        // We just return them as is or with language-specific fallbacks.
+        return data;
+    }, [videosQuery.data]);
+
+    const marketRates = useMemo(() => {
+        const data = marketRatesQuery.data;
+        if (!Array.isArray(data)) return [];
+        return data;
+    }, [marketRatesQuery.data]);
 
     const liveFeatures = useMemo(() => ([
         { title: t('liveFeatures.livePrice'), desc: t('liveFeatures.livePriceDesc') },
@@ -40,41 +124,23 @@ export const useHome = () => {
         { title: t('liveFeatures.auction'), desc: t('liveFeatures.auctionDesc') }
     ]), [t]);
 
-    const weatherData = useMemo(() => MOCK_WEATHER, []);
-    const schemes = useMemo(() => MOCK_SCHEMES, []);
-    const news = useMemo(() => MOCK_NEWS, []);
-    const videos = useMemo(() => MOCK_VIDEOS, []);
-    const marketRates = useMemo(() => MARKET_RATES_TICKER.slice(0, 4), []);
-    const seoKeywords = useMemo(() => SEO_KEYWORDS, []);
-
-    const heroContent = useMemo(() => ({
-        tagline: t('hero.tagline'),
-        title: t('hero.title'),
-        subtitle: t('hero.subtitle'),
-        ctaFarmer: t('hero.ctaFarmer'),
-        ctaBuyer: t('hero.ctaBuyer'),
-    }), [t]);
-
     const testimonials = useMemo(() => ([
         {
             quote: t('testimonials.farmerQuote'),
             name: t('testimonials.farmerName'),
             role: t('testimonials.farmerRole'),
-            color: 'green'
+            color: 'green' as const
         },
         {
             quote: t('testimonials.buyerQuote'),
             name: t('testimonials.buyerName'),
             role: t('testimonials.buyerRole'),
-            color: 'yellow'
+            color: 'yellow' as const
         }
     ]), [t]);
 
     return {
-        // Translations
         t,
-
-        // Data
         stats,
         categories,
         liveFeatures,
@@ -82,9 +148,13 @@ export const useHome = () => {
         schemes,
         news,
         videos,
+        videoCategory,
+        setVideoCategory,
         marketRates,
-        seoKeywords,
-        heroContent,
+        seoKeywords: SEO_KEYWORDS,
         testimonials,
+        isLoading: statsQuery.isLoading || categoriesQuery.isLoading || weatherQuery.isLoading,
+        isError: statsQuery.isError || categoriesQuery.isError,
+        isVideosLoading: videosQuery.isLoading
     };
 };

@@ -2,13 +2,13 @@
 import { useState, useMemo } from 'react';
 import { CATEGORIES } from '../constants';
 import type { Product } from '../types';
-import AppLogger from '../utils/logger';
+import AppLogger, { Category } from '../utils/logger';
 import { useToast } from '../components/Toast';
 import { useTranslation } from 'react-i18next';
 import { useProducts, useCreateOrder, useCreateBid } from './api';
 
 export const useMarketplace = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['products', 'auth', 'common']);
   const { showToast } = useToast();
 
   // Use TanStack Query to fetch products
@@ -29,7 +29,7 @@ export const useMarketplace = () => {
   const [bidAmount, setBidAmount] = useState('');
 
   const filteredProducts = useMemo(() => {
-    AppLogger.info("Filtering products", { selectedCategory, searchQuery, sortBy });
+    AppLogger.info(Category.DATA, "Filtering products", { selectedCategory, searchQuery, sortBy });
     let result = [...products].filter((product) => {
       const matchesCategory = selectedCategory === CATEGORIES[0] || product.category === selectedCategory;
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -46,9 +46,9 @@ export const useMarketplace = () => {
   }, [products, selectedCategory, searchQuery, priceRange, sortBy]);
 
   const initiateAction = (product: Product, type: 'buy' | 'bid') => {
-    const user = localStorage.getItem('user');
-    if (!user) {
-      showToast("મહેરબાની કરીને પહેલા લોગિન કરો.", 'warning');
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      showToast(t('auth:auth.pleaseLogin'), 'warning');
       return;
     }
 
@@ -69,7 +69,7 @@ export const useMarketplace = () => {
         await createOrderMutation.mutateAsync({
           productId: selectedProduct.id,
           quantity,
-          deliveryAddress: JSON.parse(localStorage.getItem('user') || '{}').location || 'Farm pickup',
+          deliveryAddress: JSON.parse(localStorage.getItem('user') || '{}').location || t('common:common.address'),
           paymentMethod: 'cash'
         });
       } else {
@@ -78,7 +78,7 @@ export const useMarketplace = () => {
           productId: selectedProduct.id,
           amount: Number(bidAmount),
           quantity,
-          message: "રસ ધરાવું છું"
+          message: t('products:market.bidInterest')
         });
       }
 
@@ -86,7 +86,7 @@ export const useMarketplace = () => {
       // Toast is already shown by the mutation
       AppLogger.info("Market action successful", { type: actionType, productId: selectedProduct.id });
     } catch (error: any) {
-      AppLogger.error("Market action failed", error);
+      AppLogger.error(Category.API, "Market action failed", error);
       setStatus('idle');
       // Error toast is already shown by the mutation
     }
@@ -101,7 +101,7 @@ export const useMarketplace = () => {
 
   return {
     filteredProducts,
-    loading,
+    loading: isProductsLoading,
     selectedCategory, setSelectedCategory,
     searchQuery, setSearchQuery,
     sortBy, setSortBy,

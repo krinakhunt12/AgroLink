@@ -16,7 +16,29 @@ export const en = {
     subtitle: "Farmers get the fair price for their hard work, and buyers get farm-fresh produce. 'Khedut Setu' is the trust of farmers.",
     ctaFarmer: "Register as Farmer",
     ctaBuyer: "Create Buyer Account",
-    learnMore: "How it works?"
+    learnMore: "How it works?",
+    slides: [
+      {
+        title: "Direct from Farmer to Buyer. No Middlemen, Just Profit!",
+        subtitle: "Farmers get the fair price for their hard work, and buyers get farm-fresh produce.",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "Smart Technology for Modern Agriculture",
+        subtitle: "Leverage AI-driven insights to optimize your crop yields and farm management.",
+        image: "https://images.unsplash.com/photo-1586771107445-d3ec9473d0f7?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "Fresh Crops Direct from the Harvest",
+        subtitle: "Access a wide variety of grains, fruits, and vegetables at the best market prices.",
+        image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2000&auto=format&fit=crop"
+      },
+      {
+        title: "Empowering Farmers with Modern Tools",
+        subtitle: "Join over 50,000 farmers using our platform to grow their business and reach more buyers.",
+        image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=2000&auto=format&fit=crop"
+      }
+    ]
   },
   stats: {
     farmers: "Farmers Joined",
@@ -107,7 +129,8 @@ export const en = {
     securePayDesc: "Your money stays safe in Escrow account.",
     auction: "Live Auction",
     auctionDesc: "Auction your crops and get the best bids online.",
-    liveUpdates: "Live Market Rates"
+    liveUpdates: "Live Market Rates",
+    liveIndicator: "LIVE"
   },
   testimonials: {
     title: "What do Farmers and Buyers say?",

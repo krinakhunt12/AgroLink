@@ -1,0 +1,45 @@
+{
+    "dashboard": {
+        "title": "મારી ખેતી (Dashboard)",
+        "subtitle": "તમારા પાક અને બોલીનું સંચાલન કરો",
+        "addNew": "નવો પાક ઉમેરો",
+        "activeListings": "ચાલુ લિસ્ટિંગ",
+        "recentBids": "આવેલી બોલી (Bids)",
+        "edit": "એડિટ કરો",
+        "delete": "ડિલીટ કરો",
+        "accept": "સ્વીકારો",
+        "reject": "રદ કરો",
+        "viewAllBids": "તમામ બોલી જુઓ",
+        "form": {
+            "title": "નવો પાક લિસ્ટ કરો",
+            "cropName": "પાકનું નામ",
+            "placeholderName": "દા.ત. શંકર કપાસ",
+            "category": "કેટેગરી",
+            "price": "વેચાણ કિંમત (ભાવ)",
+            "unit": "એકમ (Unit)",
+            "negotiable": "ભાવતાલ શક્ય છે (Negotiable)",
+            "negotiableDesc": "ગ્રાહક પોતાના બોલી લગાવી શકશે",
+            "photo": "પાકનો ફોટો પાડો",
+            "submit": "પાક લિસ્ટ કરો",
+            "aiAdvice": "AI ભાવ સલાહ",
+            "searching": "શોધી રહ્યા છીએ...",
+            "description": "વર્ણન",
+            "descriptionPlaceholder": "તમારા પાક વિશે વિગતો લખો...",
+            "units": {
+                "per20kg": "પ્રતિ 20 કિલો",
+                "perKg": "પ્રતિ કિલો",
+                "perPiece": "પ્રતિ નંગ"
+            }
+        },
+        "noListings": "કોઈ સક્રિય જાહેરાતો નથી.",
+        "noBids": "કોઈ બિડ મળી નથી.",
+        "buyer": "ખરીદનાર",
+        "totalSales": "કુલ વેચાણ",
+        "followers": "ફોલોઅર્સ",
+        "cancel": "રદ કરો",
+        "updateListing": "લિંસ્ટિંગ અપડેટ કરો",
+        "clickToChange": "બદલવા માટે ક્લિક કરો",
+        "uploadImage": "પાકનો ફોટો અપલોડ કરો",
+        "aiPriceSuggestion": "નવીનતમ બજારના વલણોના આધારે, આ કિંમત સ્પર્ધાત્મક લાગે છે."
+    }
+}

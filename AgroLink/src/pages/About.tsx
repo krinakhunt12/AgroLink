@@ -1,95 +1,122 @@
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShieldCheck, Users, Lightbulb, Heart, Target, Eye } from 'lucide-react';
+import { ShieldCheck, Users, Lightbulb, Heart, Target, Eye, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
 
 const About: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-stone-50 min-h-screen font-sans">
-      <div className="relative bg-green-900 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1595252328701-d41951551a37?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('about.title')}</h1>
-          <p className="text-xl text-green-100 max-w-2xl mx-auto">{t('about.subtitle')}</p>
+    <div className="bg-bg-base min-h-screen">
+      {/* Header Section */}
+      <div className="bg-white border-b border-border-base py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-2 text-xs font-bold text-brand-primary uppercase tracking-widest mb-4">
+              <span className="w-8 h-px bg-brand-primary"></span>
+              Our Story
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-text-primary tracking-tight leading-tight mb-6">
+              {t('about.title')}
+            </h1>
+            <p className="text-lg text-text-muted leading-relaxed font-medium">
+              {t('about.subtitle')}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 pb-20">
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-16">
-           <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-             <span className="w-12 h-1 bg-yellow-400"></span>
-             {t('about.storyTitle')}
-           </h2>
-           <div className="flex flex-col md:flex-row gap-10 items-center">
-             <div className="md:w-1/2">
-                <p className="text-lg text-gray-700 leading-relaxed">{t('about.storyDesc')}</p>
-                <div className="mt-8 flex gap-4">
-                  <div className="flex flex-col">
-                     <span className="text-4xl font-bold text-green-700">2024</span>
-                     <span className="text-sm text-gray-500 uppercase font-bold">{t('about.founded')}</span>
-                  </div>
-                  <div className="w-px bg-gray-200"></div>
-                  <div className="flex flex-col">
-                     <span className="text-4xl font-bold text-green-700">50k+</span>
-                     <span className="text-sm text-gray-500 uppercase font-bold">{t('about.users')}</span>
-                  </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Mission & Vision */}
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
+          <Card className="bg-bg-surface border border-border-base rounded-lg overflow-hidden shadow-sm">
+            <CardContent className="p-10 space-y-6">
+              <div className="w-12 h-12 bg-brand-primary/10 rounded-lg flex items-center justify-center text-brand-primary">
+                <Target size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-text-primary">{t('about.missionTitle')}</h3>
+              <p className="text-text-secondary leading-relaxed font-medium">{t('about.missionDesc')}</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-white border border-border-base rounded-lg overflow-hidden shadow-sm">
+            <CardContent className="p-10 space-y-6">
+              <div className="w-12 h-12 bg-status-info/10 rounded-lg flex items-center justify-center text-status-info">
+                <Eye size={24} />
+              </div>
+              <h3 className="text-2xl font-bold text-text-primary">{t('about.visionTitle')}</h3>
+              <p className="text-text-secondary leading-relaxed font-medium">{t('about.visionDesc')}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Inner Story */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
+          <div className="space-y-8">
+            <h2 className="text-3xl font-bold text-text-primary tracking-tight">{t('about.storyTitle')}</h2>
+            <p className="text-lg text-text-secondary leading-relaxed font-medium">
+              {t('about.storyDesc')}
+            </p>
+            <div className="grid grid-cols-2 gap-8 pt-4">
+              <div>
+                <p className="text-4xl font-bold text-brand-primary">2024</p>
+                <p className="text-xs font-bold text-text-muted uppercase tracking-widest mt-1">{t('about.founded')}</p>
+              </div>
+              <div>
+                <p className="text-4xl font-bold text-brand-primary">50k+</p>
+                <p className="text-xs font-bold text-text-muted uppercase tracking-widest mt-1">{t('about.users')}</p>
+              </div>
+            </div>
+          </div>
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1592419044706-39796d40f98c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              alt="Farmer"
+              className="rounded-lg shadow-sm border border-border-base object-cover w-full h-[400px]"
+            />
+          </div>
+        </div>
+
+        {/* Values Section */}
+        <div className="space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold text-text-primary">{t('about.valuesTitle')}</h2>
+            <div className="w-12 h-1 bg-brand-primary mx-auto rounded-full"></div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: ShieldCheck, color: 'text-brand-primary', bg: 'bg-brand-primary/5', key: 'trust' },
+              { icon: Lightbulb, color: 'text-brand-primary', bg: 'bg-brand-primary/5', key: 'innovation' },
+              { icon: Users, color: 'text-brand-primary', bg: 'bg-brand-primary/5', key: 'community' },
+              { icon: Heart, color: 'text-brand-primary', bg: 'bg-brand-primary/5', key: 'transparency' }
+            ].map((val, i) => (
+              <div key={i} className="bg-white p-8 rounded-lg text-center border border-border-base transition-colors hover:border-brand-primary/50">
+                <div className={`w-12 h-12 mx-auto ${val.bg} ${val.color} rounded-lg flex items-center justify-center mb-6`}>
+                  <val.icon size={24} />
                 </div>
-             </div>
-             <div className="md:w-1/2">
-               <img src="https://images.unsplash.com/photo-1592419044706-39796d40f98c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Farmer" className="rounded-2xl shadow-lg border-4 border-white" />
-             </div>
-           </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-           <div className="bg-gradient-to-br from-green-700 to-green-800 rounded-3xl p-10 text-white relative overflow-hidden">
-              <div className="relative z-10">
-                <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm"><Target size={32} /></div>
-                <h3 className="text-2xl font-bold mb-4">{t('about.missionTitle')}</h3>
-                <p className="text-green-100 text-lg leading-relaxed">{t('about.missionDesc')}</p>
+                <h3 className="font-bold text-text-primary text-sm uppercase tracking-wider">{t(`about.values.${val.key}`)}</h3>
               </div>
-           </div>
-           <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-lg relative overflow-hidden">
-              <div className="relative z-10">
-                <div className="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-blue-600"><Eye size={32} /></div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">{t('about.visionTitle')}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">{t('about.visionDesc')}</p>
-              </div>
-           </div>
-        </div>
-
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('about.valuesTitle')}</h2>
-          <div className="w-20 h-1.5 bg-yellow-400 mx-auto rounded-full"></div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100">
-             <div className="w-14 h-14 mx-auto bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4"><ShieldCheck size={28} /></div>
-             <h3 className="font-bold text-gray-900">{t('about.values.trust')}</h3>
-          </div>
-          <div className="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100">
-             <div className="w-14 h-14 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4"><Lightbulb size={28} /></div>
-             <h3 className="font-bold text-gray-900">{t('about.values.innovation')}</h3>
-          </div>
-          <div className="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100">
-             <div className="w-14 h-14 mx-auto bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4"><Users size={28} /></div>
-             <h3 className="font-bold text-gray-900">{t('about.values.community')}</h3>
-          </div>
-          <div className="bg-white p-6 rounded-2xl text-center shadow-sm border border-gray-100">
-             <div className="w-14 h-14 mx-auto bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mb-4"><Heart size={28} /></div>
-             <h3 className="font-bold text-gray-900">{t('about.values.transparency')}</h3>
+            ))}
           </div>
         </div>
 
-        <div className="mt-20 bg-yellow-400 rounded-3xl p-10 text-center relative overflow-hidden shadow-xl">
-           <div className="relative z-10">
-             <h2 className="text-3xl font-black text-green-900 mb-6">{t('ctaFinal.title')}</h2>
-             <Link to="/register" className="inline-block bg-green-900 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-green-800 transition shadow-lg">{t('ctaFinal.startBtn')}</Link>
-           </div>
+        {/* Join Us CTA */}
+        <div className="mt-24 bg-bg-muted/50 rounded-lg p-12 md:p-16 text-center border border-border-base relative overflow-hidden">
+          <div className="max-w-2xl mx-auto space-y-8 relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-text-primary leading-tight">{t('ctaFinal.title')}</h2>
+            <p className="text-lg text-text-muted">{t('ctaFinal.subtitle')}</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button asChild size="lg" className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold h-14 px-10 cursor-pointer shadow-sm">
+                <Link to="/register">{t('ctaFinal.startBtn')}</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="bg-white border-border-base text-text-primary font-bold h-14 px-10 cursor-pointer hover:bg-bg-muted">
+                <Link to="/market" className="flex items-center gap-2">
+                  Browse Market <ChevronRight size={18} />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -97,3 +124,4 @@ const About: React.FC = () => {
 };
 
 export default About;
+

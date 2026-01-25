@@ -1,5 +1,5 @@
 
-import { Home, ShoppingBag, UserPlus, HelpCircle, LayoutDashboard, LogIn } from 'lucide-react';
+import { Home, ShoppingBag, UserPlus, LayoutDashboard, LogIn } from 'lucide-react';
 import type { NavItem, Product } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
@@ -11,16 +11,16 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const CATEGORIES = [
-  'તમામ',
-  'અનાજ',
-  'શાકભાજી',
-  'દાળ અને કઠોળ',
-  'મસાલા',
-  'ફળ',
-  'ઓર્ગેનિક',
-  'ડેરી પ્રોડક્ટ્સ',
-  'બિયારણ',
-  'ખેતી ઓજારો'
+  'all',
+  'grains',
+  'vegetables',
+  'pulses',
+  'spices',
+  'fruits',
+  'organic',
+  'dairy',
+  'seeds',
+  'tools'
 ];
 
 export const MOCK_WEATHER = [
