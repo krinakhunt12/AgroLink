@@ -7,7 +7,6 @@ import { CategoryGrid } from '../components/home/CategoryGrid';
 import { VideoGallery } from '../components/home/VideoGallery';
 import { SchemesNewsSection } from '../components/home/SchemesNewsSection';
 import { LiveFeaturesSection } from '../components/home/live-features/LiveFeaturesSection';
-import { MarketRatesSection } from '../components/home/live-features/MarketRatesSection';
 import { DownloadBanner } from '../components/home/DownloadBanner';
 import { Testimonials } from '../components/home/Testimonials';
 import { FinalCTA } from '../components/home/FinalCTA';
@@ -93,17 +92,11 @@ const Home: React.FC = () => {
         news={news}
       />
 
-      {/* 7. Live Features Section - Platform capabilities */}
+      {/* 7. Live Features Section - Platform capabilities & Dynamic Market Rates */}
       <LiveFeaturesSection
         title={t('liveFeatures.title')}
         features={liveFeatures}
-        marketRates={marketRates}
-        liveUpdatesLabel={t('liveFeatures.liveUpdates')}
-        liveIndicatorLabel={t('liveFeatures.liveIndicator')}
       />
-
-      {/* 7.5 Live Market Rates Section - Real-time APMC data */}
-      <MarketRatesSection />
 
       {/* 8. Download Banner - App promotion */}
       <DownloadBanner
