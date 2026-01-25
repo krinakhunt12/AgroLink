@@ -92,13 +92,17 @@ export const homeService = {
 
     getVideos: async (query: string = 'agriculture farming india') => {
         try {
+            // Call backend YouTube API with ML filtering
             const response = await youtubeAPI.getVideos(query);
             if (response.success && Array.isArray(response.data)) {
                 return response.data;
             }
+
+            // Fallback to mock data if API fails
             return MOCK_VIDEOS;
         } catch (error) {
-            console.error("Failed to fetch youtube videos:", error);
+            console.error('Failed to fetch YouTube videos:', error);
+            // Fallback to mock data
             return MOCK_VIDEOS;
         }
     },

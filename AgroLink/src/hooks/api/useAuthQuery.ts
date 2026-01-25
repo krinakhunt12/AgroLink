@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { authAPI } from '../services/api';
-import { queryKeys } from '../lib/queryKeys';
-import { useToast } from '../components/Toast';
-import AppLogger from '../utils/logger';
+import { authAPI } from '../../services/api';
+import { queryKeys } from '../../lib/queryKeys';
+import { useToast } from '../../components/Toast';
+import AppLogger from '../../utils/logger';
 
 /**
  * Auth Query Hooks

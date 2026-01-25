@@ -101,7 +101,7 @@ export const useMarketplace = () => {
 
   return {
     filteredProducts,
-    loading: isProductsLoading,
+    loading,
     selectedCategory, setSelectedCategory,
     searchQuery, setSearchQuery,
     sortBy, setSortBy,

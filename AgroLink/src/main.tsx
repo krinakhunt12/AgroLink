@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import App from './App';
 import './i18n';
 import ErrorBoundary from './components/ErrorBoundary';
-import { Providers } from './components/providers/Providers';
+import { ToastProvider } from './components/Toast';
 import { queryClient } from './lib/queryClient';
 import "./index.css"
 
@@ -20,9 +20,9 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Providers>
+        <ToastProvider>
           <App />
-        </Providers>
+        </ToastProvider>
         {/* React Query Devtools - only visible in development */}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

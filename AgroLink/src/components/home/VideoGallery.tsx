@@ -91,7 +91,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
                         {videos.length > 0 ? (
                             videos.map((video, idx) => (
                                 <Card
-                                    key={video.videoId + idx}
+                                    key={video.videoId ? `${video.videoId}-${idx}` : `video-${idx}`}
                                     className="group bg-white rounded-[24px] overflow-hidden border border-border-base hover:border-brand-primary/30 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
                                 >
                                     <a href={`https://www.youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full">

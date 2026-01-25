@@ -15,7 +15,7 @@ import productRoutes from './src/routes/product.routes.js';
 import bidRoutes from './src/routes/bid.routes.js';
 import categoryRoutes from './src/routes/category.routes.js';
 import orderRoutes from './src/routes/order.routes.js';
-import youtubeRoutes from './src/routes/youtube.routes.js';
+import youtubeRoutes from './src/routes/youtube.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
 
 // Initialize Express app
