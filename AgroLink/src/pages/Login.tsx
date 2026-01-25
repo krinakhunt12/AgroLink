@@ -1,16 +1,19 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn, Phone, Lock, Sprout, Lightbulb, ArrowLeft, ShieldCheck } from 'lucide-react';
-import { authAPI } from '../services/api';
+import { useLogin } from '../hooks/api';
 import { useToast } from '../components/Toast';
+import { authAPI } from '../services/api';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { showToast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const loginMutation = useLogin();
+
   const [formData, setFormData] = useState({
     phone: '',
     password: ''
@@ -35,49 +38,32 @@ const Login: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
-      const response = await authAPI.login({
+      // Use TanStack Query mutation
+      await loginMutation.mutateAsync({
         phone: formData.phone,
         password: formData.password
       });
 
-      // Check if login was successful
-      if (response.success && response.token && response.user) {
-        showToast(`સ્વાગત છે, ${response.user.name}!`, 'success');
+      // Get user info to determine redirect
+      const user = authAPI.getCurrentUser();
 
-        // Small delay to show success message before navigation
-        setTimeout(() => {
-          // Navigate based on user type
-          if (response.user.userType === 'farmer') {
-            navigate('/dashboard');
-          } else {
-            navigate('/market');
-          }
-        }, 500);
-      } else {
-        throw new Error('લોગિન પ્રતિસાદ અમાન્ય છે');
-      }
+      // Small delay to show success message
+      setTimeout(() => {
+        // Redirect based on user type
+        const from = (location.state as any)?.from?.pathname;
+        if (from && !from.includes('/login') && !from.includes('/register')) {
+          navigate(from, { replace: true });
+        } else if (user?.userType === 'farmer') {
+          navigate('/dashboard', { replace: true });
+        } else {
+          navigate('/buyer/dashboard', { replace: true });
+        }
+      }, 500);
     } catch (error: any) {
+      // Error handling is done in the mutation
+      // Just log for debugging
       console.error('Login error:', error);
-
-      // Handle specific error messages
-      let errorMessage = 'લોગિન નિષ્ફળ. કૃપા કરીને ફરીથી પ્રયાસ કરો.';
-
-      if (error.message.includes('Invalid credentials')) {
-        errorMessage = 'ફોન નંબર અથવા પાસવર્ડ ખોટો છે';
-      } else if (error.message.includes('Phone number already registered')) {
-        errorMessage = 'આ ફોન નંબર પહેલેથી જ નોંધાયેલ છે';
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage = 'નેટવર્ક ભૂલ. કૃપા કરીને તમારું કનેક્શન તપાસો.';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      showToast(errorMessage, 'error');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -182,10 +168,10 @@ const Login: React.FC = () => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loginMutation.isPending}
               className="w-full flex justify-center py-5 px-4 bg-green-700 hover:bg-green-800 text-white rounded-2xl font-black text-lg shadow-xl shadow-green-700/20 transition-all active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
             >
-              {loading ? (
+              {loginMutation.isPending ? (
                 <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <span className="flex items-center gap-2"><LogIn size={20} /> {t('auth.loginBtn')}</span>

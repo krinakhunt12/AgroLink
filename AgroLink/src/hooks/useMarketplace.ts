@@ -1,18 +1,23 @@
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { CATEGORIES } from '../constants';
 import type { Product } from '../types';
 import AppLogger from '../utils/logger';
 import { useToast } from '../components/Toast';
 import { useTranslation } from 'react-i18next';
-import { productsAPI, bidsAPI, ordersAPI } from '../services/api';
+import { useProducts, useCreateOrder, useCreateBid } from './api';
 
 export const useMarketplace = () => {
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Use TanStack Query to fetch products
+  const { data: products = [], isLoading: loading } = useProducts();
+
+  // Mutations with automatic invalidation
+  const createOrderMutation = useCreateOrder();
+  const createBidMutation = useCreateBid();
+
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState(10000);
@@ -22,29 +27,6 @@ export const useMarketplace = () => {
   const [status, setStatus] = useState<'idle' | 'processing' | 'success'>('idle');
   const [quantity, setQuantity] = useState(1);
   const [bidAmount, setBidAmount] = useState('');
-
-  // Fetch products on mount and when filters change (if we want server-side filtering)
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await productsAPI.getAll();
-        // Map _id to id if necessary
-        const mappedProducts = response.data.map((p: any) => ({
-          ...p,
-          id: p._id || p.id
-        }));
-        setProducts(mappedProducts);
-      } catch (error) {
-        AppLogger.error("Failed to fetch products", error);
-        showToast("પ્રોડક્ટ્સ લોડ કરવામાં નિષ્ફળતા મળી.", 'error');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [showToast]);
 
   const filteredProducts = useMemo(() => {
     AppLogger.info("Filtering products", { selectedCategory, searchQuery, sortBy });
@@ -83,14 +65,16 @@ export const useMarketplace = () => {
     setStatus('processing');
     try {
       if (actionType === 'buy') {
-        await ordersAPI.create({
+        // Use mutation instead of direct API call
+        await createOrderMutation.mutateAsync({
           productId: selectedProduct.id,
           quantity,
           deliveryAddress: JSON.parse(localStorage.getItem('user') || '{}').location || 'Farm pickup',
           paymentMethod: 'cash'
         });
       } else {
-        await bidsAPI.create({
+        // Use mutation instead of direct API call
+        await createBidMutation.mutateAsync({
           productId: selectedProduct.id,
           amount: Number(bidAmount),
           quantity,
@@ -99,12 +83,12 @@ export const useMarketplace = () => {
       }
 
       setStatus('success');
-      showToast(actionType === 'buy' ? t('market.success') : t('market.bidSuccess'), 'success');
+      // Toast is already shown by the mutation
       AppLogger.info("Market action successful", { type: actionType, productId: selectedProduct.id });
     } catch (error: any) {
       AppLogger.error("Market action failed", error);
       setStatus('idle');
-      showToast(error.message || "કંઈક ભૂલ થઈ છે. ફરી પ્રયાસ કરો.", 'error');
+      // Error toast is already shown by the mutation
     }
   };
 

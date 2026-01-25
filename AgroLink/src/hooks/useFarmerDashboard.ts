@@ -1,16 +1,30 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { getAgriculturalAdvice } from '../services/geminiService';
 import AppLogger from '../utils/logger';
 import { useToast } from '../components/Toast';
-import { productsAPI, bidsAPI, authAPI } from '../services/api';
+import { authAPI } from '../services/api';
+import {
+  useProductsByFarmer,
+  useCreateProduct,
+  useDeleteProduct,
+  useProductBids,
+  useUpdateBidStatus
+} from './api';
 
 export const useFarmerDashboard = () => {
   const { showToast } = useToast();
+  const user = authAPI.getCurrentUser();
+  const userId = user?.id || user?._id;
 
-  const [listings, setListings] = useState<any[]>([]);
-  const [bids, setBids] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Use TanStack Query to fetch farmer's products
+  const { data: listings = [], isLoading: loadingProducts } = useProductsByFarmer(userId || '');
+
+  // Mutations with automatic invalidation
+  const createProductMutation = useCreateProduct();
+  const deleteProductMutation = useDeleteProduct();
+  const updateBidStatusMutation = useUpdateBidStatus();
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [loadingAi, setLoadingAi] = useState(false);
   const [aiAdvice, setAiAdvice] = useState('');
@@ -26,33 +40,18 @@ export const useFarmerDashboard = () => {
     image: null as File | null
   });
 
-  const fetchDashboardData = useCallback(async () => {
-    const user = authAPI.getCurrentUser();
-    if (!user) return;
+  // Fetch bids for all farmer's products
+  // Note: This is a simplified approach. For better performance, 
+  // you might want to create a dedicated backend endpoint
+  const allBids = listings.flatMap(product => {
+    const { data: productBids = [] } = useProductBids(product._id || product.id);
+    return productBids.map((bid: any) => ({
+      ...bid,
+      productName: product.name
+    }));
+  }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    setLoading(true);
-    try {
-      const productsRes = await productsAPI.getByFarmer(user.id || user._id);
-      setListings(productsRes.data);
-
-      // Fetch bids for each product
-      const allBids: any[] = [];
-      for (const product of productsRes.data) {
-        const bidsRes = await bidsAPI.getProductBids(product._id);
-        allBids.push(...bidsRes.data.map((b: any) => ({ ...b, productName: product.name })));
-      }
-      setBids(allBids.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
-    } catch (error) {
-      AppLogger.error("Failed to fetch dashboard data", error);
-      showToast("ડેશબોર્ડ ડેટા લોડ કરવામાં નિષ્ફળતા મળી.", 'error');
-    } finally {
-      setLoading(false);
-    }
-  }, [showToast]);
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
+  const loading = loadingProducts || createProductMutation.isPending || deleteProductMutation.isPending;
 
   const fetchAiAdvice = async () => {
     if (!formData.name) {
@@ -61,16 +60,16 @@ export const useFarmerDashboard = () => {
     }
 
     setLoadingAi(true);
-    AppLogger.info("Requesting AI market advice", { crop: formData.name });
+    AppLogger.info("AI", { message: "Requesting AI market advice", crop: formData.name });
 
     try {
       const query = `ગુજરાતમાં અત્યારે ${formData.name} ના બજાર ભાવ શું ચાલી રહ્યા છે અને મારે શું ભાવે વેચવું જોઈએ?`;
       const res = await getAgriculturalAdvice(query);
       setAiAdvice(res.text);
       setAiSources(res.sources || []);
-      AppLogger.info("AI advice received");
+      AppLogger.info("AI", { message: "AI advice received" });
     } catch (error) {
-      AppLogger.error("Failed to fetch AI advice", error);
+      AppLogger.error("AI", error);
       showToast("AI સલાહ મેળવવામાં સમસ્યા થઈ.", "error");
     } finally {
       setLoadingAi(false);
@@ -95,38 +94,38 @@ export const useFarmerDashboard = () => {
     }
 
     try {
-      setLoading(true);
-      await productsAPI.create(data);
-      showToast("ઉત્પાદન સફળતાપૂર્વક ઉમેરવામાં આવ્યું છે!", 'success');
+      // Use mutation - it will automatically invalidate and refetch
+      await createProductMutation.mutateAsync(data);
       setShowAddForm(false);
       resetForm();
-      fetchDashboardData();
+      // No need to manually refetch - TanStack Query handles it!
     } catch (error: any) {
-      AppLogger.error("Failed to submit crop", error);
-      showToast(error.message || "ઉત્પાદન ઉમેરવામાં ભૂલ થઈ.", 'error');
-    } finally {
-      setLoading(false);
+      // Error handling is done in the mutation
+      AppLogger.error("Product", error);
     }
   };
 
   const handleBidAction = async (bidId: string, status: 'accepted' | 'rejected') => {
     try {
-      await bidsAPI.updateStatus(bidId, status);
-      showToast(`બિડ ${status === 'accepted' ? 'સ્વીકારવામાં' : 'નકારવામાં'} આવી છે.`, 'success');
-      fetchDashboardData();
+      // Use mutation - it will automatically invalidate and refetch
+      await updateBidStatusMutation.mutateAsync({ bidId, status });
+      // No need to manually refetch - TanStack Query handles it!
     } catch (error: any) {
-      showToast("એક્શન લેવામાં ભૂલ થઈ.", 'error');
+      // Error handling is done in the mutation
+      AppLogger.error("Bid", error);
     }
   };
 
   const deleteListing = async (productId: string) => {
     if (!window.confirm("શું તમે ખરેખર આ જાહેરાત કાઢી નાખવા માંગો છો?")) return;
+
     try {
-      await productsAPI.delete(productId);
-      showToast("જાહેરાત કાઢી નાખવામાં આવી છે.", 'success');
-      fetchDashboardData();
+      // Use mutation - it will automatically invalidate and refetch
+      await deleteProductMutation.mutateAsync(productId);
+      // No need to manually refetch - TanStack Query handles it!
     } catch (error) {
-      showToast("જાહેરાત કાઢી નાખવામાં ભૂલ થઈ.", 'error');
+      // Error handling is done in the mutation
+      AppLogger.error("Product", error);
     }
   };
 
@@ -145,7 +144,9 @@ export const useFarmerDashboard = () => {
   };
 
   return {
-    listings, bids, loading,
+    listings,
+    bids: allBids,
+    loading,
     showAddForm, setShowAddForm,
     loadingAi, aiAdvice, aiSources,
     formData, setFormData,

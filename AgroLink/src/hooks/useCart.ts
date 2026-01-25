@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Product } from '../types';
 import { useToast } from '../components/Toast';
-import { ordersAPI } from '../services/api';
+import { useCreateOrder } from './api';
 import AppLogger from '../utils/logger';
 
 export interface CartItem extends Product {
@@ -12,6 +12,9 @@ export const useCart = () => {
     const [items, setItems] = useState<CartItem[]>([]);
     const { showToast } = useToast();
 
+    // Use TanStack Query mutation for checkout
+    const createOrderMutation = useCreateOrder();
+
     // Load cart from localStorage on mount
     useEffect(() => {
         const savedCart = localStorage.getItem('agro_cart');
@@ -19,7 +22,7 @@ export const useCart = () => {
             try {
                 setItems(JSON.parse(savedCart));
             } catch (e) {
-                AppLogger.error("Failed to parse cart from localStorage", e);
+                AppLogger.error("Cart", e);
             }
         }
     }, []);
@@ -63,12 +66,12 @@ export const useCart = () => {
     }, []);
 
     const checkout = useCallback(async (deliveryAddress: string) => {
-        if (items.length === 0) return;
+        if (items.length === 0) return false;
 
         try {
-            // Create an order for each item in the cart
+            // Create an order for each item in the cart using mutations
             const promises = items.map(item =>
-                ordersAPI.create({
+                createOrderMutation.mutateAsync({
                     productId: item.id,
                     quantity: item.quantity,
                     deliveryAddress,
@@ -77,15 +80,15 @@ export const useCart = () => {
             );
 
             await Promise.all(promises);
-            showToast("ઓર્ડર સફળતાપૂર્વક મૂકવામાં આવ્યો છે!", 'success');
+            // Success toast is shown by the mutation
             clearCart();
             return true;
         } catch (error) {
-            AppLogger.error("Checkout failed", error);
-            showToast("ચેકઆઉટમાં ભૂલ થઈ. ફરી પ્રયાસ કરો.", 'error');
+            AppLogger.error("Cart", error);
+            // Error toast is shown by the mutation
             return false;
         }
-    }, [items, clearCart, showToast]);
+    }, [items, clearCart, createOrderMutation]);
 
     const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -96,6 +99,7 @@ export const useCart = () => {
         updateQuantity,
         clearCart,
         checkout,
-        subtotal
+        subtotal,
+        isCheckingOut: createOrderMutation.isPending
     };
 };

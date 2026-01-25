@@ -1,10 +1,12 @@
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingAiChat from './components/FloatingAiChat';
 import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from './components/ProtectedRoute';
+import DashboardLayout from './components/layouts/DashboardLayout';
 
-// Page imports
+// Public Pages
 import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
 import Register from './pages/Register';
@@ -14,13 +16,19 @@ import Help from './pages/Help';
 import Legal from './pages/Legal';
 import About from './pages/About';
 import News from './pages/News';
-import FarmerDashboard from './pages/FarmerDashboard';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
 
+// Farmer Dashboard Pages
+import FarmerDashboardHome from './pages/FarmerDashboardHome';
+import FarmerDashboard from './pages/FarmerDashboard';
+
+// Buyer Dashboard Pages
+import BuyerDashboard from './pages/BuyerDashboard';
+
 /**
  * MainLayout provides the common UI wrapper (Navbar, Footer, AI Chat)
- * for standard application pages.
+ * for public pages only.
  */
 const MainLayout = () => (
     <div className="flex flex-col min-h-screen relative">
@@ -35,42 +43,74 @@ const MainLayout = () => (
 
 /**
  * AppRouter component
- * Centralized routing configuration for the entire application
+ * Centralized routing with role-based authentication
  */
 const AppRouter = () => {
     return (
         <>
             <ScrollToTop />
             <Routes>
-                {/* Auth Pages (No Navbar/Footer) */}
+                {/* ============= PUBLIC ROUTES (No Auth Required) ============= */}
+
+                {/* Auth Pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                {/* Standard Pages (With Navbar/Footer) */}
+                {/* Public Pages with Navbar/Footer */}
                 <Route element={<MainLayout />}>
-                    {/* Home */}
                     <Route path="/" element={<Home />} />
-
-                    {/* Marketplace & Products */}
                     <Route path="/market" element={<Marketplace />} />
                     <Route path="/product/:id" element={<ProductDetail />} />
                     <Route path="/cart" element={<Cart />} />
-
-                    {/* Dashboard */}
-                    <Route path="/dashboard" element={<FarmerDashboard />} />
-
-                    {/* AI & Help */}
                     <Route path="/ai-advisor" element={<AiAssistant />} />
                     <Route path="/help" element={<Help />} />
-
-                    {/* Information Pages */}
                     <Route path="/about" element={<About />} />
                     <Route path="/news" element={<News />} />
-
-                    {/* Legal Pages */}
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
                 </Route>
+
+                {/* ============= FARMER DASHBOARD (Protected) ============= */}
+
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute requiredRole="farmer">
+                            <DashboardLayout userType="farmer" />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route index element={<FarmerDashboardHome />} />
+                    <Route path="products" element={<FarmerDashboard />} />
+                    <Route path="products/new" element={<FarmerDashboard />} />
+                    <Route path="orders" element={<div className="p-8"><h1 className="text-2xl font-bold">ઓર્ડર્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="bids" element={<div className="p-8"><h1 className="text-2xl font-bold">બિડ્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">પ્રોફાઇલ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                </Route>
+
+                {/* ============= BUYER DASHBOARD (Protected) ============= */}
+
+                <Route
+                    path="/buyer"
+                    element={
+                        <ProtectedRoute requiredRole="buyer">
+                            <DashboardLayout userType="buyer" />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route index element={<Navigate to="/buyer/dashboard" replace />} />
+                    <Route path="dashboard" element={<BuyerDashboard />} />
+                    <Route path="marketplace" element={<Marketplace />} />
+                    <Route path="product/:id" element={<ProductDetail />} />
+                    <Route path="cart" element={<Cart />} />
+                    <Route path="orders" element={<div className="p-8"><h1 className="text-2xl font-bold">મારા ઓર્ડર્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="wishlist" element={<div className="p-8"><h1 className="text-2xl font-bold">વિશલિસ્ટ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">પ્રોફાઇલ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                </Route>
+
+                {/* ============= FALLBACK ============= */}
+
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </>
     );
