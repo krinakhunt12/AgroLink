@@ -300,5 +300,30 @@
         "address": "Gandhinagar, Gujarat",
         "newsTitle": "Agriculture News",
         "or": "OR"
+    },
+    "marketRates": {
+        "title": "Live Market Rates",
+        "subtitle": "Daily APMC prices across Gujarat",
+        "minPrice": "Min Price",
+        "maxPrice": "Max Price",
+        "modalPrice": "Modal Price",
+        "updatedAt": "Updated",
+        "live": "LIVE",
+        "todaysRate": "Today's Rate",
+        "viewMore": "View More Markets",
+        "errorLoading": "Today's market rates are currently unavailable",
+        "noData": "No data found for this commodity",
+        "loading": "Fetching live rates..."
+    },
+    "commodities": {
+        "Cotton": "Cotton",
+        "Groundnut": "Groundnut",
+        "Cumin": "Cumin / Jeera",
+        "Castor": "Castor",
+        "Wheat": "Wheat",
+        "Bajra": "Bajra",
+        "Onion": "Onion",
+        "Potato": "Potato",
+        "Sweet Potato": "Sweet Potato"
     }
 }

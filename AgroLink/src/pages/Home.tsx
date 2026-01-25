@@ -7,6 +7,7 @@ import { CategoryGrid } from '../components/home/CategoryGrid';
 import { VideoGallery } from '../components/home/VideoGallery';
 import { SchemesNewsSection } from '../components/home/SchemesNewsSection';
 import { LiveFeaturesSection } from '../components/home/live-features/LiveFeaturesSection';
+import { MarketRatesSection } from '../components/home/live-features/MarketRatesSection';
 import { DownloadBanner } from '../components/home/DownloadBanner';
 import { Testimonials } from '../components/home/Testimonials';
 import { FinalCTA } from '../components/home/FinalCTA';
@@ -61,6 +62,7 @@ const Home: React.FC = () => {
         title={t('weather.title')}
         subtitle={t('weather.subtitle')}
         liveUpdatesLabel={t('weather.liveUpdates')}
+        liveNowLabel={t('weather.liveNow')}
       />
 
       {/* 4. Categories - Browse products */}
@@ -99,6 +101,9 @@ const Home: React.FC = () => {
         liveUpdatesLabel={t('liveFeatures.liveUpdates')}
         liveIndicatorLabel={t('liveFeatures.liveIndicator')}
       />
+
+      {/* 7.5 Live Market Rates Section - Real-time APMC data */}
+      <MarketRatesSection />
 
       {/* 8. Download Banner - App promotion */}
       <DownloadBanner

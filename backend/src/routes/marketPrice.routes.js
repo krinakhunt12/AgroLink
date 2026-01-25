@@ -1,5 +1,6 @@
 import express from 'express';
 import * as marketPriceController from '../controllers/marketPrice.controller.js';
+import { uploadExcel } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -29,5 +30,11 @@ router.get('/compare/:commodity', marketPriceController.comparePrices);
 
 // Search with advanced filters
 router.post('/search', marketPriceController.searchMarketPrices);
+
+// Predict prices
+router.get('/predict', marketPriceController.predictPrice);
+
+// Import historical data from Excel (Training)
+router.post('/import', uploadExcel.single('file'), marketPriceController.importFromExcel);
 
 export default router;

@@ -300,5 +300,30 @@
         "address": "ગાંધીનગર, ગુજરાત",
         "newsTitle": "કૃષિ સમાચાર",
         "or": "અથવા"
+    },
+    "marketRates": {
+        "title": "લાઈવ બજાર ભાવ",
+        "subtitle": "ગુજરાતના APMC ના રોજિંદા ભાવ",
+        "minPrice": "ન્યૂનતમ ભાવ",
+        "maxPrice": "મહત્તમ ભાવ",
+        "modalPrice": "પસંદગી ભાવ",
+        "updatedAt": "અપડેટ થયેલ",
+        "live": "લાઈવ",
+        "todaysRate": "આજનો ભાવ",
+        "viewMore": "વધુ માર્કેટ જુઓ",
+        "errorLoading": "આજના બજાર ભાવો હાલમાં ઉપલબ્ધ નથી",
+        "noData": "આ પાક માટે કોઈ ડેટા મળ્યો નથી",
+        "loading": "બજાર ભાવ મેળવી રહ્યા છીએ..."
+    },
+    "commodities": {
+        "Cotton": "કપાસ",
+        "Groundnut": "મગફળી",
+        "Cumin": "જીરું",
+        "Castor": "એરંડા",
+        "Wheat": "ઘઉં",
+        "Bajra": "બાજરી",
+        "Onion": "ડુંગળી",
+        "Potato": "બટાકા",
+        "Sweet Potato": "શક્કરિયા"
     }
 }

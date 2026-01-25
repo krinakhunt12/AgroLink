@@ -1,4 +1,6 @@
 import axios from 'axios';
+import * as xlsx from 'xlsx';
+import MarketPrice from '../models/MarketPrice.model.js';
 import logger, { LogCategory } from '../utils/logger.js';
 
 // Base URL for the Market Price API
@@ -74,6 +76,8 @@ export const getMarketPrices = async (req, res) => {
             district,
             market,
             commodity,
+            variety,
+            grade,
             limit = 10,
             offset = 0,
             format = 'json'
@@ -92,6 +96,8 @@ export const getMarketPrices = async (req, res) => {
         if (district) params['filters[district]'] = district;
         if (market) params['filters[market]'] = market;
         if (commodity) params['filters[commodity]'] = commodity;
+        if (variety) params['filters[variety]'] = variety;
+        if (grade) params['filters[grade]'] = grade;
 
         // Make API request
         const response = await axios.get(MARKET_PRICE_API_BASE_URL, { params });
@@ -473,6 +479,206 @@ export const comparePrices = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to compare prices',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Import market prices from Excel file
+ * @route POST /api/market-prices/import
+ * @access Admin/Farmer
+ */
+export const importFromExcel = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Please upload an Excel file' });
+        }
+
+        const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const data = xlsx.utils.sheet_to_json(worksheet);
+
+        if (data.length === 0) {
+            return res.status(400).json({ success: false, message: 'Excel file is empty' });
+        }
+
+        const records = [];
+        let skipped = 0;
+        let imported = 0;
+
+        for (const row of data) {
+            try {
+                // Header mapping (Normalization)
+                const state = row['State'] || row['state'];
+                const district = row['District'] || row['district'];
+                const market = row['Market'] || row['market'];
+                const commodity = row['Commodity'] || row['commodity'];
+                const variety = row['Variety'] || row['variety'] || 'Local';
+                const arrivalDateStr = row['Arrival_Date'] || row['arrival_date'] || row['Date'] || '25/01/2026';
+                const minPrice = parseFloat(String(row['Min Price'] || row['min_price']).replace(/,/g, ''));
+                const maxPrice = parseFloat(String(row['Max Price'] || row['max_price']).replace(/,/g, ''));
+                const modalPrice = parseFloat(String(row['Modal Price'] || row['modal_price']).replace(/,/g, ''));
+
+                if (!state || !market || !commodity || isNaN(modalPrice)) {
+                    skipped++;
+                    continue;
+                }
+
+                // Parse date DD/MM/YYYY
+                const [day, month, year] = arrivalDateStr.split('/');
+                const parsedDate = new Date(year, month - 1, day);
+
+                const record = {
+                    state,
+                    district,
+                    market,
+                    commodity,
+                    variety,
+                    grade: row['Grade'] || 'FAQ',
+                    arrival_date: arrivalDateStr,
+                    parsed_date: parsedDate,
+                    min_price: minPrice,
+                    max_price: maxPrice,
+                    modal_price: modalPrice,
+                    source: 'EXCEL'
+                };
+
+                // Use updateOne with upsert to prevent duplicates
+                await MarketPrice.updateOne(
+                    { state, district, market, commodity, variety, arrival_date: arrivalDateStr },
+                    { $set: record },
+                    { upsert: true }
+                );
+
+                imported++;
+            } catch (err) {
+                console.error('Error processing row:', row, err);
+                skipped++;
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `Import completed: ${imported} imported, ${skipped} skipped`,
+            details: { imported, skipped }
+        });
+
+    } catch (error) {
+        console.error('Import Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to import Excel data', error: error.message });
+    }
+};
+
+/**
+ * Predict current/future price based on historical data
+ * @route GET /api/market-prices/predict
+ * @access Public
+ */
+export const predictPrice = async (req, res) => {
+    try {
+        const { state, district, market, commodity, variety } = req.query;
+
+        if (!commodity || !state) {
+            return res.status(400).json({
+                success: false,
+                message: 'Commodity and State are required for prediction'
+            });
+        }
+
+        // --- STEP 1: Search in Local Database (Excel Data) first ---
+        const localFilter = { state, commodity };
+        if (district) localFilter.district = district;
+        if (market) localFilter.market = market;
+        if (variety) localFilter.variety = variety;
+
+        let historicalRecords = await MarketPrice.find(localFilter).sort({ parsed_date: 1 });
+
+        // --- STEP 2: Fallback to GOV API if local data is insufficient ---
+        if (historicalRecords.length < 5) {
+            const params = {
+                'api-key': process.env.MARKET_PRICE_API_KEY,
+                format: 'json',
+                limit: 100,
+                'filters[state]': state,
+                'filters[commodity]': commodity
+            };
+
+            if (district) params['filters[district]'] = district;
+            if (market) params['filters[market]'] = market;
+            if (variety) params['filters[variety]'] = variety;
+
+            const response = await axios.get(MARKET_PRICE_API_BASE_URL, { params });
+            const apiRecords = response.data.records || [];
+
+            // Convert API records to unified format for prediction
+            const unifiedRecords = apiRecords.map(r => ({
+                modal_price: r.modal_price,
+                arrival_date: r.arrival_date
+            }));
+
+            // Merge or use API records
+            if (unifiedRecords.length > 0) {
+                historicalRecords = [...historicalRecords, ...unifiedRecords];
+            }
+        }
+
+        if (historicalRecords.length < 3) {
+            return res.status(404).json({
+                success: false,
+                message: 'Insufficient historical data (minimum 3 days required) to generate a prediction. Please upload more Excel history.'
+            });
+        }
+
+        // 3. Prepare data for Regression
+        const modalPrices = historicalRecords.map(r => parseFloat(String(r.modal_price).replace(/,/g, '')));
+        const n = modalPrices.length;
+
+        // 4. Linear Regression
+        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        for (let i = 0; i < n; i++) {
+            sumX += i;
+            sumY += modalPrices[i];
+            sumXY += i * modalPrices[i];
+            sumXX += i * i;
+        }
+
+        const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        const intercept = (sumY - slope * sumX) / n;
+
+        const predictedPrice = Math.round(slope * n + intercept);
+        const confidence = n > 20 ? 'High' : (n > 10 ? 'Medium' : 'Low');
+        const trend = slope > 1 ? 'Bullish (Strong)' : (slope > 0 ? 'Bullish' : (slope < -1 ? 'Bearish (Strong)' : (slope < 0 ? 'Bearish' : 'Stable')));
+
+        res.status(200).json({
+            success: true,
+            data: {
+                commodity,
+                variety: variety || 'All',
+                market: market || 'All',
+                sourceUsed: historicalRecords[0]?.source || 'API/Mixed',
+                prediction: {
+                    todayPredictedPrice: predictedPrice,
+                    trend,
+                    confidence,
+                    slope: slope.toFixed(2),
+                    totalDataPoints: n
+                },
+                currentMarketPrice: modalPrices[n - 1],
+                historicalMovement: {
+                    start: modalPrices[0],
+                    end: modalPrices[n - 1],
+                    change: (modalPrices[n - 1] - modalPrices[0]).toFixed(2)
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('Prediction API Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to generate price prediction',
             error: error.message
         });
     }
