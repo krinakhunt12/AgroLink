@@ -121,7 +121,7 @@ const Register: React.FC = () => {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
                     <Phone size={18} />
                   </div>
-                  <Input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="pl-10" placeholder="9876543210" />
+                  <Input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="pl-10" placeholder={t('auth.placeholderPhone')} />
                 </div>
               </div>
 
@@ -131,7 +131,7 @@ const Register: React.FC = () => {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
                     <Mail size={18} />
                   </div>
-                  <Input name="email" type="email" value={formData.email} onChange={handleChange} className="pl-10" placeholder="example@email.com" />
+                  <Input name="email" type="email" value={formData.email} onChange={handleChange} className="pl-10" placeholder={t('auth.placeholderEmail')} />
                 </div>
               </div>
 
@@ -153,7 +153,7 @@ const Register: React.FC = () => {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
                     <Lock size={18} />
                   </div>
-                  <Input name="password" type="password" required value={formData.password} onChange={handleChange} className="pl-10" placeholder="********" />
+                  <Input name="password" type="password" required value={formData.password} onChange={handleChange} className="pl-10" placeholder={t('auth.placeholderPassword')} />
                 </div>
               </div>
             </div>

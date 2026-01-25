@@ -16,7 +16,7 @@ const About: React.FC = () => {
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 text-xs font-bold text-brand-primary uppercase tracking-widest mb-4">
               <span className="w-8 h-px bg-brand-primary"></span>
-              Our Story
+              {t('about.ourStory')}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-text-primary tracking-tight leading-tight mb-6">
               {t('about.title')}
@@ -112,7 +112,7 @@ const About: React.FC = () => {
               </Button>
               <Button asChild variant="outline" size="lg" className="bg-white border-border-base text-text-primary font-bold h-14 px-10 cursor-pointer hover:bg-bg-muted">
                 <Link to="/market" className="flex items-center gap-2">
-                  Browse Market <ChevronRight size={18} />
+                  {t('about.browseMarket')} <ChevronRight size={18} />
                 </Link>
               </Button>
             </div>

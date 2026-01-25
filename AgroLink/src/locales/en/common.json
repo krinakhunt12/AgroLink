@@ -71,6 +71,7 @@
         "title": "Agri Weather",
         "subtitle": "Temperature and rainfall forecast for your area",
         "liveUpdates": "Live Updates",
+        "liveNow": "Live Now",
         "conditions": {
             "sunny": "Clear Sky",
             "cloudy": "Partly Cloudy",

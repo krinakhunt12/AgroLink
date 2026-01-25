@@ -34,6 +34,12 @@
         "sortBy": "Sort By",
         "bidInterest": "I am interested in this product and would like to place a bid."
     },
+    "status": {
+        "active": "Active",
+        "sold": "Sold",
+        "inactive": "Inactive",
+        "pending": "Pending Verification"
+    },
     "detail": {
         "back": "Back to Market",
         "verified": "Verified",

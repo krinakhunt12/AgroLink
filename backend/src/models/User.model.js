@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
     },
     language: {
         type: String,
-        enum: ['en', 'gu'],
+        enum: ['en', 'gu', 'hi'],
         default: 'gu'
     },
     resetPasswordToken: String,

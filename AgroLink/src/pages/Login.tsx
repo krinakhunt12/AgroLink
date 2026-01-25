@@ -102,7 +102,7 @@ const Login: React.FC = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     className="pl-10"
-                    placeholder="9876543210"
+                    placeholder={t('auth.placeholderPhone')}
                   />
                 </div>
               </div>
@@ -132,7 +132,7 @@ const Login: React.FC = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="pl-10"
-                    placeholder="********"
+                    placeholder={t('auth.placeholderPassword')}
                   />
                 </div>
               </div>

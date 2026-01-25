@@ -10,6 +10,18 @@
         "accept": "Accept",
         "reject": "Reject",
         "viewAllBids": "View All Bids",
+        "cancel": "Cancel",
+        "updateListing": "Update Listing",
+        "saveChanges": "Save Changes",
+        "clickToChange": "Click to Change",
+        "uploadImage": "Upload crop image",
+        "aiPriceSuggestion": "Based on current market trends, this price seems competitive.",
+        "status": {
+            "pending": "Pending",
+            "accepted": "Accepted",
+            "rejected": "Rejected",
+            "sold": "Sold"
+        },
         "form": {
             "title": "List New Crop",
             "cropName": "Crop Name",
@@ -22,6 +34,8 @@
             "photo": "Take a Photo",
             "submit": "List Crop",
             "aiAdvice": "AI Price Advice",
+            "getInsights": "Get smart pricing insights",
+            "suggest": "Suggest",
             "searching": "Searching...",
             "description": "Description",
             "descriptionPlaceholder": "Write details about your crop...",
@@ -30,16 +44,6 @@
                 "perKg": "Per KG",
                 "perPiece": "Per Piece"
             }
-        },
-        "noListings": "No active listings.",
-        "noBids": "No bids found.",
-        "buyer": "Buyer",
-        "totalSales": "Total Sales",
-        "followers": "Followers",
-        "cancel": "Cancel",
-        "updateListing": "Update Listing",
-        "clickToChange": "Click to Change",
-        "uploadImage": "Upload crop image",
-        "aiPriceSuggestion": "Based on current market trends, this price seems competitive."
+        }
     }
 }

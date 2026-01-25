@@ -14,6 +14,7 @@ interface WeatherWidgetProps {
     title: string;
     subtitle: string;
     liveUpdatesLabel: string;
+    liveNowLabel: string;
 }
 
 const getWeatherIcon = (iconName: string) => {
@@ -29,7 +30,8 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = React.memo(({
     weatherData,
     title,
     subtitle,
-    liveUpdatesLabel
+    liveUpdatesLabel,
+    liveNowLabel
 }) => {
     return (
         <section className="py-20 bg-bg-base overflow-hidden">
@@ -58,7 +60,7 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = React.memo(({
                                 </div>
                                 <div className="flex items-baseline gap-1">
                                     <span className="text-3xl font-bold text-text-primary">{w.temp}</span>
-                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Live Now</span>
+                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{liveNowLabel}</span>
                                 </div>
                             </Card>
                         ))

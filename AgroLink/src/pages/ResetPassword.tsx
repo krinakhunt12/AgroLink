@@ -96,7 +96,7 @@ const ResetPassword: React.FC = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     className="pl-12 py-3 bg-bg-muted/30 border border-border-base rounded-md text-text-primary font-medium focus:bg-white transition-all placeholder:text-text-muted/50"
-                                    placeholder="********"
+                                    placeholder={t('auth.placeholderPassword')}
                                 />
                             </div>
                         </div>
@@ -116,7 +116,7 @@ const ResetPassword: React.FC = () => {
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
                                     className="pl-12 py-3 bg-bg-muted/30 border border-border-base rounded-md text-text-primary font-medium focus:bg-white transition-all placeholder:text-text-muted/50"
-                                    placeholder="********"
+                                    placeholder={t('auth.placeholderPassword')}
                                 />
                             </div>
                         </div>

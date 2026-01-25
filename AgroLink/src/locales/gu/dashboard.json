@@ -10,6 +10,18 @@
         "accept": "સ્વીકારો",
         "reject": "રદ કરો",
         "viewAllBids": "તમામ બોલી જુઓ",
+        "cancel": "રદ કરો",
+        "updateListing": "લિંસ્ટિંગ અપડેટ કરો",
+        "saveChanges": "ફેરફારો સાચવો",
+        "clickToChange": "બદલવા માટે ક્લિક કરો",
+        "uploadImage": "પાકનો ફોટો અપલોડ કરો",
+        "aiPriceSuggestion": "નવીનતમ બજારના વલણોના આધારે, આ કિંમત સ્પર્ધાત્મક લાગે છે.",
+        "status": {
+            "pending": "બાકી",
+            "accepted": "સ્વીકારાયેલ",
+            "rejected": "નકારેલ",
+            "sold": "વેચાયેલ"
+        },
         "form": {
             "title": "નવો પાક લિસ્ટ કરો",
             "cropName": "પાકનું નામ",
@@ -22,6 +34,8 @@
             "photo": "પાકનો ફોટો પાડો",
             "submit": "પાક લિસ્ટ કરો",
             "aiAdvice": "AI ભાવ સલાહ",
+            "getInsights": "સ્માર્ટ પ્રાઇસિંગ આંતરદૃષ્ટિ મેળવો",
+            "suggest": "સૂચન કરો",
             "searching": "શોધી રહ્યા છીએ...",
             "description": "વર્ણન",
             "descriptionPlaceholder": "તમારા પાક વિશે વિગતો લખો...",
@@ -30,16 +44,6 @@
                 "perKg": "પ્રતિ કિલો",
                 "perPiece": "પ્રતિ નંગ"
             }
-        },
-        "noListings": "કોઈ સક્રિય જાહેરાતો નથી.",
-        "noBids": "કોઈ બિડ મળી નથી.",
-        "buyer": "ખરીદનાર",
-        "totalSales": "કુલ વેચાણ",
-        "followers": "ફોલોઅર્સ",
-        "cancel": "રદ કરો",
-        "updateListing": "લિંસ્ટિંગ અપડેટ કરો",
-        "clickToChange": "બદલવા માટે ક્લિક કરો",
-        "uploadImage": "પાકનો ફોટો અપલોડ કરો",
-        "aiPriceSuggestion": "નવીનતમ બજારના વલણોના આધારે, આ કિંમત સ્પર્ધાત્મક લાગે છે."
+        }
     }
 }

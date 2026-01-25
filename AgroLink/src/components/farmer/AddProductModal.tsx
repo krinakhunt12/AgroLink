@@ -134,7 +134,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <p className="text-white font-bold text-xs uppercase tracking-widest">Click to change</p>
+                                    <p className="text-white font-bold text-xs uppercase tracking-widest">{t('dashboard.clickToChange')}</p>
                                 </div>
                             </div>
                         ) : (
@@ -165,7 +165,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                             >
-                                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                {CATEGORIES.map(cat => <option key={cat} value={cat}>{t('common:categories.items.' + cat.toLowerCase())}</option>)}
                             </select>
                         </div>
                     </div>
@@ -174,10 +174,10 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
                         <div className="flex justify-between items-center bg-bg-muted/30 p-4 rounded-md border border-border-base">
                             <div className="space-y-1">
                                 <p className="font-bold text-sm text-text-primary">{t('dashboard.form.aiAdvice')}</p>
-                                <p className="text-xs text-text-muted">Get smart pricing insights</p>
+                                <p className="text-xs text-text-muted">{t('dashboard.form.getInsights')}</p>
                             </div>
                             <Button variant="secondary" size="sm" onClick={fetchAiAdvice} isLoading={loadingAi} className="h-8 cursor-pointer shadow-sm">
-                                <Sparkles size={12} className="mr-1.5" /> Suggest
+                                <Sparkles size={12} className="mr-1.5" /> {t('dashboard.form.suggest')}
                             </Button>
                         </div>
 
@@ -235,9 +235,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClos
                 </div>
 
                 <div className="px-6 py-4 bg-white border-t border-border-base shrink-0 flex justify-end gap-3 rounded-b-lg">
-                    <Button variant="outline" onClick={onClose} disabled={isCreating || isUpdating} className="cursor-pointer">Cancel</Button>
+                    <Button variant="outline" onClick={onClose} disabled={isCreating || isUpdating} className="cursor-pointer">
+                        {t('dashboard.cancel')}
+                    </Button>
                     <Button variant="primary" onClick={handleSubmit} isLoading={isCreating || isUpdating} className="bg-brand-primary hover:bg-brand-primary-dark text-white font-bold cursor-pointer">
-                        {productToEdit ? 'Save Changes' : t('dashboard.form.submit')}
+                        {productToEdit ? t('dashboard.saveChanges') : t('dashboard.form.submit')}
                     </Button>
                 </div>
             </DialogContent>

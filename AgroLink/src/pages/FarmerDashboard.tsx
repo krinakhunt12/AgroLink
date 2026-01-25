@@ -101,7 +101,7 @@ const FarmerDashboard: React.FC = () => {
                       <div className="flex justify-between items-start gap-2">
                         <h3 className="text-base font-bold text-text-primary truncate">{item.name}</h3>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ${item.status === 'active' ? 'bg-status-success/10 text-status-success' : 'bg-bg-muted text-text-muted'}`}>
-                          {item.status}
+                          {t('products:status.' + item.status)}
                         </span>
                       </div>
                       <p className="text-text-secondary font-semibold text-sm">₹{item.price} <span className="text-text-muted font-normal">/ {item.unit}</span></p>
@@ -170,7 +170,7 @@ const FarmerDashboard: React.FC = () => {
                         </div>
                       ) : (
                         <div className={`text-center py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest ${bid.status === 'accepted' ? 'bg-status-success/10 text-status-success' : 'bg-status-error/5 text-status-error'}`}>
-                          {bid.status === 'accepted' ? 'Accepted' : 'Rejected'}
+                          {t('dashboard.status.' + bid.status)}
                         </div>
                       )}
                     </div>
