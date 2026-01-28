@@ -308,6 +308,10 @@ export const youtubeAPI = {
         const endpoint = `/youtube/videos${query ? `?q=${encodeURIComponent(query)}` : ''}`;
         return await apiRequest(endpoint);
     },
+    // New RSS-based agriculture videos (No API Key required)
+    getAgricultureVideos: async () => {
+        return await apiRequest('/agriculture-videos/latest');
+    },
 };
 
 export default {

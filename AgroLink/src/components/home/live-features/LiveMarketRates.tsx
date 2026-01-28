@@ -1,26 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
 import { TrendingUp, RefreshCw, AlertCircle } from 'lucide-react';
-import { marketPriceService } from '../../../services/marketPriceService';
 import { MarketRateRow } from './MarketRateRow';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../ui/card';
 
-// Popular commodities for Gujarat
-const POPULAR_COMMODITIES = [
-    'Cotton',
-    'Groundnut',
-    'Cumin Seed(Jeera)',
-    'Castor Seed',
-    'Wheat',
-    'Bajra(Pearl Millet/Cumbu)',
-    'Onion',
-    'Potato'
-];
 
 export const LiveMarketRates: React.FC = () => {
     const { t } = useTranslation('common');
 
+    /* Commented out for now as requested
     const {
         data: marketData,
         isLoading,
@@ -55,6 +43,13 @@ export const LiveMarketRates: React.FC = () => {
         staleTime: 5 * 60 * 1000,
         refetchInterval: 5 * 60 * 1000,
     });
+    */
+
+    const marketData: any[] = [];
+    const isLoading = false;
+    const isError = false;
+    const refetch = () => { };
+    const isFetching = false;
 
     return (
         <Card className="bg-bg-surface text-text-primary rounded-[32px] overflow-hidden shadow-premium border border-border-base flex flex-col h-full transition-all hover:shadow-premium-hover">

@@ -8,7 +8,7 @@ import { SEO_KEYWORDS } from '../constants';
  * Custom hook for Home page business logic
  */
 export const useHome = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [videoCategory, setVideoCategory] = useState('all');
 
     // 1. Fetching data using TanStack Query
@@ -37,22 +37,19 @@ export const useHome = () => {
         queryFn: () => homeService.getNews()
     });
 
-    // Dynamic Video Query - Reactive to language and category!
+    // Dynamic Video Query - No API Key required (RSS based)
     const videosQuery = useQuery({
-        queryKey: ['home', 'videos', i18n.language, videoCategory],
-        queryFn: () => {
-            const langPrefix = i18n.language === 'gu' ? 'ગુજરાતી ' : i18n.language === 'hi' ? 'हिंदी ' : '';
-            const categoryTerm = videoCategory === 'all' ? 'farming updates' : videoCategory;
-            const query = `${langPrefix}Indian agriculture ${categoryTerm}`;
-            return homeService.getVideos(query);
-        },
-        staleTime: 5 * 60 * 1000 // 5 minutes
+        queryKey: ['home', 'videos'],
+        queryFn: () => homeService.getVideos(),
+        staleTime: 10 * 60 * 1000 // 10 minutes
     });
 
+    /* Commented out for now as requested
     const marketRatesQuery = useQuery({
         queryKey: ['home', 'marketRates'],
         queryFn: () => homeService.getMarketRates()
     });
+    */
 
     // 2. Data Transformations
     const stats = useMemo(() => {
@@ -112,10 +109,11 @@ export const useHome = () => {
     }, [videosQuery.data]);
 
     const marketRates = useMemo(() => {
-        const data = marketRatesQuery.data;
-        if (!Array.isArray(data)) return [];
-        return data;
-    }, [marketRatesQuery.data]);
+        // const data = marketRatesQuery?.data;
+        // if (!Array.isArray(data)) return [];
+        // return data;
+        return []; // Return empty for now
+    }, []);
 
     const liveFeatures = useMemo(() => ([
         { title: t('liveFeatures.livePrice'), desc: t('liveFeatures.livePriceDesc') },

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const MARKET_PRICE_ENDPOINT = `${API_BASE_URL}/api/market-prices`;
+const MARKET_PRICE_ENDPOINT = `${API_BASE_URL}/market-prices`;
 
 // Types
 export interface MarketPriceRecord {

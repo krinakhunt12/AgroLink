@@ -90,10 +90,10 @@ export const homeService = {
         return MOCK_NEWS;
     },
 
-    getVideos: async (query: string = 'agriculture farming india') => {
+    getVideos: async () => {
         try {
-            // Call backend YouTube API with ML filtering
-            const response = await youtubeAPI.getVideos(query);
+            // Call backend RSS-based Agriculture Video API
+            const response = await youtubeAPI.getAgricultureVideos();
             if (response.success && Array.isArray(response.data)) {
                 return response.data;
             }
@@ -101,7 +101,7 @@ export const homeService = {
             // Fallback to mock data if API fails
             return MOCK_VIDEOS;
         } catch (error) {
-            console.error('Failed to fetch YouTube videos:', error);
+            console.error('Failed to fetch Agriculture videos:', error);
             // Fallback to mock data
             return MOCK_VIDEOS;
         }
