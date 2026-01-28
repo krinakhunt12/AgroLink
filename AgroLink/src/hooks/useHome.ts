@@ -84,19 +84,32 @@ export const useHome = () => {
         if (!Array.isArray(data)) return [];
         return data.map((s: any) => ({
             ...s,
-            tag: t(s.tag),
-            title: t(s.title),
-            desc: t(s.desc)
+            tag: s.pubDate ? (s.relevanceCategory || 'Scheme') : t(s.tag),
+            title: s.pubDate ? s.title : t(s.title),
+            desc: s.pubDate ? (s.description?.replace(/<[^>]*>/g, '') || s.desc) : t(s.desc),
+            link: s.link || '#'
         }));
     }, [schemesQuery.data, t]);
 
     const news = useMemo(() => {
         const data = newsQuery.data;
         if (!Array.isArray(data)) return [];
-        return data.map((n: any) => ({
-            ...n,
-            title: t(n.title)
-        }));
+        return data.map((n: any) => {
+            // Format date from pubDate if it exists (for backend data)
+            let formattedDate = n.date;
+            if (n.pubDate) {
+                const dateObj = new Date(n.pubDate);
+                formattedDate = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+            }
+
+            return {
+                ...n,
+                // If it's real news, don't use t() as it's an actual title, not a key
+                // For mock data, it might be a key or a string
+                title: n.pubDate ? n.title : t(n.title),
+                date: formattedDate || t('common.justNow')
+            };
+        });
     }, [newsQuery.data, t]);
 
     const videos = useMemo(() => {

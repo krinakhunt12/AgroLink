@@ -32,7 +32,8 @@ class RSSService {
                 author: item.author,
                 channelId: item.channelId,
                 thumbnail: `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`,
-                description: item.contentSnippet || ''
+                description: item.contentSnippet || '',
+                source: 'YouTube'
             }));
         } catch (error) {
             console.error(`Error fetching RSS for channel ${channelId}:`, error.message);
@@ -49,6 +50,41 @@ class RSSService {
         const results = await Promise.all(fetchPromises);
 
         // Flatten the array of arrays and sort by date
+        return results.flat().sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+    }
+
+    /**
+     * Fetch news from a single RSS feed
+     * @param {Object} source - {name, url}
+     */
+    async fetchNewsFeed(source) {
+        try {
+            const feed = await parser.parseURL(source.url);
+
+            return feed.items.map(item => ({
+                id: item.guid || item.link,
+                title: item.title,
+                link: item.link,
+                pubDate: item.pubDate,
+                author: item.author || item.creator,
+                description: item.contentSnippet || item.content || '',
+                source: source.name,
+                category: source.category
+            }));
+        } catch (error) {
+            console.error(`Error fetching news from ${source.name}:`, error.message);
+            return [];
+        }
+    }
+
+    /**
+     * Fetch news from multiple sources
+     * @param {Array} sources 
+     */
+    async fetchAllNews(sources) {
+        const fetchPromises = sources.map(source => this.fetchNewsFeed(source));
+        const results = await Promise.all(fetchPromises);
+
         return results.flat().sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
     }
 }

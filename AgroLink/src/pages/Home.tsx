@@ -31,7 +31,6 @@ const Home: React.FC = () => {
     videos,
     videoCategory,
     setVideoCategory,
-    marketRates,
     seoKeywords,
     testimonials,
     isLoading,
@@ -80,6 +79,8 @@ const Home: React.FC = () => {
         currentCategory={videoCategory}
         onCategoryChange={setVideoCategory}
         isLoading={isVideosLoading}
+        limit={4}
+        showViewMore={true}
       />
 
       {/* 6. Schemes & News - Updates for farmers */}

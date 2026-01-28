@@ -314,6 +314,20 @@ export const youtubeAPI = {
     },
 };
 
+// News API
+export const newsAPI = {
+    getLatestAgricultureNews: async () => {
+        return await apiRequest('/agriculture-news/latest');
+    },
+};
+
+// Schemes API
+export const schemesAPI = {
+    getLatestAgricultureSchemes: async () => {
+        return await apiRequest('/agriculture-schemes/latest');
+    },
+};
+
 export default {
     auth: authAPI,
     products: productsAPI,
@@ -322,4 +336,6 @@ export default {
     users: usersAPI,
     categories: categoriesAPI,
     youtube: youtubeAPI,
+    news: newsAPI,
+    schemes: schemesAPI,
 };

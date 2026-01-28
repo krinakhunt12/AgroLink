@@ -17,6 +17,7 @@ import Help from './pages/Help';
 import Legal from './pages/Legal';
 import About from './pages/About';
 import News from './pages/News';
+import Videos from './pages/Videos';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import Cart from './pages/Cart';
@@ -70,6 +71,7 @@ const AppRouter = () => {
                     <Route path="/help" element={<Help />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/news" element={<News />} />
+                    <Route path="/videos" element={<Videos />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
 
@@ -79,7 +81,7 @@ const AppRouter = () => {
                 </Route>
 
                 {/* Farmer Routes (Protected) */}
-                <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
+                <Route element={<ProtectedRoute requiredRole="farmer" />}>
                     <Route element={<MainLayout />}>
                         <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
                         <Route path="/farmer/products/add" element={<AddProduct />} />
@@ -89,7 +91,7 @@ const AppRouter = () => {
 
 
                 {/* Buyer Routes (Protected) */}
-                <Route element={<ProtectedRoute allowedRoles={['buyer']} />}>
+                <Route element={<ProtectedRoute requiredRole="buyer" />}>
                     <Route element={<MainLayout />}>
                         <Route path="/buyer/dashboard" element={<Marketplace />} />
                         <Route path="/cart" element={<Cart />} />

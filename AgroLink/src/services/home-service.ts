@@ -6,7 +6,7 @@ import {
     MARKET_RATES_TICKER
 } from '../constants';
 
-import { youtubeAPI } from './api';
+import { youtubeAPI, newsAPI, schemesAPI } from './api';
 
 /**
  * Home Service
@@ -81,13 +81,29 @@ export const homeService = {
     },
 
     getSchemes: async () => {
-        await new Promise(resolve => setTimeout(resolve, 700));
-        return MOCK_SCHEMES;
+        try {
+            const response = await schemesAPI.getLatestAgricultureSchemes();
+            if (response.success && Array.isArray(response.data)) {
+                return response.data;
+            }
+            return MOCK_SCHEMES;
+        } catch (error) {
+            console.error('Failed to fetch Agriculture schemes:', error);
+            return MOCK_SCHEMES;
+        }
     },
 
     getNews: async () => {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return MOCK_NEWS;
+        try {
+            const response = await newsAPI.getLatestAgricultureNews();
+            if (response.success && Array.isArray(response.data)) {
+                return response.data;
+            }
+            return MOCK_NEWS;
+        } catch (error) {
+            console.error('Failed to fetch Agriculture news:', error);
+            return MOCK_NEWS;
+        }
     },
 
     getVideos: async () => {

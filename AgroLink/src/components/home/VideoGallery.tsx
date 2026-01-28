@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, ArrowRight, Sparkles, Youtube } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Card } from '../ui/card';
 import type { Video } from '../../types';
 
@@ -11,6 +12,8 @@ interface VideoGalleryProps {
     currentCategory: string;
     onCategoryChange: (category: string) => void;
     isLoading?: boolean;
+    limit?: number;
+    showViewMore?: boolean;
 }
 
 const CATEGORIES = [
@@ -27,9 +30,12 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
     videos,
     currentCategory,
     onCategoryChange,
-    isLoading = false
+    isLoading = false,
+    limit,
+    showViewMore = false
 }) => {
     const { t } = useTranslation();
+    const displayedVideos = limit ? videos.slice(0, limit) : videos;
 
     return (
         <section className="py-24 bg-bg-base relative overflow-hidden">
@@ -88,8 +94,8 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {videos.length > 0 ? (
-                            videos.map((video, idx) => (
+                        {displayedVideos.length > 0 ? (
+                            displayedVideos.map((video, idx) => (
                                 <Card
                                     key={video.videoId ? `${video.videoId}-${idx}` : `video-${idx}`}
                                     className="group bg-white rounded-[24px] overflow-hidden border border-border-base hover:border-brand-primary/30 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
@@ -163,6 +169,19 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
                             </div>
                         )}
                     </div>
+
+                    {/* View More Button */}
+                    {showViewMore && videos.length > (limit || 0) && (
+                        <div className="mt-16 flex justify-center">
+                            <Link
+                                to="/videos"
+                                className="group inline-flex items-center gap-3 px-10 py-3 bg-white border-2 border-brand-primary/20 text-brand-primary rounded-sm uppercase tracking-widest hover:bg-brand-primary hover:text-white hover:border-brand-primary"
+                            >
+                                <span>{t('videos.viewAll')}</span>
+                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
@@ -170,4 +189,3 @@ export const VideoGallery: React.FC<VideoGalleryProps> = React.memo(({
 });
 
 VideoGallery.displayName = 'VideoGallery';
-

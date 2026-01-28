@@ -17,6 +17,8 @@ import categoryRoutes from './src/routes/category.routes.js';
 import orderRoutes from './src/routes/order.routes.js';
 import youtubeRoutes from './src/routes/youtube.js';
 import agricultureVideoRoutes from './src/routes/videoRoutes.js';
+import agricultureNewsRoutes from './src/routes/newsRoutes.js';
+import agricultureSchemeRoutes from './src/routes/schemeRoutes.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
 
 // Initialize Express app
@@ -61,6 +63,8 @@ app.use('/api/orders', orderRoutes);
 app.use("/api/market-prices", marketPriceRoutes);
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/agriculture-videos", agricultureVideoRoutes);
+app.use("/api/agriculture-news", agricultureNewsRoutes);
+app.use("/api/agriculture-schemes", agricultureSchemeRoutes);
 
 // 404 handler
 app.use((req, res) => {
