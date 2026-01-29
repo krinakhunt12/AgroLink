@@ -1,220 +1,137 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Activity, Cpu, HardDrive, Terminal, AlertTriangle, Server,
-    Globe, Lock, CheckCircle2, AlertCircle, Clock, RefreshCw,
-    Zap, Database, ShieldAlert, Bug, BarChart3, ArrowUp, ArrowDown
+    Globe, Lock, RefreshCw,
+    Zap, Database, ShieldAlert, Bug, BarChart3,
+    CheckCircle2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-    ResponsiveContainer, LineChart, Line, BarChart, Bar
+    ResponsiveContainer
 } from 'recharts';
 
-// --- Mock Data Generators ---
-const generateTimeSeriesData = (points: number, min: number, max: number) => {
-    return Array.from({ length: points }, (_, i) => ({
-        time: `${i}:00`,
-        value: Math.floor(Math.random() * (max - min + 1)) + min
-    }));
-};
-
-const cpuData = generateTimeSeriesData(20, 20, 60);
-const memoryData = generateTimeSeriesData(20, 40, 85);
-const requestData = generateTimeSeriesData(20, 100, 500);
-
-const apiMetrics = [
-    { name: '/predict-price', method: 'POST', avgResponse: 142, success: 99.8, errors: 0.2, lastCheck: 'now', trend: [120, 150, 130, 160, 142] },
-    { name: '/forecast-demand', method: 'GET', avgResponse: 210, success: 98.5, errors: 1.5, lastCheck: '2s ago', trend: [180, 220, 250, 200, 210] },
-    { name: '/admin/login', method: 'POST', avgResponse: 85, success: 100, errors: 0, lastCheck: '5s ago', trend: [80, 90, 85, 82, 85] },
-    { name: '/crop/listing', method: 'GET', avgResponse: 45, success: 99.9, errors: 0.1, lastCheck: '1s ago', trend: [40, 50, 45, 42, 45] },
-    { name: '/chat/messages', method: 'POST', avgResponse: 62, success: 99.5, errors: 0.5, lastCheck: '8s ago', trend: [60, 70, 65, 58, 62] },
+// --- Mock Data ---
+const cpuData = [
+    { time: '00:00', value: 42 }, { time: '04:00', value: 38 },
+    { time: '08:00', value: 65 }, { time: '12:00', value: 58 },
+    { time: '16:00', value: 72 }, { time: '20:00', value: 45 },
+    { time: '23:59', value: 40 },
 ];
 
-const logs = [
-    { id: 1, type: 'info', service: 'AUTH', message: 'Admin login successful: admin@agrolink.ai', time: '2 mins ago' },
-    { id: 2, type: 'error', service: 'ML-PREDICT', message: 'Inference timeout for crop ID: 8924', time: '5 mins ago' },
-    { id: 3, type: 'warning', service: 'DB', message: 'Long running query detected (1.2s)', time: '12 mins ago' },
-    { id: 4, type: 'info', service: 'API', message: 'New listing created: Organic Cotton', time: '15 mins ago' },
-    { id: 5, type: 'error', service: 'SECURITY', message: 'Failed login attempt from 192.168.1.45', time: '22 mins ago' },
-    { id: 6, type: 'info', service: 'ML-FORECAST', message: 'Model refresh completed successfully', time: '40 mins ago' },
+const apiMetrics = [
+    { name: '/predict-price', method: 'POST', avgResponse: 142, success: 99.8, errors: 0.2, lastCheck: 'now' },
+    { name: '/forecast-demand', method: 'GET', avgResponse: 210, success: 98.5, errors: 1.5, lastCheck: '2s ago' },
+    { name: '/admin/login', method: 'POST', avgResponse: 85, success: 100, errors: 0, lastCheck: '5s ago' },
+    { name: '/crop/listing', method: 'GET', avgResponse: 45, success: 99.9, errors: 0.1, lastCheck: '1s ago' },
 ];
 
 const SystemHealth: React.FC = () => {
     const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
-    const [isRefreshing, setIsRefreshing] = useState(false);
-
-    const handleRefresh = () => {
-        setIsRefreshing(true);
-        setTimeout(() => {
-            setLastRefresh(new Date().toLocaleTimeString());
-            setIsRefreshing(false);
-        }, 1000);
-    };
 
     return (
-        <div className="space-y-8 pb-12">
+        <div className="space-y-6 lg:space-y-8 font-['Outfit'] pb-12">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0f172a] p-8 rounded-[32px] text-white shadow-2xl">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-emerald-500/20 rounded-lg">
-                            <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
-                        </div>
-                        <h2 className="text-2xl font-black tracking-tight">System Health & Monitoring</h2>
-                    </div>
-                    <p className="text-slate-400 mt-1 font-medium italic">Internal System Metrics • Real-time Infrastructure Oversight</p>
+                    <h2 className="text-2xl font-bold text-[var(--text-primary)]">System Health & Infrastructure</h2>
+                    <p className="text-[var(--text-muted)] text-sm italic">Internal Monitoring • Real-time Infrastructure Oversight</p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 bg-[var(--bg-surface)] border border-[var(--border-base)] px-4 py-2 rounded-[var(--radius-theme)]">
                     <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Last Synchronized</p>
-                        <p className="text-sm font-mono text-emerald-400">{lastRefresh}</p>
+                        <p className="text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold">Last Synchronized</p>
+                        <p className="text-xs font-mono text-[var(--status-success)]">{lastRefresh}</p>
                     </div>
                     <button
-                        onClick={handleRefresh}
-                        className={`p-3 bg-slate-800 hover:bg-slate-700 rounded-2xl transition-all border border-slate-700 group ${isRefreshing ? 'animate-spin' : ''}`}
+                        onClick={() => setLastRefresh(new Date().toLocaleTimeString())}
+                        className="p-2 hover:bg-[var(--bg-muted)] rounded transition-colors"
                     >
-                        <RefreshCw className="w-5 h-5 text-slate-300 group-hover:text-white" />
+                        <RefreshCw className="w-4 h-4 text-[var(--text-secondary)]" />
                     </button>
                 </div>
             </div>
 
             {/* Health Status Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatusCard
-                    title="API Status"
-                    status="Healthy"
-                    value="42ms avg"
-                    icon={Globe}
-                    color="emerald"
-                    details="12 endpoints online"
-                />
-                <StatusCard
-                    title="Backend Server"
-                    status="Running"
-                    value="v2.4.0-stable"
-                    icon={Server}
-                    color="blue"
-                    details="Uptime: 14d 6h 22m"
-                />
-                <StatusCard
-                    title="ML Services"
-                    status="Warning"
-                    value="3/4 Online"
-                    icon={Zap}
-                    color="amber"
-                    details="Forecast model latency high"
-                />
-                <StatusCard
-                    title="Database"
-                    status="Healthy"
-                    value="1.2ms latency"
-                    icon={Database}
-                    color="indigo"
-                    details="MongoDB Cluster: Primary"
-                />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                <StatusCard title="API Gateway" status="Healthy" value="42ms avg" icon={Globe} color="success" />
+                <StatusCard title="Backend Server" status="Operational" value="v2.4.0" icon={Server} color="info" />
+                <StatusCard title="ML Services" status="Warning" value="3/4 Online" icon={Zap} color="warning" />
+                <StatusCard title="Database" status="Healthy" value="1.2ms" icon={Database} color="success" />
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
-                {/* Left Column: Charts & Metrics */}
-                <div className="xl:col-span-2 space-y-8">
-
-                    {/* Server Load Section */}
-                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+                {/* Left: Resource Usage */}
+                <div className="xl:col-span-2 space-y-6">
+                    <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-[var(--radius-theme)] p-6">
                         <div className="flex items-center justify-between mb-8">
                             <div>
-                                <h3 className="font-bold text-slate-900 text-lg">Server Load & Resource Usage</h3>
-                                <p className="text-sm text-slate-500 font-medium">Real-time CPU and Memory allocation</p>
+                                <h3 className="font-bold text-[var(--text-primary)]">Server Load & Resource Usage</h3>
+                                <p className="text-xs text-[var(--text-muted)]">Real-time CPU allocation trend</p>
                             </div>
                             <div className="flex gap-2">
-                                <span className="flex items-center gap-1.5 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div> CPU
-                                </span>
-                                <span className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div> Memory
+                                <span className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--brand-primary)] bg-[var(--bg-muted)] px-2 py-1 rounded">
+                                    <Activity className="w-3 h-3" /> CPU LOADS
                                 </span>
                             </div>
                         </div>
 
-                        <div className="h-64 md:h-80">
+                        <div className="h-64">
                             <ResponsiveContainer width="100%" height="100%">
                                 <AreaChart data={cpuData}>
                                     <defs>
                                         <linearGradient id="colorCpu" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
-                                            <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                                            <stop offset="5%" stopColor="var(--brand-primary)" stopOpacity={0.1} />
+                                            <stop offset="95%" stopColor="var(--brand-primary)" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-base)" />
                                     <XAxis dataKey="time" hide />
-                                    <YAxis hide />
+                                    <YAxis hide hide domain={[0, 100]} />
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px', color: '#fff' }}
-                                        itemStyle={{ color: '#fff' }}
+                                        contentStyle={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-base)', borderRadius: 'var(--radius-theme)', fontSize: '12px' }}
                                     />
-                                    <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorCpu)" />
+                                    <Area type="monotone" dataKey="value" stroke="var(--brand-primary)" strokeWidth={2} fillOpacity={1} fill="url(#colorCpu)" />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-slate-50">
-                            <LoadMetric label="CPU Usage" value="48%" subValue="8 Cores" icon={Cpu} />
-                            <LoadMetric label="Memory Usage" value="6.2GB" subValue="Max 16GB" icon={HardDrive} />
-                            <LoadMetric label="Disk I/O" value="124MB/s" subValue="92% Free" icon={BarChart3} />
-                            <LoadMetric label="Connections" value="2,840" subValue="+12% / min" icon={Activity} />
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-[var(--border-base)]">
+                            <LoadStat label="CPU" value="48%" icon={Cpu} />
+                            <LoadStat label="Memory" value="6.2GB" icon={HardDrive} />
+                            <LoadStat label="Disk" value="124MB/s" icon={BarChart3} />
+                            <LoadStat label="Network" value="2.8k req" icon={Activity} />
                         </div>
                     </div>
 
-                    {/* API Performance Section */}
-                    <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-                        <div className="p-8 border-b border-slate-50 bg-slate-50/30">
-                            <h3 className="font-bold text-slate-900 text-lg">API Performance Monitoring</h3>
-                            <p className="text-sm text-slate-500 font-medium">Endpoint responsiveness and error rates</p>
+                    {/* API Monitoring Table */}
+                    <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-[var(--radius-theme)] overflow-hidden">
+                        <div className="px-6 py-4 border-b border-[var(--border-base)]">
+                            <h3 className="font-bold text-[var(--text-primary)]">Endpoint Performance</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="bg-slate-50/50">
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Endpoint</th>
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Avg Resp</th>
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Success Rate</th>
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Error %</th>
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Last Checked</th>
-                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Trend</th>
+                                    <tr className="bg-[var(--bg-muted)]/50 border-b border-[var(--border-base)]">
+                                        <th className="px-6 py-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Endpoint</th>
+                                        <th className="px-6 py-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest text-right">Avg Resp</th>
+                                        <th className="px-6 py-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest text-center">Success</th>
+                                        <th className="px-6 py-3 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest text-center">Errors</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
-                                    {apiMetrics.map((api, idx) => (
-                                        <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                            <td className="px-8 py-5">
+                                <tbody className="divide-y divide-[var(--border-base)]">
+                                    {apiMetrics.map((api, i) => (
+                                        <tr key={i} className="hover:bg-[var(--bg-muted)]/20 transition-colors odd:bg-[var(--bg-surface)] even:bg-[var(--bg-muted)]/10">
+                                            <td className="px-6 py-4">
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-bold text-slate-800 font-mono italic">{api.name}</span>
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase">{api.method}</span>
+                                                    <span className="text-sm font-semibold text-[var(--text-primary)] font-mono">{api.name}</span>
+                                                    <span className="text-[10px] font-bold text-[var(--text-muted)]">{api.method}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-8 py-5">
-                                                <span className={`text-sm font-black ${api.avgResponse > 200 ? 'text-amber-600' : 'text-slate-900'}`}>{api.avgResponse}ms</span>
-                                            </td>
-                                            <td className="px-8 py-5 text-sm font-bold text-emerald-600">{api.success}%</td>
-                                            <td className="px-8 py-5">
-                                                <span className={`px-2 py-1 rounded text-[10px] font-black ${api.errors > 1 ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-400'}`}>
+                                            <td className="px-6 py-4 text-right font-mono text-sm">{api.avgResponse}ms</td>
+                                            <td className="px-6 py-4 text-center text-sm font-bold text-[var(--status-success)]">{api.success}%</td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${api.errors > 1 ? 'bg-red-50 text-[var(--status-error)]' : 'bg-gray-50 text-[var(--text-muted)]'}`}>
                                                     {api.errors}%
                                                 </span>
-                                            </td>
-                                            <td className="px-8 py-5 text-xs font-mono text-slate-400 uppercase">
-                                                {api.lastCheck}
-                                            </td>
-                                            <td className="px-8 py-5 w-32">
-                                                <div className="h-8 flex items-end gap-0.5">
-                                                    {api.trend.map((val, i) => (
-                                                        <div
-                                                            key={i}
-                                                            className={`w-2 rounded-t-sm ${api.errors > 1 ? 'bg-rose-400/50' : 'bg-blue-400/50'}`}
-                                                            style={{ height: `${(val / 250) * 100}%` }}
-                                                        />
-                                                    ))}
-                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -224,112 +141,36 @@ const SystemHealth: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Column: AI health & Logs */}
-                <div className="space-y-8">
-
-                    {/* ML Model Service Monitoring */}
-                    <div className="bg-[#0f172a] p-8 rounded-[32px] text-white overflow-hidden relative group">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Zap className="w-24 h-24" />
-                        </div>
-                        <h3 className="font-bold text-lg relative z-10">AI Model Health</h3>
-                        <p className="text-slate-400 text-sm mb-6 relative z-10">Real-time diagnostic metrics for LLM & ML models</p>
-
-                        <div className="space-y-6 relative z-10">
-                            <AiMetric
-                                label="Price Prediction v4.2"
-                                value="Online"
-                                stat="4.8k req/day"
-                                color="emerald"
-                            />
-                            <AiMetric
-                                label="Demand Forecast v2.1"
-                                value="Latency Alert"
-                                stat="Refreshed 4h ago"
-                                color="amber"
-                            />
-                            <AiMetric
-                                label="Agro-Advisor (Gemini)"
-                                value="Online"
-                                stat="99.9% Up"
-                                color="blue"
-                            />
-                        </div>
-
-                        <div className="mt-8 pt-8 border-t border-slate-800 grid grid-cols-2 gap-4 relative z-10">
-                            <div>
-                                <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Avg Inference</p>
-                                <p className="text-xl font-bold font-mono">1.24s</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Model Drift</p>
-                                <p className="text-xl font-bold font-mono text-emerald-400">Low</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Security & Access Panel */}
-                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-rose-50 rounded-lg">
-                                <ShieldAlert className="w-5 h-5 text-rose-500" />
-                            </div>
-                            <h3 className="font-bold text-slate-900">Security & Access</h3>
-                        </div>
-
+                {/* Right: Security & Logs */}
+                <div className="space-y-6">
+                    <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-[var(--radius-theme)] p-6">
+                        <h3 className="font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                            <ShieldAlert className="w-4 h-4 text-[var(--status-error)]" /> Security Panel
+                        </h3>
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                <div className="flex items-center gap-3">
-                                    <Lock className="w-4 h-4 text-slate-400" />
-                                    <div>
-                                        <p className="text-xs font-bold text-slate-700">Failed Admin Logins</p>
-                                        <p className="text-[10px] text-slate-500">Last 24 hours</p>
-                                    </div>
-                                </div>
-                                <span className="text-lg font-black text-rose-600">3</span>
-                            </div>
-
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                <div className="flex items-center gap-3">
-                                    <Bug className="w-4 h-4 text-slate-400" />
-                                    <div>
-                                        <p className="text-xs font-bold text-slate-700">Suspicious Attempts</p>
-                                        <p className="text-[10px] text-slate-500">IP geo-fenced</p>
-                                    </div>
-                                </div>
-                                <span className="text-lg font-black text-slate-900">12</span>
-                            </div>
+                            <SecurityStat label="Blocked IPs" value="12" sub="Last 24h" icon={Lock} />
+                            <SecurityStat label="Login Failures" value="3" sub="Admin only" icon={Bug} />
                         </div>
                     </div>
 
-                    {/* Recent System Alerts */}
-                    <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-                        <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-                            <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                                <Terminal className="w-4 h-4 text-blue-500" /> System Logs
+                    <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-[var(--radius-theme)] overflow-hidden">
+                        <div className="px-6 py-4 border-b border-[var(--border-base)] flex items-center justify-between">
+                            <h3 className="font-bold text-[var(--text-primary)] flex items-center gap-2">
+                                <Terminal className="w-4 h-4 text-[var(--brand-primary)]" /> System Logs
                             </h3>
-                            <span className="text-[10px] font-black text-slate-400 uppercase">Live Tail</span>
+                            <div className="flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[var(--status-success)] animate-pulse"></span>
+                                <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase">Live</span>
+                            </div>
                         </div>
-                        <div className="divide-y divide-slate-50">
-                            {logs.map((log) => (
-                                <div key={log.id} className="p-4 hover:bg-slate-50 transition-colors group">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className={`w-1.5 h-1.5 rounded-full ${log.type === 'error' ? 'bg-rose-500' :
-                                                log.type === 'warning' ? 'bg-amber-500' : 'bg-emerald-500'
-                                                }`} />
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{log.service}</span>
-                                        </div>
-                                        <span className="text-[10px] text-slate-400 font-medium font-mono">{log.time}</span>
-                                    </div>
-                                    <p className="text-xs font-semibold text-slate-700 leading-relaxed font-mono truncate group-hover:whitespace-normal group-hover:overflow-visible group-hover:break-words">
-                                        {log.message}
-                                    </p>
-                                </div>
-                            ))}
+                        <div className="p-4 space-y-3">
+                            <LogItem service="AUTH" msg="Admin login success" type="info" />
+                            <LogItem service="ML" msg="Inference timeout: crop#89" type="error" />
+                            <LogItem service="DB" msg="Query optimized in 1.2s" type="info" />
+                            <LogItem service="API" msg="New listing created: Rice" type="info" />
                         </div>
-                        <button className="w-full py-4 text-[10px] font-black text-blue-600 uppercase bg-slate-50/50 hover:bg-blue-600 hover:text-white transition-all">
-                            View Full Log Archive
+                        <button className="w-full py-3 bg-[var(--bg-muted)]/50 text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-widest hover:bg-[var(--bg-muted)]">
+                            Export Logs
                         </button>
                     </div>
                 </div>
@@ -339,89 +180,57 @@ const SystemHealth: React.FC = () => {
 };
 
 // --- Sub-components ---
-
-const StatusCard = ({ title, status, value, icon: Icon, color, details }: any) => {
-    const colors: any = {
-        emerald: "bg-emerald-500 hover:bg-emerald-600 text-emerald-50",
-        blue: "bg-blue-600 hover:bg-blue-700 text-blue-50",
-        amber: "bg-amber-500 hover:bg-amber-600 text-amber-50",
-        indigo: "bg-indigo-600 hover:bg-indigo-700 text-indigo-50",
+const StatusCard = ({ title, status, value, icon: Icon, color }: any) => {
+    const statusColors: any = {
+        success: 'text-[var(--status-success)] bg-emerald-50 border-emerald-100',
+        warning: 'text-[var(--status-warning)] bg-amber-50 border-amber-100',
+        error: 'text-[var(--status-error)] bg-red-50 border-red-100',
+        info: 'text-[var(--status-info)] bg-blue-50 border-blue-100',
     };
-
-    const iconColors: any = {
-        emerald: "bg-emerald-400/20",
-        blue: "bg-blue-400/20",
-        amber: "bg-amber-400/20",
-        indigo: "bg-indigo-400/20",
-    };
-
     return (
-        <motion.div
-            whileHover={{ y: -4 }}
-            className={`p-6 rounded-[28px] ${colors[color]} border-none shadow-lg transition-all cursor-default relative overflow-hidden group`}
-        >
-            <div className="flex justify-between items-start relative z-10">
-                <div className={`p-3 rounded-2xl ${iconColors[color]}`}>
-                    <Icon className="w-6 h-6 text-white" />
-                </div>
-                <div className="px-3 py-1 bg-black/10 rounded-full flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">{status}</span>
+        <div className="bg-[var(--bg-surface)] p-5 border border-[var(--border-base)] rounded-[var(--radius-theme)] flex items-start gap-4">
+            <div className={`p-2.5 rounded-lg border ${statusColors[color]}`}>
+                <Icon className="w-5 h-5" />
+            </div>
+            <div>
+                <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider">{title}</p>
+                <p className="text-xl font-bold text-[var(--text-primary)] mt-0.5">{value}</p>
+                <div className="flex items-center gap-1.5 mt-2">
+                    <span className={`w-1.5 h-1.5 rounded-full ${color === 'success' ? 'bg-[var(--status-success)]' : color === 'warning' ? 'bg-[var(--status-warning)]' : 'bg-[var(--status-info)]'}`}></span>
+                    <span className="text-[10px] font-bold text-[var(--text-secondary)]">{status}</span>
                 </div>
             </div>
-            <div className="mt-8 relative z-10">
-                <h3 className="text-[10px] uppercase tracking-widest font-black opacity-70 leading-none">{title}</h3>
-                <p className="text-2xl font-black mt-1 leading-none">{value}</p>
-                <p className="text-xs font-medium mt-2 opacity-80 italic">{details}</p>
-            </div>
-
-            {/* Background decoration */}
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-125 transition-transform duration-700" />
-        </motion.div>
+        </div>
     );
 };
 
-const LoadMetric = ({ label, value, subValue, icon: Icon }: any) => (
-    <div className="flex flex-col">
-        <div className="flex items-center gap-2 mb-2">
-            <Icon className="w-4 h-4 text-slate-400" />
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{label}</span>
-        </div>
-        <p className="text-xl font-black text-slate-900 font-mono tracking-tight">{value}</p>
-        <p className="text-[10px] font-bold text-slate-500 uppercase">{subValue}</p>
+const LoadStat = ({ label, value, icon: Icon }: any) => (
+    <div className="flex flex-col items-center">
+        <Icon className="w-4 h-4 text-[var(--text-muted)] mb-2" />
+        <span className="text-sm font-bold text-[var(--text-primary)]">{value}</span>
+        <span className="text-[10px] font-medium text-[var(--text-muted)] uppercase mt-1 tracking-tighter">{label}</span>
     </div>
 );
 
-const AiMetric = ({ label, value, stat, color }: any) => {
-    const statusColors: any = {
-        emerald: 'bg-emerald-500 text-emerald-500',
-        amber: 'bg-amber-500 text-amber-500',
-        blue: 'bg-blue-500 text-blue-500',
-    };
-
-    return (
-        <div className="group/item">
-            <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-bold text-slate-200 group-hover/item:text-white transition-colors">{label}</span>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${color === 'emerald' ? 'bg-emerald-500/20 text-emerald-400' :
-                    color === 'amber' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'
-                    }`}>
-                    {value}
-                </span>
-            </div>
-            <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: color === 'amber' ? '70%' : '95%' }}
-                    className={`h-full ${statusColors[color].split(' ')[0]} rounded-full opacity-80`}
-                />
-            </div>
-            <div className="flex justify-between items-center mt-1.5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase group-hover/item:text-slate-400">{stat}</span>
-                <span className="text-[10px] font-bold text-slate-500 uppercase">Latency: {color === 'amber' ? ' высокую' : 'Low'}</span>
+const SecurityStat = ({ label, value, sub, icon: Icon }: any) => (
+    <div className="flex items-center justify-between p-3 bg-[var(--bg-muted)]/30 border border-[var(--border-base)] rounded">
+        <div className="flex items-center gap-3">
+            <Icon className="w-4 h-4 text-[var(--text-muted)]" />
+            <div>
+                <p className="text-xs font-bold text-[var(--text-primary)]">{label}</p>
+                <p className="text-[10px] text-[var(--text-muted)]">{sub}</p>
             </div>
         </div>
-    );
-};
+        <span className="text-lg font-bold text-[var(--text-primary)]">{value}</span>
+    </div>
+);
+
+const LogItem = ({ service, msg, type }: any) => (
+    <div className="flex items-start gap-2 text-[11px] font-mono leading-tight">
+        <span className={`shrink-0 w-1 h-1 mt-1.5 rounded-full ${type === 'error' ? 'bg-red-500' : 'bg-emerald-500'}`}></span>
+        <span className="text-[var(--text-muted)] uppercase font-bold shrink-0">[{service}]</span>
+        <span className="text-[var(--text-secondary)] break-all">{msg}</span>
+    </div>
+);
 
 export default SystemHealth;

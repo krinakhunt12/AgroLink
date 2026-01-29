@@ -38,6 +38,8 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminListings from './pages/admin/AdminListings';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder';
 import SystemHealth from './pages/admin/SystemHealth';
+import MLOpsDashboard from './pages/admin/MLOpsDashboard';
+import RulesEngine from './pages/admin/RulesEngine';
 
 /**
  * MainLayout provides the common UI wrapper (Navbar, Footer, AI Chat)
@@ -152,9 +154,8 @@ const AppRouter = () => {
                         <Route path="/admin/buyers" element={<AdminUsers type="buyer" />} />
                         <Route path="/admin/listings" element={<AdminListings />} />
                         <Route path="/admin/orders" element={<AdminPlaceholder title="Transactions & Orders" />} />
-                        <Route path="/admin/ai-logs" element={<AdminPlaceholder title="AI Price Prediction Logs" />} />
-                        <Route path="/admin/forecast" element={<AdminPlaceholder title="Demand Forecast Reports" />} />
-                        <Route path="/admin/analytics" element={<AdminPlaceholder title="System Analytics" />} />
+                        <Route path="/admin/ml-ops" element={<MLOpsDashboard />} />
+                        <Route path="/admin/rules" element={<RulesEngine />} />
                         <Route path="/admin/health" element={<SystemHealth />} />
                         <Route path="/admin/settings" element={<AdminPlaceholder title="Settings" />} />
                     </Route>
