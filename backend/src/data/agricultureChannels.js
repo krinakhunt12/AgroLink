@@ -3,7 +3,7 @@
  * You can find a channel ID by viewing the source of the channel page 
  * or using online tools.
  */
-export const trustedChannels = [
+export const agricultureChannels = [
     { id: 'UCtX0_3O0F6_nOfyA6Q_eG_Q', name: 'Indian Farmer' },
     { id: 'UC6_Yz1Ob-XU_OTUoBLkjV2Q', name: 'Krishi Darshan' },
     { id: 'UC5svs2h6DV4FQlDfg1iVhJA', name: 'Agriculture INDIA' },

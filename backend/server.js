@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import connectDB from './src/config/database.js';
 import { errorHandler } from './src/middleware/errorHandler.js';
 import { rateLimiter } from './src/middleware/rateLimiter.js';
@@ -20,6 +21,7 @@ import agricultureVideoRoutes from './src/routes/videoRoutes.js';
 import agricultureNewsRoutes from './src/routes/newsRoutes.js';
 import agricultureSchemeRoutes from './src/routes/schemeRoutes.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
+import agricultureDashboardRoutes from './src/routes/agricultureDashboardRoutes.js';
 
 // Initialize Express app
 const app = express();
@@ -35,6 +37,7 @@ app.use(cors({
 }));
 app.use(compression()); // Compress responses
 app.use(morgan('dev')); // Logging
+app.use(cookieParser()); // Cookie parsing
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
@@ -65,6 +68,7 @@ app.use("/api/youtube", youtubeRoutes);
 app.use("/api/agriculture-videos", agricultureVideoRoutes);
 app.use("/api/agriculture-news", agricultureNewsRoutes);
 app.use("/api/agriculture-schemes", agricultureSchemeRoutes);
+app.use("/api/agriculture", agricultureDashboardRoutes);
 
 // 404 handler
 app.use((req, res) => {

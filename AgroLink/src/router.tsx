@@ -22,6 +22,7 @@ import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
+import AgricultureDashboard from './pages/AgricultureDashboard';
 
 // Farmer Dashboard Pages
 import FarmerDashboardHome from './pages/FarmerDashboardHome';
@@ -86,6 +87,7 @@ const AppRouter = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/news" element={<News />} />
                     <Route path="/videos" element={<Videos />} />
+                    <Route path="/agriculture-hub" element={<AgricultureDashboard />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
                 </Route>
