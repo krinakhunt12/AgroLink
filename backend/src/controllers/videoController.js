@@ -1,5 +1,5 @@
 import rssService from '../services/rssService.js';
-import { trustedChannels } from '../data/agricultureChannels.js';
+import { agricultureChannels } from '../data/agricultureChannels.js';
 import { classifyVideo } from '../ml/videoClassifier.js';
 
 /**
@@ -15,7 +15,7 @@ class VideoController {
             console.log('📡 Fetching videos from YouTube RSS feeds...');
 
             // 1. Fetch all videos from trusted channels
-            const rawVideos = await rssService.fetchAllChannels(trustedChannels);
+            const rawVideos = await rssService.fetchAllChannels(agricultureChannels);
             console.log(`📥 Fetched ${rawVideos.length} raw videos total.`);
 
             // 2. Apply filtering and classification using the ML-inspired logic
@@ -41,7 +41,7 @@ class VideoController {
             res.status(200).json({
                 success: true,
                 count: usefulVideos.length,
-                channelsSearched: trustedChannels.length,
+                channelsSearched: agricultureChannels.length,
                 data: usefulVideos
             });
         } catch (error) {
