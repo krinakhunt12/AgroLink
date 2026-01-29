@@ -2,12 +2,16 @@ import React from 'react';
 import {
     Users, UserCheck, Package, ShoppingCart,
     ArrowUpRight, ArrowDownRight, BrainCircuit,
-    Clock, RefreshCw, Filter, Download, Zap, AlertTriangle,
+    Clock, RefreshCw, Filter, Download,
     ShieldAlert
 } from 'lucide-react';
+import { useAppSelector } from '../../store/hooks';
 
 const AdminDashboard: React.FC = () => {
-    // Mock data
+    const { farmers, buyers } = useAppSelector(state => state.users);
+    const { listings } = useAppSelector(state => state.marketplace);
+
+    // Mock anomalies - ideally these would also come from Redux
     const anomalies = [
         { id: 1, title: 'Tomato Price Spike', desc: 'Price jumped 42% in 24h deviates from AI baseline.', severity: 'critical', time: '12m ago' },
         { id: 2, title: 'Suspicious Activity', desc: 'Buyer #442 contact pattern matches bulk-spam bot.', severity: 'warning', time: '1h ago' },
@@ -15,9 +19,9 @@ const AdminDashboard: React.FC = () => {
     ];
 
     const stats = [
-        { label: 'Total Farmers', value: '12,840', change: '+12%', isPositive: true, icon: Users },
-        { label: 'Total Buyers', value: '4,210', change: '+5.4%', isPositive: true, icon: UserCheck },
-        { label: 'Active Listings', value: '8,924', change: '-2%', isPositive: false, icon: Package },
+        { label: 'Total Farmers', value: farmers.length.toLocaleString(), change: '+12%', isPositive: true, icon: Users },
+        { label: 'Total Buyers', value: buyers.length.toLocaleString(), change: '+5.4%', isPositive: true, icon: UserCheck },
+        { label: 'Active Listings', value: listings.length.toLocaleString(), change: '-2%', isPositive: false, icon: Package },
         { label: 'Transactions', value: '₹45.2M', change: '+18.2%', isPositive: true, icon: ShoppingCart },
     ];
 
@@ -85,8 +89,8 @@ const AdminDashboard: React.FC = () => {
                         <div key={anno.id} className="p-5 hover:bg-[var(--bg-muted)]/20 transition-colors">
                             <div className="flex justify-between items-start mb-2">
                                 <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${anno.severity === 'critical' ? 'bg-red-50 text-[var(--status-error)] border border-red-100' :
-                                        anno.severity === 'warning' ? 'bg-amber-50 text-[var(--status-warning)] border border-amber-100' :
-                                            'bg-blue-50 text-[var(--status-info)] border border-blue-100'
+                                    anno.severity === 'warning' ? 'bg-amber-50 text-[var(--status-warning)] border border-amber-100' :
+                                        'bg-blue-50 text-[var(--status-info)] border border-blue-100'
                                     }`}>
                                     {anno.severity}
                                 </span>
@@ -130,8 +134,8 @@ const AdminDashboard: React.FC = () => {
                                     <td className="px-6 py-4 text-right font-mono text-sm text-[var(--text-primary)] font-bold">₹{row.actual}</td>
                                     <td className="px-6 py-4 text-center">
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${row.status === 'Healthy' ? 'bg-emerald-50 text-[var(--status-success)] border-emerald-100' :
-                                                row.status === 'Warning' ? 'bg-amber-50 text-[var(--status-warning)] border-amber-100' :
-                                                    'bg-blue-50 text-[var(--status-info)] border-blue-100'
+                                            row.status === 'Warning' ? 'bg-amber-50 text-[var(--status-warning)] border-amber-100' :
+                                                'bg-blue-50 text-[var(--status-info)] border-blue-100'
                                             }`}>
                                             {row.status}
                                         </span>
