@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ['farmer', 'buyer'],
+        enum: ['farmer', 'buyer', 'admin'],
         required: [true, 'User type is required']
     },
     location: {

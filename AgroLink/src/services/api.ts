@@ -70,6 +70,22 @@ export const authAPI = {
         return data;
     },
 
+    // Admin Login
+    adminLogin: async (credentials: { email: string; password: string }) => {
+        const data = await apiRequest('/auth/admin/login', {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+        });
+
+        // Save token to localStorage
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+        }
+
+        return data;
+    },
+
     // Google Login
     googleLogin: async (data: { token: string; userType?: 'farmer' | 'buyer' }) => {
         const response = await apiRequest('/auth/google', {

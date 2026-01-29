@@ -30,6 +30,14 @@ import FarmerDashboard from './pages/FarmerDashboard';
 // Buyer Dashboard Pages
 import BuyerDashboard from './pages/BuyerDashboard';
 
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminListings from './pages/admin/AdminListings';
+import AdminPlaceholder from './pages/admin/AdminPlaceholder';
+
 /**
  * MainLayout provides the common UI wrapper (Navbar, Footer, AI Chat)
  * for public pages only.
@@ -61,6 +69,9 @@ const AppRouter = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
 
+                {/* Admin Auth (Separate from main login) */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+
                 {/* Public Pages with Navbar/Footer */}
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
@@ -74,10 +85,6 @@ const AppRouter = () => {
                     <Route path="/videos" element={<Videos />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
-
-                    {/* Public Market Preview (Optional, or redirect to Login if strict) */}
-                    <Route path="/market" element={<Marketplace />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
                 </Route>
 
                 {/* Farmer Routes (Protected) */}
@@ -136,12 +143,23 @@ const AppRouter = () => {
                     <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">પ્રોફાઇલ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
                 </Route>
 
+                {/* ============= ADMIN DASHBOARD (Protected) ============= */}
+                <Route element={<ProtectedRoute requiredRole="admin" />}>
+                    <Route element={<AdminLayout />}>
+                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        <Route path="/admin/farmers" element={<AdminUsers type="farmer" />} />
+                        <Route path="/admin/buyers" element={<AdminUsers type="buyer" />} />
+                        <Route path="/admin/listings" element={<AdminListings />} />
+                        <Route path="/admin/orders" element={<AdminPlaceholder title="Transactions & Orders" />} />
+                        <Route path="/admin/ai-logs" element={<AdminPlaceholder title="AI Price Prediction Logs" />} />
+                        <Route path="/admin/forecast" element={<AdminPlaceholder title="Demand Forecast Reports" />} />
+                        <Route path="/admin/analytics" element={<AdminPlaceholder title="System Analytics" />} />
+                        <Route path="/admin/settings" element={<AdminPlaceholder title="Settings" />} />
+                    </Route>
+                </Route>
+
                 {/* ============= FALLBACK ============= */}
-
                 <Route path="*" element={<Navigate to="/" replace />} />
-
-                {/* Fallback - Redirect to Home */}
-                <Route path="*" element={<Home />} />
             </Routes>
         </>
     );

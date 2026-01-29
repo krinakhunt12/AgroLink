@@ -3,7 +3,7 @@ import { authAPI } from '../services/api';
 
 interface ProtectedRouteProps {
     children?: React.ReactNode;
-    requiredRole?: 'farmer' | 'buyer';
+    requiredRole?: 'farmer' | 'buyer' | 'admin';
 }
 
 /**
@@ -24,7 +24,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
 
     // If role is required and doesn't match, redirect to appropriate dashboard
     if (requiredRole && user?.userType !== requiredRole) {
-        const redirectPath = user?.userType === 'farmer' ? '/dashboard' : '/buyer/dashboard';
+        let redirectPath = '/';
+        if (user?.userType === 'farmer') redirectPath = '/dashboard';
+        else if (user?.userType === 'buyer') redirectPath = '/buyer/dashboard';
+        else if (user?.userType === 'admin') redirectPath = '/admin/dashboard';
+
         return <Navigate to={redirectPath} replace />;
     }
 

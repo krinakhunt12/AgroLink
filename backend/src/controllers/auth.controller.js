@@ -78,6 +78,55 @@ export const login = async (req, res, next) => {
     }
 };
 
+// @desc    Admin login
+// @route   POST /api/auth/admin/login
+// @access  Public
+export const adminLogin = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide email and password'
+            });
+        }
+
+        // Check for user
+        const user = await User.findOne({ email }).select('+password');
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        // Check if user is admin
+        if (user.userType !== 'admin') {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized access'
+            });
+        }
+
+        // Check if password matches
+        const isMatch = await user.comparePassword(password);
+
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        sendTokenResponse(user, 200, res);
+    } catch (error) {
+        next(error);
+    }
+};
+
 // @desc    Google Login
 // @route   POST /api/auth/google
 // @access  Public
