@@ -3,7 +3,8 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Users, UserCheck, Package, ShoppingCart,
     BarChart3, Settings, LogOut, ShieldCheck, Menu, X,
-    BrainCircuit, Bell, Search, TrendingUp, History, Database
+    BrainCircuit, Bell, Search, TrendingUp, History, Database,
+    Activity
 } from 'lucide-react';
 import { authAPI } from '../../services/api';
 
@@ -21,6 +22,7 @@ const AdminLayout: React.FC = () => {
         { icon: Database, label: 'AI Price Prediction Logs', path: '/admin/ai-logs' },
         { icon: TrendingUp, label: 'Demand Forecast Reports', path: '/admin/forecast' },
         { icon: BarChart3, label: 'System Analytics', path: '/admin/analytics' },
+        { icon: Activity, label: 'System Health', path: '/admin/health' },
         { icon: Settings, label: 'Settings', path: '/admin/settings' },
     ];
 
