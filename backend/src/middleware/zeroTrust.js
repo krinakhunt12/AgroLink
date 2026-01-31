@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.model.js';
+import { auditLogger } from '../services/auditLogger.js';
 
 /**
  * ZERO-TRUST SECURITY ARCHITECTURE
@@ -391,27 +392,62 @@ function handleSecurityFailure(req, res, code, message, statusCode) {
 /**
  * Helper: Comprehensive audit logging
  */
-function logSecurityEvent(eventType, req, user, additionalData = {}) {
-    const logEntry = {
-        timestamp: new Date().toISOString(),
-        eventType,
-        requestId: req.securityContext?.requestId,
-        ip: req.securityContext?.ip,
-        userAgent: req.securityContext?.userAgent,
-        userId: user?._id?.toString() || 'anonymous',
-        userType: user?.userType || 'unknown',
-        method: req.method,
-        path: req.path,
-        ...additionalData
-    };
+async function logSecurityEvent(eventType, req, user, additionalData = {}) {
+    try {
+        // Map internal event types to audit log event types
+        const eventTypeMap = {
+            'AUTH_SUCCESS': 'LOGIN_SUCCESS',
+            'SECURITY_FAILURE': 'ACCESS_DENIED',
+            'FINGERPRINT_MISMATCH': 'SUSPICIOUS_ACTIVITY',
+            'INJECTION_ATTEMPT': 'INJECTION_ATTEMPT',
+            'IP_FLAGGED': 'SUSPICIOUS_ACTIVITY',
+            'TIME_RESTRICTION': 'POLICY_VIOLATION',
+            'ANOMALOUS_PATTERN': 'ANOMALY_DETECTED',
+            'MISSING_HEADER': 'SUSPICIOUS_ACTIVITY',
+            'INVALID_CONTENT_TYPE': 'SUSPICIOUS_ACTIVITY',
+            'SESSION_REVOKED': 'LOGOUT'
+        };
 
-    // In production, send to centralized logging service (e.g., ELK, Splunk)
-    console.log(`[SECURITY-AUDIT] ${eventType}:`, JSON.stringify(logEntry));
+        const mappedEventType = eventTypeMap[eventType] || 'SECURITY';
 
-    // Store critical events for real-time monitoring
-    if (['SECURITY_FAILURE', 'FINGERPRINT_MISMATCH', 'INJECTION_ATTEMPT', 'IP_FLAGGED'].includes(eventType)) {
-        // Trigger alert to security team
-        // sendSecurityAlert(logEntry);
+        // Determine event category
+        let eventCategory = 'SECURITY';
+        if (eventType.includes('AUTH')) {
+            eventCategory = 'AUTHENTICATION';
+        } else if (eventType.includes('PERMISSION') || eventType.includes('ACCESS')) {
+            eventCategory = 'AUTHORIZATION';
+        }
+
+        await auditLogger.log({
+            eventType: mappedEventType,
+            eventCategory,
+            userId: user?._id,
+            userRole: user?.userType,
+            userName: user?.name,
+            action: `${req.method} ${req.path}`,
+            resource: req.path,
+            method: req.method,
+            endpoint: req.path,
+            outcome: eventType.includes('SUCCESS') ? 'SUCCESS' : eventType.includes('FAILURE') ? 'BLOCKED' : 'WARNING',
+            statusCode: additionalData.statusCode || 200,
+            ipAddress: req.securityContext?.ip || 'unknown',
+            userAgent: req.securityContext?.userAgent,
+            sessionId: req.sessionID,
+            details: additionalData,
+            requestId: req.securityContext?.requestId,
+            context: {
+                eventType: eventType, // Original event type
+                ...additionalData
+            }
+        });
+    } catch (error) {
+        // Fallback to console logging if audit logger fails
+        console.error('[AUDIT-LOG-ERROR]', error);
+        console.log(`[SECURITY-AUDIT] ${eventType}:`, {
+            userId: user?._id?.toString() || 'anonymous',
+            ip: req.securityContext?.ip,
+            ...additionalData
+        });
     }
 }
 
