@@ -2,7 +2,7 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Helper function to handle API requests
-const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
+export const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('token');
 
     const headers: Record<string, string> = {
@@ -309,6 +309,10 @@ export const usersAPI = {
         }
         return data;
     },
+    // Delete account
+    deleteAccount: async () => {
+        return await apiRequest('/users/me', { method: 'DELETE' });
+    },
 };
 
 // Categories API
@@ -344,6 +348,95 @@ export const schemesAPI = {
     },
 };
 
+// Intelligence & Blockchain API
+export const intelligenceAPI = {
+    // Get crop price prediction
+    predictPrice: async (data: any) => {
+        return await apiRequest('/ml/predict-price', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+
+    // Analyze Demand-Supply gap
+    analyzeGap: async (data: any) => {
+        return await apiRequest('/ml/analyze-gap', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+
+    // Evaluate Buyer Trust
+    evaluateBuyer: async (buyerId: string, history: any) => {
+        return await apiRequest(`/ml/buyer-trust/${buyerId}`, {
+            method: 'POST',
+            body: JSON.stringify(history),
+        });
+    },
+
+    // Get Farmer Profit analytics
+    getProfitDashboard: async (transactions: any[]) => {
+        return await apiRequest('/ml/profit-dashboard', {
+            method: 'POST',
+            body: JSON.stringify(transactions),
+        });
+    },
+
+    // Check MSP and Policy awareness
+    getPolicyAwareness: async (params: any) => {
+        const queryParams = new URLSearchParams(params).toString();
+        return await apiRequest(`/ml/policy-awareness?${queryParams}`);
+    },
+
+    // Blockchain: Seal a trade
+    sealTrade: async (tradeData: any) => {
+        return await apiRequest('/ml/blockchain/seal', {
+            method: 'POST',
+            body: JSON.stringify(tradeData),
+        });
+    },
+
+    // Blockchain: Verify ledger
+    verifyBlockchain: async () => {
+        return await apiRequest('/ml/blockchain/verify');
+    },
+
+    // Smart Contracts: Initiate Escrow
+    startContract: async (contractData: any) => {
+        return await apiRequest('/ml/contracts/start-escrow', {
+            method: 'POST',
+            body: JSON.stringify(contractData),
+        });
+    },
+
+    // Smart Contracts: Dispatch order
+    dispatchTrade: async (contractId: string) => {
+        return await apiRequest(`/ml/contracts/dispatch/${contractId}`, {
+            method: 'POST',
+        });
+    },
+
+    // Smart Contracts: Confirm delivery
+    confirmDelivery: async (contractId: string) => {
+        return await apiRequest(`/ml/contracts/confirm-delivery/${contractId}`, {
+            method: 'POST',
+        });
+    },
+
+    // Smart Contracts: Get status
+    getContractStatus: async (contractId: string) => {
+        return await apiRequest(`/ml/contracts/get/${contractId}`);
+    },
+
+    // AI Anomaly Detection: Audit a transaction
+    auditTransaction: async (auditData: { transaction_data: any; user_data: any }) => {
+        return await apiRequest('/ml/audit', {
+            method: 'POST',
+            body: JSON.stringify(auditData),
+        });
+    }
+};
+
 export default {
     auth: authAPI,
     products: productsAPI,
@@ -354,4 +447,5 @@ export default {
     youtube: youtubeAPI,
     news: newsAPI,
     schemes: schemesAPI,
+    intelligence: intelligenceAPI,
 };

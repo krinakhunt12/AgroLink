@@ -1,214 +1,258 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import NodeCache from 'node-cache';
+import crypto from 'crypto';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
-const CONFIDENCE_THRESHOLD = parseFloat(process.env.CONFIDENCE_THRESHOLD || '0.7');
+const ML_SERVICE_API_KEY = process.env.ML_SERVICE_API_KEY || 'agrolink_secure_ml_key_2026';
+const ML_SERVICE_SECRET = process.env.ML_SERVICE_SECRET || 'super_secret_ml_protection_code';
 
-/**
- * ML Service Client
- * Communicates with Python ML service for video classification
- */
+const cache = new NodeCache({ stdTTL: 300 }); // 5 minute cache
+
 class MLService {
-    /**
-     * Predict if a video is useful for farmers
-     * @param {Object} video - Video metadata
-     * @returns {Promise<Object>} Prediction result with confidence score
-     */
-    async predictVideoUsefulness(video) {
-        try {
-            const response = await axios.post(`${ML_SERVICE_URL}/predict`, {
-                title: video.title,
-                description: video.description,
-                channel: video.channel,
-                duration: video.durationMinutes,
-                views: video.views,
-                engagement_rate: video.engagementRate
-            }, {
-                timeout: 5000, // 5 second timeout
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            return {
-                isUseful: response.data.is_useful,
-                confidence: response.data.confidence,
-                category: response.data.category || 'unknown',
-                features: response.data.features || {}
-            };
-        } catch (error) {
-            console.error('ML Service Error:', error.message);
-
-            // Fallback to rule-based classification if ML service is down
-            return this.fallbackClassification(video);
-        }
-    }
-
-    /**
-     * Batch predict multiple videos
-     * More efficient than individual predictions
-     * @param {Array} videos - Array of video metadata
-     * @returns {Promise<Array>} Array of prediction results
-     */
-    async batchPredict(videos) {
-        try {
-            const payload = videos.map(video => ({
-                title: video.title,
-                description: video.description,
-                channel: video.channel,
-                duration: video.durationMinutes,
-                views: video.views,
-                engagement_rate: video.engagementRate
-            }));
-
-            const response = await axios.post(`${ML_SERVICE_URL}/batch-predict`, {
-                videos: payload
-            }, {
-                timeout: 15000, // 15 second timeout for batch
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            return response.data.predictions;
-        } catch (error) {
-            console.error('ML Batch Prediction Error:', error.message);
-
-            // Fallback to individual predictions
-            return Promise.all(videos.map(video => this.predictVideoUsefulness(video)));
-        }
-    }
-
-    /**
-     * Fallback rule-based classification
-     * Used when ML service is unavailable
-     */
-    fallbackClassification(video) {
-        const title = video.title.toLowerCase();
-        const description = video.description.toLowerCase();
-
-        // Useful keywords for agriculture
-        const usefulKeywords = [
-            'farming', 'cultivation', 'crop', 'harvest', 'irrigation',
-            'fertilizer', 'pesticide', 'organic', 'soil', 'seed',
-            'tractor', 'equipment', 'technique', 'method', 'guide',
-            'tutorial', 'training', 'demonstration', 'kheti', 'krishi'
-        ];
-
-        // Non-useful keywords
-        const nonUsefulKeywords = [
-            'song', 'music', 'movie', 'trailer', 'comedy',
-            'prank', 'vlog', 'gaming', 'reaction', 'unboxing'
-        ];
-
-        let usefulScore = 0;
-        let nonUsefulScore = 0;
-
-        // Count keyword matches
-        for (const keyword of usefulKeywords) {
-            if (title.includes(keyword)) usefulScore += 2;
-            if (description.includes(keyword)) usefulScore += 1;
-        }
-
-        for (const keyword of nonUsefulKeywords) {
-            if (title.includes(keyword)) nonUsefulScore += 3;
-            if (description.includes(keyword)) nonUsefulScore += 1;
-        }
-
-        // Calculate confidence based on keyword density
-        const totalWords = title.split(' ').length + description.split(' ').length;
-        const keywordDensity = (usefulScore - nonUsefulScore) / totalWords;
-
-        const isUseful = usefulScore > nonUsefulScore && usefulScore >= 3;
-        const confidence = Math.min(Math.abs(keywordDensity) * 10, 0.85); // Max 0.85 for fallback
-
-        return {
-            isUseful,
-            confidence: parseFloat(confidence.toFixed(2)),
-            category: isUseful ? 'tutorial' : 'entertainment',
-            features: {
-                usefulScore,
-                nonUsefulScore,
-                fallback: true
+    constructor() {
+        this.api = axios.create({
+            baseURL: ML_SERVICE_URL,
+            timeout: 10000, // 10s timeout
+            headers: {
+                'Content-Type': 'application/json'
             }
-        };
-    }
+        });
 
-    /**
-     * Check if ML service is healthy
-     */
-    async healthCheck() {
-        try {
-            const response = await axios.get(`${ML_SERVICE_URL}/health`, {
-                timeout: 3000
-            });
-            return response.data.status === 'healthy';
-        } catch (error) {
-            return false;
-        }
-    }
+        // Add Security Interceptor: Every request to the ML service must be signed
+        this.api.interceptors.request.use((config) => {
+            const timestamp = Math.floor(Date.now() / 1000).toString();
+            const body = config.data ? JSON.stringify(config.data) : '';
+            const path = config.url;
 
-    /**
-     * Get ML model information
-     */
-    async getModelInfo() {
-        try {
-            const response = await axios.get(`${ML_SERVICE_URL}/model-info`, {
-                timeout: 3000
-            });
-            return response.data;
-        } catch (error) {
-            return {
-                model: 'fallback',
-                version: '1.0.0',
-                accuracy: 'N/A'
-            };
-        }
-    }
+            // Signature Logic: HMAC_SHA256(Secret, Timestamp + Path + Body)
+            const payload = `${timestamp}${path}${body}`;
+            const signature = crypto
+                .createHmac('sha256', ML_SERVICE_SECRET)
+                .update(payload)
+                .digest('hex');
 
-    /**
-     * Filter videos based on ML predictions
-     * @param {Array} videos - Videos with predictions
-     * @returns {Array} Filtered useful videos
-     */
-    filterUsefulVideos(videos) {
-        return videos.filter(video => {
-            // Must be predicted as useful
-            if (!video.mlPrediction?.isUseful) return false;
+            config.headers['X-ML-API-Key'] = ML_SERVICE_API_KEY;
+            config.headers['X-ML-Timestamp'] = timestamp;
+            config.headers['X-ML-Signature'] = signature;
 
-            // Must meet confidence threshold
-            if (video.mlPrediction.confidence < CONFIDENCE_THRESHOLD) return false;
-
-            return true;
+            return config;
         });
     }
 
     /**
-     * Rank videos by combined score
-     * Factors: ML confidence, recency, engagement, views
+     * Get crop price prediction with XAI
      */
-    rankVideos(videos) {
-        return videos.map(video => {
-            const mlScore = video.mlPrediction?.confidence || 0;
-            const recencyScore = video.recencyScore || 0;
-            const engagementScore = Math.min(video.engagementRate / 10, 1); // Normalize to 0-1
-            const viewScore = Math.min(Math.log10(video.views + 1) / 6, 1); // Normalize to 0-1
+    async predictPrice(data) {
+        const cacheKey = `price_${JSON.stringify(data)}`;
+        const cached = cache.get(cacheKey);
+        if (cached) return cached;
 
-            // Weighted combination
-            const rankingScore = (
-                mlScore * 0.5 +           // 50% ML confidence
-                recencyScore * 0.25 +     // 25% recency
-                engagementScore * 0.15 +  // 15% engagement
-                viewScore * 0.10          // 10% popularity
-            );
+        try {
+            const response = await this.api.post('/api/predict-price', data);
+            cache.set(cacheKey, response.data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
 
-            return {
-                ...video,
-                rankingScore: parseFloat(rankingScore.toFixed(3))
-            };
-        }).sort((a, b) => b.rankingScore - a.rankingScore);
+    /**
+     * Analyze Demand-Supply Gap
+     */
+    async analyzeGap(data) {
+        const cacheKey = `gap_${JSON.stringify(data)}`;
+        const cached = cache.get(cacheKey);
+        if (cached) return cached;
+
+        try {
+            const response = await this.api.post('/api/analyze-gap', data);
+            cache.set(cacheKey, response.data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Evaluate Buyer Trust
+     */
+    async evaluateBuyer(buyerId, history) {
+        const cacheKey = `trust_${buyerId}`;
+        const cached = cache.get(cacheKey);
+        if (cached) return cached;
+
+        try {
+            const response = await this.api.post(`/api/buyer-trust/${buyerId}`, history);
+            cache.set(cacheKey, response.data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Generate Profit Dashboard Analytics
+     */
+    async getProfitDashboard(transactions) {
+        try {
+            const response = await this.api.post('/api/profit-dashboard', transactions);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Get Policy & MSP Awareness analysis
+     */
+    async getPolicyAwareness(params) {
+        const cacheKey = `policy_${JSON.stringify(params)}`;
+        const cached = cache.get(cacheKey);
+        if (cached) return cached;
+
+        try {
+            const response = await this.api.get('/api/policy-awareness', { params });
+            cache.set(cacheKey, response.data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Seal a trade on the Blockchain
+     */
+    async sealTrade(tradeData) {
+        try {
+            const response = await this.api.post('/api/blockchain/seal-trade', tradeData);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Seal a transaction on the Blockchain for audit and non-repudiation
+     */
+    async sealIntegrity(data) {
+        try {
+            const response = await this.api.post('/api/blockchain/seal-integrity', data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Verify a transaction's integrity against the Blockchain ledger
+     */
+    async verifyIntegrity(data) {
+        try {
+            const response = await this.api.post('/api/blockchain/verify-integrity', data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Verify Blockchain Integrity
+     */
+    async verifyBlockchain() {
+        try {
+            const response = await this.api.get('/api/blockchain/verify-ledger');
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Initiate a Smart Contract (Escrow)
+     */
+    async initiateContract(contractData) {
+        try {
+            const response = await this.api.post('/api/contracts/initiate', contractData);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Mark a trade as Dispatched (Farmer action)
+     */
+    async dispatchTrade(contractId) {
+        try {
+            const response = await this.api.post(`/api/contracts/dispatch/${contractId}`);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Confirm Delivery and Release Payment
+     */
+    async confirmDelivery(contractId) {
+        try {
+            const response = await this.api.post(`/api/contracts/confirm/${contractId}`);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Get Contract Current Status
+     */
+    async getContract(contractId) {
+        try {
+            const response = await this.api.get(`/api/contracts/${contractId}`);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Trigger Background Alert Process
+     */
+    async processAlerts() {
+        try {
+            const response = await this.api.post('/api/alerts/process');
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    /**
+     * Audit a transaction for potential anomalies or fraud
+     */
+    async auditTransaction(data) {
+        try {
+            const response = await this.api.post('/api/audit-transaction', data);
+            return response.data;
+        } catch (error) {
+            this._handleError(error);
+        }
+    }
+
+    _handleError(error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            console.error('ML Service Error:', error.response.data);
+            throw new Error(error.response.data.detail || 'ML Service Failure');
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('ML Service Unreachable:', error.message);
+            throw new Error('ML Service Connection Timeout');
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('ML Gateway Error:', error.message);
+            throw new Error('Internal Gateway Error');
+        }
     }
 }
 

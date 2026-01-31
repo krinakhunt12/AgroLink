@@ -51,6 +51,14 @@ const orderSchema = new mongoose.Schema({
     notes: {
         type: String,
         maxlength: [500, 'Notes cannot exceed 500 characters']
+    },
+    blockchainHash: {
+        type: String,
+        default: null
+    },
+    blockchainVerified: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

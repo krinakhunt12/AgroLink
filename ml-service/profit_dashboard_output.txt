@@ -1,0 +1,34 @@
+
+=================================================================
+      AGROLINK INTELLIGENT FARMER PROFIT DASHBOARD      
+=================================================================
+TOTAL NET PROFIT     : Rs.502500
+AVG MARGIN           : 49.42%
+MOST PROFITABLE CROP : Onion
+-----------------------------------------------------------------
+CROP-WISE ANALYTICS:
+ - Onion     : Profit Rs.169000.00 | Margin  49.8%
+ - Potato    : Profit Rs.156000.00 | Margin  58.0%
+ - Wheat     : Profit Rs.96000.00 | Margin  50.0%
+ - Cotton    : Profit Rs.50000.00 | Margin  38.5%
+ - Tomato    : Profit Rs.31500.00 | Margin  45.2%
+-----------------------------------------------------------------
+OPTIMAL SELLING WINDOWS (Best Prices Found):
+ - Onion     : December
+ - Potato    : November
+ - Tomato    : May
+ - Wheat     : August
+ - Cotton    : October
+-----------------------------------------------------------------
+MONTHLY PROFIT DISTRIBUTION:
+ - January   : Rs.  75000.00
+ - February  : Rs.  60000.00
+ - March     : Rs.  24000.00
+ - May       : Rs.  24000.00
+ - June      : Rs.   7500.00
+ - August    : Rs.  96000.00
+ - October   : Rs.  50000.00
+ - November  : Rs.  96000.00
+ - December  : Rs.  70000.00
+=================================================================
+

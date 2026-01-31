@@ -1,5 +1,6 @@
 import Order from '../models/Order.model.js';
 import Product from '../models/Product.model.js';
+import mlService from '../services/mlService.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -149,6 +150,34 @@ export const updateOrderStatus = async (req, res, next) => {
         }
 
         order.status = status;
+
+        // BLOCKCHAIN INTEGRITY SEAL: If status is delivered, finalize it on the ledger
+        if (status === 'delivered') {
+            console.log(`[Blockchain-Security] Sealing Integrity for Order: ${order._id}`);
+            try {
+                // Populate product to get name for the seal
+                const product = await Product.findById(order.product);
+
+                const sealResult = await mlService.sealIntegrity({
+                    farmer_id: order.farmer.toString(),
+                    buyer_id: order.buyer.toString(),
+                    crop_type: product?.name || 'Agro Product',
+                    quantity: order.quantity,
+                    agreed_price: order.totalPrice,
+                    order_id: order._id.toString()
+                });
+
+                if (sealResult && sealResult.integrity_hash) {
+                    order.blockchainHash = sealResult.integrity_hash;
+                    order.blockchainVerified = true;
+                    console.log(`[Blockchain-Security] Seal Generated: ${order.blockchainHash}`);
+                }
+            } catch (error) {
+                console.error('[Blockchain-Security] Failed to generate integrity seal:', error.message);
+                // We don't block the request if blockchain fails, but we should log it
+            }
+        }
+
         await order.save();
 
         res.status(200).json({

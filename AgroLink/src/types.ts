@@ -38,9 +38,46 @@ export interface Bid {
 export const UserType = {
   FARMER: 'farmer',
   BUYER: 'buyer',
+  ADMIN: 'admin',
 } as const;
 
 export type UserType = typeof UserType[keyof typeof UserType];
+
+export interface User {
+  id: string;
+  _id?: string;
+  name: string;
+  phone?: string;
+  email?: string;
+  userType: UserType;
+  location?: string;
+  isVerified: boolean;
+  avatar?: string | null;
+  rating: number;
+  trustScore: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  language: 'en' | 'gu' | 'hi';
+}
+
+export interface Order {
+  id: string;
+  _id?: string;
+  product: Product | string;
+  buyer: User | string;
+  farmer: User | string;
+  quantity: number;
+  pricePerUnit: number;
+  totalPrice: number;
+  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  deliveryAddress: string;
+  paymentMethod: 'cash' | 'upi' | 'bank_transfer';
+  paymentStatus: 'pending' | 'paid' | 'failed';
+  notes?: string;
+  blockchainHash?: string;
+  blockchainVerified?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface NavItem {
   label: string;

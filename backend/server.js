@@ -22,6 +22,7 @@ import agricultureNewsRoutes from './src/routes/newsRoutes.js';
 import agricultureSchemeRoutes from './src/routes/schemeRoutes.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
 import agricultureDashboardRoutes from './src/routes/agricultureDashboardRoutes.js';
+import mlRoutes from './src/routes/ml.routes.js';
 
 // Initialize Express app
 const app = express();
@@ -69,6 +70,7 @@ app.use("/api/agriculture-videos", agricultureVideoRoutes);
 app.use("/api/agriculture-news", agricultureNewsRoutes);
 app.use("/api/agriculture-schemes", agricultureSchemeRoutes);
 app.use("/api/agriculture", agricultureDashboardRoutes);
+app.use("/api/intelligence", mlRoutes);
 
 // 404 handler
 app.use((req, res) => {

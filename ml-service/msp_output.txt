@@ -1,0 +1,30 @@
+
+#################################################################
+      AGROLINK POLICY & MSP AWARENESS REPORT      
+#################################################################
+CROP: Onion | MARKET: Ahmedabad(Chimanbhai Patal Market Vasana) APMC
+-----------------------------------------------------------------
+GOVERNMENT MSP   : Rs.1500
+AI PREDICTED     : Rs.2158.8
+POLICY STATUS    : ABOVE MSP
+DIFFERENCE       : Rs.700
+-----------------------------------------------------------------
+ASSESSMENT       : SAFE (Market Profitable)
+GUIDANCE         : Market price is above MSP. Favorable selling conditions in the open market.
+#################################################################
+
+
+#################################################################
+      AGROLINK POLICY & MSP AWARENESS REPORT      
+#################################################################
+CROP: Potato | MARKET: Surat APMC
+-----------------------------------------------------------------
+GOVERNMENT MSP   : Rs.1200
+AI PREDICTED     : Rs.852.64
+POLICY STATUS    : BELOW MSP
+DIFFERENCE       : Rs.300
+-----------------------------------------------------------------
+ASSESSMENT       : HIGH RISK (Undervaluation)
+GUIDANCE         : WARNING: Market price is below MSP. Consider selling to government procurement centers or holding stock.
+#################################################################
+

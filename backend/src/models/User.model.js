@@ -67,6 +67,18 @@ const userSchema = new mongoose.Schema({
         enum: ['en', 'gu', 'hi'],
         default: 'gu'
     },
+    // RBAC & Policy Engine Enhancement Fields
+    trustScore: {
+        type: Number,
+        default: 80, // Default trust score (0-100)
+        min: 0,
+        max: 100
+    },
+    riskLevel: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'low'
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date
 }, {

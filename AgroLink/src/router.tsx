@@ -30,6 +30,8 @@ import FarmerDashboard from './pages/FarmerDashboard';
 
 // Buyer Dashboard Pages
 import BuyerDashboard from './pages/BuyerDashboard';
+import TradeDeliveryTracker from './pages/TradeDeliveryTracker';
+import AccountSettings from './pages/AccountSettings';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -87,6 +89,9 @@ const AppRouter = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/news" element={<News />} />
                     <Route path="/videos" element={<Videos />} />
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/track-delivery/:contractId" element={<TradeDeliveryTracker />} />
+                    </Route>
                     <Route path="/agriculture-hub" element={<AgricultureDashboard />} />
                     <Route path="/terms" element={<Legal type="terms" />} />
                     <Route path="/privacy" element={<Legal type="privacy" />} />
@@ -125,7 +130,7 @@ const AppRouter = () => {
                     <Route path="products/new" element={<FarmerDashboard />} />
                     <Route path="orders" element={<div className="p-8"><h1 className="text-2xl font-bold">ઓર્ડર્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
                     <Route path="bids" element={<div className="p-8"><h1 className="text-2xl font-bold">બિડ્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
-                    <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">પ્રોફાઇલ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="profile" element={<AccountSettings />} />
                 </Route>
 
                 {/* ============= BUYER DASHBOARD (Protected) ============= */}
@@ -145,7 +150,7 @@ const AppRouter = () => {
                     <Route path="cart" element={<Cart />} />
                     <Route path="orders" element={<div className="p-8"><h1 className="text-2xl font-bold">મારા ઓર્ડર્સ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
                     <Route path="wishlist" element={<div className="p-8"><h1 className="text-2xl font-bold">વિશલિસ્ટ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
-                    <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">પ્રોફાઇલ</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
+                    <Route path="profile" element={<AccountSettings />} />
                 </Route>
 
                 {/* ============= ADMIN DASHBOARD (Protected) ============= */}

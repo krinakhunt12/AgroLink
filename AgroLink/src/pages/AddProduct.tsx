@@ -2,12 +2,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ProductForm } from '../components/farmer/ProductForm';
-import { ArrowLeft, Sprout } from 'lucide-react';
+import { ArrowLeft, Sprout, ShieldAlert } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const AddProduct: React.FC = () => {
     const { t } = useTranslation(['dashboard', 'common']);
     const navigate = useNavigate();
+    const { user } = useAuth();
+
+    const isVerified = user?.isVerified;
 
     return (
         <div className="bg-bg-base min-h-screen py-16 px-4">
@@ -34,9 +38,30 @@ const AddProduct: React.FC = () => {
                     </div>
                 </header>
 
-                <div className="bg-white border border-border-base rounded-lg p-8 shadow-sm">
-                    <ProductForm />
-                </div>
+                {!isVerified ? (
+                    <div className="bg-status-warning/5 border-2 border-dashed border-status-warning/30 rounded-lg p-12 text-center space-y-6">
+                        <div className="mx-auto w-20 h-20 bg-status-warning/10 rounded-full flex items-center justify-center text-status-warning">
+                            <ShieldAlert size={40} />
+                        </div>
+                        <div className="max-w-md mx-auto space-y-2">
+                            <h2 className="text-xl font-black uppercase text-status-warning tracking-tight">Verification Required</h2>
+                            <p className="text-sm text-text-muted leading-relaxed">
+                                To ensure marketplace integrity, only <strong>Verified Farmers</strong> can create new crop listings.
+                                Please complete your profile verification in settings to unlock this feature.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => navigate('/farmer/profile')}
+                            className="bg-status-warning text-white px-8 py-3 rounded-md font-black uppercase tracking-widest text-xs hover:bg-status-warning/90 transition-all shadow-lg shadow-status-warning/20"
+                        >
+                            Complete Verification
+                        </button>
+                    </div>
+                ) : (
+                    <div className="bg-white border border-border-base rounded-lg p-8 shadow-sm">
+                        <ProductForm />
+                    </div>
+                )}
             </div>
         </div>
     );

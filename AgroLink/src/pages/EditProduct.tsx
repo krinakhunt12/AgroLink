@@ -3,14 +3,18 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProductForm } from '../components/farmer/ProductForm';
-import { ArrowLeft, Edit3, Loader2 } from 'lucide-react';
+import { ArrowLeft, Edit3, Loader2, ShieldAlert } from 'lucide-react';
 import { useProduct } from '../hooks/useProducts';
+import { useAuth } from '../hooks/useAuth';
 
 const EditProduct: React.FC = () => {
     const { t } = useTranslation(['dashboard', 'common']);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data: product, isLoading } = useProduct(id || '');
+    const { user } = useAuth();
+
+    const isVerified = user?.isVerified;
 
     if (isLoading) {
         return (
@@ -46,7 +50,22 @@ const EditProduct: React.FC = () => {
                     </div>
                 </header>
 
-                <ProductForm product={product} isEdit={true} />
+                {!isVerified ? (
+                    <div className="bg-status-warning/5 border-2 border-dashed border-status-warning/30 rounded-lg p-12 text-center space-y-6">
+                        <div className="mx-auto w-20 h-20 bg-status-warning/10 rounded-full flex items-center justify-center text-status-warning">
+                            <ShieldAlert size={40} />
+                        </div>
+                        <div className="max-w-md mx-auto space-y-2">
+                            <h2 className="text-xl font-black uppercase text-status-warning tracking-tight">Verification Required</h2>
+                            <p className="text-sm text-text-muted leading-relaxed">
+                                To protect your listings and the platform, only <strong>Verified Farmers</strong> can modify crop data.
+                                Please ensure your verification is complete in settings.
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <ProductForm product={product} isEdit={true} />
+                )}
             </div>
         </div>
     );
