@@ -12,7 +12,7 @@ const Help: React.FC = () => {
         <h1 className="text-3xl font-bold text-green-900 mb-2">{t('help.title')}</h1>
         <div className="h-1 w-20 bg-yellow-400 mx-auto rounded"></div>
       </div>
-      
+
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         <div className="bg-green-50 p-6 rounded-2xl border border-green-100 flex items-start gap-4 shadow-sm">
           <div className="bg-green-100 p-3 rounded-full text-green-700"><Phone size={24} /></div>
@@ -26,12 +26,12 @@ const Help: React.FC = () => {
           <div className="bg-green-100 p-3 rounded-full text-green-700"><Mail size={24} /></div>
           <div>
             <h3 className="font-bold text-gray-900 text-lg">{t('help.emailSupport')}</h3>
-            <p className="text-green-700 font-bold text-xl mt-1">support@khedutsetu.com</p>
+            <p className="text-green-700 font-bold text-xl mt-1">support@agrolink.in</p>
             <p className="text-sm text-gray-500 mt-1">{t('help.response')}</p>
           </div>
         </div>
       </div>
-      
+
       <div id="faq" className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8 scroll-mt-24">
         <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800">
           <MessageSquare className="text-yellow-500" /> {t('help.faqTitle')}
@@ -65,11 +65,11 @@ const Help: React.FC = () => {
         <h2 className="text-xl font-bold mb-2 flex items-center gap-2 text-red-800"><Shield className="w-6 h-6" /> {t('help.safetyTitle')}</h2>
         <p className="text-red-700 mb-4 text-sm">{t('help.safetyDesc')}</p>
         <ul className="grid md:grid-cols-2 gap-3">
-           {(t('help.tips', { returnObjects: true }) as string[]).map((tip, idx) => (
-             <li key={idx} className="flex items-start gap-2 text-red-900 text-sm bg-white/60 p-2 rounded">
-               <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5" /> {tip}
-             </li>
-           ))}
+          {(t('help.tips', { returnObjects: true }) as string[]).map((tip, idx) => (
+            <li key={idx} className="flex items-start gap-2 text-red-900 text-sm bg-white/60 p-2 rounded">
+              <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5" /> {tip}
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -77,12 +77,12 @@ const Help: React.FC = () => {
         <h2 className="text-2xl font-bold mb-6 text-center relative z-10">{t('help.contactTitle')}</h2>
         <form className="space-y-4 max-w-lg mx-auto relative z-10">
           <div>
-             <label className="text-xs font-bold text-green-200 uppercase ml-1">{t('help.formName')}</label>
-             <input type="text" className="w-full p-3 mt-1 rounded-xl bg-green-800 border border-green-700 text-white focus:outline-none focus:border-yellow-400" />
+            <label className="text-xs font-bold text-green-200 uppercase ml-1">{t('help.formName')}</label>
+            <input type="text" className="w-full p-3 mt-1 rounded-xl bg-green-800 border border-green-700 text-white focus:outline-none focus:border-yellow-400" />
           </div>
           <div>
-             <label className="text-xs font-bold text-green-200 uppercase ml-1">{t('help.formMsg')}</label>
-             <textarea rows={4} className="w-full p-3 mt-1 rounded-xl bg-green-800 border border-green-700 text-white focus:outline-none focus:border-yellow-400"></textarea>
+            <label className="text-xs font-bold text-green-200 uppercase ml-1">{t('help.formMsg')}</label>
+            <textarea rows={4} className="w-full p-3 mt-1 rounded-xl bg-green-800 border border-green-700 text-white focus:outline-none focus:border-yellow-400"></textarea>
           </div>
           <button className="w-full py-4 bg-yellow-400 text-green-900 font-bold rounded-xl hover:bg-yellow-300 shadow-lg text-lg transition">{t('help.sendBtn')}</button>
         </form>

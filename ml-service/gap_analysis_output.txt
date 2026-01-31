@@ -1,0 +1,33 @@
+Demand-Supply Analyzer initialized with intelligence layers.
+
+=================================================================
+       INTELLIGENT DEMAND-SUPPLY GAP ANALYSIS       
+=================================================================
+COMMODITY : Onion | MARKET: Ahmedabad APMC
+FORECAST  : Next 7-10 Days
+-----------------------------------------------------------------
+MARKET STATUS  : SHORTAGE EXPECTED
+GAP PERCENTAGE : 50.0%
+RISK LEVEL     : HIGH
+-----------------------------------------------------------------
+INSIGHT: Critical Onion shortage likely in Ahmedabad APMC. Prices expected to spike.
+-----------------------------------------------------------------
+ACADEMIC LOGIC: The analysis utilizes a Synthetic Demand Indexing (SDI) algorithm. Supply is forecasted using price-arrival correlation, while demand is derived from price velocity and seasonal consumption coefficients. The gap indicates the potential variance in the market equilibrium.
+=================================================================
+
+
+=================================================================
+       INTELLIGENT DEMAND-SUPPLY GAP ANALYSIS       
+=================================================================
+COMMODITY : Potato | MARKET: Surat APMC
+FORECAST  : Next 7-10 Days
+-----------------------------------------------------------------
+MARKET STATUS  : SURPLUS LIKELY
+GAP PERCENTAGE : -57.89%
+RISK LEVEL     : MODERATE (Price Drop)
+-----------------------------------------------------------------
+INSIGHT: Significant Potato surplus incoming. Buyers' market expected.
+-----------------------------------------------------------------
+ACADEMIC LOGIC: The analysis utilizes a Synthetic Demand Indexing (SDI) algorithm. Supply is forecasted using price-arrival correlation, while demand is derived from price velocity and seasonal consumption coefficients. The gap indicates the potential variance in the market equilibrium.
+=================================================================
+

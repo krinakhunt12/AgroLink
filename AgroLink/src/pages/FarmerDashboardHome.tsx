@@ -6,8 +6,10 @@ import {
 } from 'lucide-react';
 import { useProductsByFarmer } from '../hooks/api';
 import { authAPI } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 const FarmerDashboardHome: React.FC = () => {
+    const { t } = useTranslation(['dashboard', 'common']);
     const user = authAPI.getCurrentUser();
     const userId = user?.id || user?._id;
     const { data: products = [], isLoading } = useProductsByFarmer(userId || '');
@@ -21,8 +23,8 @@ const FarmerDashboardHome: React.FC = () => {
         <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
             {/* Page Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">ડેશબોર્ડ</h1>
-                <p className="mt-2 text-gray-600">તમારા ખેતી વ્યવસાયનું વિહંગાવલોકન</p>
+                <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
+                <p className="mt-2 text-gray-600">{t('dashboard.overview')}</p>
             </div>
 
             {/* Stats Grid */}
@@ -30,7 +32,7 @@ const FarmerDashboardHome: React.FC = () => {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-gray-600">કુલ ઉત્પાદનો</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard.totalProducts')}</p>
                             <p className="text-3xl font-bold text-gray-900 mt-2">
                                 {isLoading ? '...' : totalProducts}
                             </p>
@@ -44,7 +46,7 @@ const FarmerDashboardHome: React.FC = () => {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-gray-600">સક્રિય જાહેરાતો</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard.activeListings')}</p>
                             <p className="text-3xl font-bold text-gray-900 mt-2">
                                 {isLoading ? '...' : activeProducts}
                             </p>
@@ -58,7 +60,7 @@ const FarmerDashboardHome: React.FC = () => {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-gray-600">કુલ આવક</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard.totalRevenue')}</p>
                             <p className="text-3xl font-bold text-gray-900 mt-2 flex items-center gap-1">
                                 <IndianRupee className="w-6 h-6" />
                                 {isLoading ? '...' : totalRevenue.toLocaleString()}
@@ -73,7 +75,7 @@ const FarmerDashboardHome: React.FC = () => {
                 <div className="bg-white rounded-xl p-6 border border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-gray-600">કુલ ખરીદદારો</p>
+                            <p className="text-sm font-medium text-gray-600">{t('dashboard.totalBuyers')}</p>
                             <p className="text-3xl font-bold text-gray-900 mt-2">
                                 {isLoading ? '...' : '0'}
                             </p>
@@ -87,7 +89,7 @@ const FarmerDashboardHome: React.FC = () => {
 
             {/* Quick Actions */}
             <div className="mb-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">ઝડપી ક્રિયાઓ</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{t('dashboard.quickActions')}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <Link
                         to="/dashboard/products/new"
@@ -96,8 +98,8 @@ const FarmerDashboardHome: React.FC = () => {
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <Plus className="w-6 h-6 text-green-600" />
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-1">નવું ઉત્પાદન</h3>
-                        <p className="text-sm text-gray-600">નવો પાક ઉમેરો</p>
+                        <h3 className="font-semibold text-gray-900 mb-1">{t('dashboard.addNew')}</h3>
+                        <p className="text-sm text-gray-600">{t('dashboard.addNew')}</p>
                     </Link>
 
                     <Link
@@ -107,8 +109,8 @@ const FarmerDashboardHome: React.FC = () => {
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <Package className="w-6 h-6 text-blue-600" />
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-1">મારા ઉત્પાદનો</h3>
-                        <p className="text-sm text-gray-600">ઉત્પાદનો મેનેજ કરો</p>
+                        <h3 className="font-semibold text-gray-900 mb-1">{t('dashboard.myProducts')}</h3>
+                        <p className="text-sm text-gray-600">{t('dashboard.manageProducts')}</p>
                     </Link>
 
                     <Link
@@ -118,8 +120,8 @@ const FarmerDashboardHome: React.FC = () => {
                         <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <ShoppingBag className="w-6 h-6 text-yellow-600" />
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-1">ઓર્ડર્સ</h3>
-                        <p className="text-sm text-gray-600">ઓર્ડર સ્ટેટસ જુઓ</p>
+                        <h3 className="font-semibold text-gray-900 mb-1">{t('dashboard.orders')}</h3>
+                        <p className="text-sm text-gray-600">{t('dashboard.viewOrderStatus')}</p>
                     </Link>
 
                     <Link
@@ -129,8 +131,8 @@ const FarmerDashboardHome: React.FC = () => {
                         <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <MessageSquare className="w-6 h-6 text-purple-600" />
                         </div>
-                        <h3 className="font-semibold text-gray-900 mb-1">બિડ્સ</h3>
-                        <p className="text-sm text-gray-600">બિડ્સ મેનેજ કરો</p>
+                        <h3 className="font-semibold text-gray-900 mb-1">{t('dashboard.bids')}</h3>
+                        <p className="text-sm text-gray-600">{t('dashboard.manageBids')}</p>
                     </Link>
                 </div>
             </div>
@@ -138,12 +140,12 @@ const FarmerDashboardHome: React.FC = () => {
             {/* Recent Products */}
             <div>
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">તાજેતરના ઉત્પાદનો</h2>
+                    <h2 className="text-xl font-bold text-gray-900">{t('dashboard.recentProducts')}</h2>
                     <Link
                         to="/dashboard/products"
                         className="text-sm font-medium text-green-600 hover:text-green-700"
                     >
-                        બધા જુઓ →
+                        {t('dashboard.viewAll')} →
                     </Link>
                 </div>
 
@@ -177,8 +179,8 @@ const FarmerDashboardHome: React.FC = () => {
                                         </div>
                                     )}
                                     <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full ${product.status === 'active'
-                                            ? 'bg-green-100 text-green-700'
-                                            : 'bg-gray-100 text-gray-600'
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-gray-100 text-gray-600'
                                         }`}>
                                         {product.status}
                                     </span>
@@ -200,12 +202,12 @@ const FarmerDashboardHome: React.FC = () => {
                 ) : (
                     <div className="bg-white rounded-xl p-12 border border-gray-200 text-center">
                         <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600 mb-4">તમે હજુ સુધી કોઈ ઉત્પાદન ઉમેર્યું નથી</p>
+                        <p className="text-gray-600 mb-4">{t('dashboard.noProductsYet')}</p>
                         <Link
                             to="/dashboard/products/new"
                             className="inline-block px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                         >
-                            પ્રથમ ઉત્પાદન ઉમેરો
+                            {t('dashboard.addFirstProduct')}
                         </Link>
                     </div>
                 )}

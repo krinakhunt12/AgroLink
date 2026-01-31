@@ -1,0 +1,32 @@
+
+============================================================
+       AGROLINK BUYER RELIABILITY REPORT - BUYER_CORPORATE_EXPRESS       
+============================================================
+TRUST SCORE : 99.0 / 100
+RANK        : HIGHLY TRUSTED
+RISK LEVEL  : Low
+------------------------------------------------------------
+AI VERDICT  : Reliable buyer with excellent payment history and zero disputes.
+------------------------------------------------------------
+METRIC BREAKDOWN:
+ - Success Rate  : 98.7%
+ - Payment Rel.  : 98.8%
+ - Dispute Count : 0 active disputes
+============================================================
+
+
+============================================================
+       AGROLINK BUYER RELIABILITY REPORT - BUYER_LOCAL_TRADER_01       
+============================================================
+TRUST SCORE : 52.7 / 100
+RANK        : LOW TRUST
+RISK LEVEL  : High
+------------------------------------------------------------
+AI VERDICT  : High frequency of payment failures or farmer disputes. Proceed with caution.
+------------------------------------------------------------
+METRIC BREAKDOWN:
+ - Success Rate  : 70.0%
+ - Payment Rel.  : 40.0%
+ - Dispute Count : 2 active disputes
+============================================================
+

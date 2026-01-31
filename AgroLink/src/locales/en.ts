@@ -13,7 +13,7 @@ export const en = {
   hero: {
     tagline: "Gujarat's #1 Farmer Marketplace",
     title: "Direct from Farmer to Buyer. No Middlemen, Just Profit!",
-    subtitle: "Farmers get the fair price for their hard work, and buyers get farm-fresh produce. 'Khedut Setu' is the trust of farmers.",
+    subtitle: "Farmers get the fair price for their hard work, and buyers get farm-fresh produce. 'Agro Link' is the trust of farmers.",
     ctaFarmer: "Register as Farmer",
     ctaBuyer: "Create Buyer Account",
     learnMore: "How it works?",
@@ -58,7 +58,7 @@ export const en = {
     viewAll: "View All Videos"
   },
   download: {
-    title: "Download Khedut Setu Mobile App",
+    title: "Download Agro Link Mobile App",
     subtitle: "Market in your pocket. Anytime, Anywhere.",
     btn: "Download Now"
   },
@@ -137,7 +137,7 @@ export const en = {
     subtitle: "Stories of Trust and Satisfaction",
     farmerName: "Rameshbhai Patel",
     farmerRole: "Farmer, Junagadh",
-    farmerQuote: "Previously, I got low prices at the market yard. With 'Khedut Setu', I sold my mangoes directly in Ahmedabad and got 20% more profit.",
+    farmerQuote: "Previously, I got low prices at the market yard. With 'Agro Link', I sold my mangoes directly in Ahmedabad and got 20% more profit.",
     buyerName: "Meenaben Shah",
     buyerRole: "Homemaker, Ahmedabad",
     buyerQuote: "I get pure and fresh vegetables sitting at home. Cheaper than the market and excellent quality. Farmers' hard work reaches us directly."
@@ -217,7 +217,7 @@ export const en = {
     }
   },
   footer: {
-    description: "Khedut Setu is India's largest digital agri-market. Our goal is to make farmers self-reliant and provide pure food to customers.",
+    description: "Agro Link is India's largest digital agri-market. Our goal is to make farmers self-reliant and provide pure food to customers.",
     linksTitle: "Quick Links",
     terms: "Terms & Conditions",
     privacy: "Privacy Policy",
@@ -225,11 +225,11 @@ export const en = {
     faq: "FAQ",
     about: "About Us",
     contactTitle: "Contact Us",
-    rights: "© 2024 Khedut Setu. All rights reserved.",
+    rights: "© 2024 Agro Link. All rights reserved.",
     popularSearches: "Popular Searches"
   },
   auth: {
-    welcome: "Welcome to Khedut Setu!",
+    welcome: "Welcome to Agro Link!",
     loginTitle: "Login to your account",
     registerTitle: "Create a new account",
     farmer: "Farmer (Seller)",
@@ -252,7 +252,7 @@ export const en = {
     forgotPassword: "Forgot password?"
   },
   registerInfo: {
-    title: "Benefits of joining Khedut Setu Family",
+    title: "Benefits of joining Agro Link Family",
     list: [
       "Direct trade with customers for your crops.",
       "Get full profit without middlemen.",
@@ -287,7 +287,7 @@ export const en = {
     faq1: "Is registration free for farmers?",
     ans1: "Yes, registration is completely free for both farmers and buyers. We do not charge any joining fees.",
     faq2: "How does payment work?",
-    ans2: "Buyers pay online to Khedut Setu's secure escrow account. Once the farmer delivers the goods and buyer confirms quality, the money is transferred to the farmer's bank account instantly.",
+    ans2: "Buyers pay online to Agro Link's secure escrow account. Once the farmer delivers the goods and buyer confirms quality, the money is transferred to the farmer's bank account instantly.",
     faq3: "What if I receive bad quality produce?",
     ans3: "You can reject the delivery at the doorstep. If you have already accepted it, you can raise a complaint within 24 hours. Our quality team will verify and initiate a refund if applicable."
   },
@@ -303,10 +303,10 @@ export const en = {
     sources: "Information Sources:"
   },
   about: {
-    title: "About Khedut Setu",
+    title: "About Agro Link",
     subtitle: "Merging Technology with Tradition",
     storyTitle: "Our Story",
-    storyDesc: "For years, Indian farmers have faced low returns due to middlemen and market uncertainties. 'Khedut Setu' aims to change this system. We have built a digital platform where the farmer is king and the customer gets purity.",
+    storyDesc: "For years, Indian farmers have faced low returns due to middlemen and market uncertainties. 'Agro Link' aims to change this system. We have built a digital platform where the farmer is king and the customer gets purity.",
     missionTitle: "Our Mission",
     missionDesc: "To double farmers' income and bring transparency to agriculture. To connect every farmer to the world through a smartphone.",
     visionTitle: "Our Vision",
@@ -323,7 +323,7 @@ export const en = {
   },
   legal: {
     introTitle: "1. Introduction",
-    introDesc: "Welcome to Khedut Setu. By using this platform, you agree to our terms. Our goal is to enable transparent trade between farmers and buyers.",
+    introDesc: "Welcome to Agro Link. By using this platform, you agree to our terms. Our goal is to enable transparent trade between farmers and buyers.",
     farmerTermsTitle: "2. Rules for Farmers",
     farmerTerms: [
       "It is mandatory to provide true and accurate information about your crop.",
@@ -343,6 +343,6 @@ export const en = {
     paymentSecurityTitle: "3. Payment Security",
     paymentSecurityDesc: "All your online transactions are encrypted and secure. We do not save your bank details.",
     securityAssurance: "Security Assurance",
-    securityAssuranceDesc: "Khedut Setu complies with Government of India IT rules and is committed to user safety."
+    securityAssuranceDesc: "Agro Link complies with Government of India IT rules and is committed to user safety."
   }
 };

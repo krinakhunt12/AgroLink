@@ -12,7 +12,7 @@
     "hero": {
         "tagline": "Gujarat's #1 Farmer Marketplace",
         "title": "Direct from Farmer to Buyer. No Middlemen, Just Profit!",
-        "subtitle": "Farmers get the right price for their hard work, and buyers get fresh farm produce. 'Khedut Setu' means Farmer's Trust.",
+        "subtitle": "Farmers get the right price for their hard work, and buyers get fresh farm produce. 'Agro Link' means Farmer's Trust.",
         "ctaFarmer": "Join as Farmer",
         "ctaBuyer": "Join as Buyer",
         "learnMore": "How it works?",
@@ -89,7 +89,7 @@
         "noVideosDesc": "Our AI is still searching for high-quality, practical content for this category. Please check back soon."
     },
     "download": {
-        "title": "Download Khedut Setu Mobile App",
+        "title": "Download Agro Link Mobile App",
         "subtitle": "Market in your pocket. Anytime, anywhere.",
         "btn": "Download Now"
     },
@@ -170,7 +170,7 @@
         "subtitle": "Stories of trust and satisfaction",
         "farmerName": "Rameshbhai Patel",
         "farmerRole": "Farmer, Junagadh",
-        "farmerQuote": "Earlier I used to get low prices in market yards. Through Khedut Setu, I sold my mangoes directly in Ahmedabad and earned 20% more profit.",
+        "farmerQuote": "Earlier I used to get low prices in market yards. Through Agro Link, I sold my mangoes directly in Ahmedabad and earned 20% more profit.",
         "buyerName": "Minaben Shah",
         "buyerRole": "Housewife, Ahmedabad",
         "buyerQuote": "I get pure and fresh vegetables sitting at home. Cheaper than the market and quality is also absolutely best. Farmers' hard work reaches us directly."
@@ -182,7 +182,7 @@
         "marketBtn": "View Market"
     },
     "footer": {
-        "description": "Khedut Setu is India's largest digital agri-market. Our aim is to make farmers self-reliant and provide pure food to customers.",
+        "description": "Agro Link is India's largest digital agri-market. Our aim is to make farmers self-reliant and provide pure food to customers.",
         "linksTitle": "Quick Links",
         "terms": "Terms & Conditions",
         "privacy": "Privacy Policy",
@@ -191,7 +191,7 @@
         "about": "About Us",
         "contactTitle": "Contact Us",
         "supportTitle": "Support",
-        "rights": "© 2024 Khedut Setu. All rights reserved.",
+        "rights": "© 2024 Agro Link. All rights reserved.",
         "popularSearches": "Popular Searches"
     },
     "help": {
@@ -216,7 +216,7 @@
         "faq1": "Is registration free for farmers?",
         "ans1": "Yes, registration is absolutely free for both farmers and buyers. We do not take any joining fee.",
         "faq2": "How does payment work?",
-        "ans2": "Buyers pay online into Khedut Setu's secure Escrow account. Once the farmer delivers the goods and the buyer confirms the quality, the money is immediately transferred to the farmer's bank account.",
+        "ans2": "Buyers pay online into Agro Link's secure Escrow account. Once the farmer delivers the goods and the buyer confirms the quality, the money is immediately transferred to the farmer's bank account.",
         "faq3": "What if I receive poor quality goods?",
         "ans3": "You can reject the goods at the time of delivery. If you have already accepted it, you can complain within 24 hours. Our team will investigate and if found appropriate, will provide a refund."
     },
@@ -244,10 +244,10 @@
         ]
     },
     "about": {
-        "title": "About Khedut Setu",
+        "title": "About Agro Link",
         "subtitle": "Convergence of Technology and Tradition",
         "storyTitle": "Our Story",
-        "storyDesc": "For years, Indian farmers have faced low returns due to middlemen and market uncertainty. The aim of 'Khedut Setu' is to change this system. We have created a digital platform where the farmer is king and the customer gets purity.",
+        "storyDesc": "For years, Indian farmers have faced low returns due to middlemen and market uncertainty. The aim of 'Agro Link' is to change this system. We have created a digital platform where the farmer is king and the customer gets purity.",
         "missionTitle": "Our Mission",
         "missionDesc": "To double farmers' income and bring transparency to agriculture. Connecting every farmer with the world through smartphone.",
         "visionTitle": "Our Vision",
@@ -264,7 +264,7 @@
     },
     "legal": {
         "introTitle": "1. Introduction",
-        "introDesc": "Welcome to Khedut Setu. By using this platform you agree to our terms. Our aim is to facilitate transparent trade between farmers and buyers.",
+        "introDesc": "Welcome to Agro Link. By using this platform you agree to our terms. Our aim is to facilitate transparent trade between farmers and buyers.",
         "farmerTermsTitle": "2. Rules for Farmers",
         "farmerTerms": [
             "Providing true and accurate information of your crop is mandatory.",
@@ -284,10 +284,10 @@
         "paymentSecurityTitle": "3. Payment Security",
         "paymentSecurityDesc": "All your online transactions are encrypted and secure. We do not save your bank details.",
         "securityAssurance": "Security Assurance",
-        "securityAssuranceDesc": "Khedut Setu complies with IT rules of Government of India and is committed to user security."
+        "securityAssuranceDesc": "Agro Link complies with IT rules of Government of India and is committed to user security."
     },
     "common": {
-        "brand": "Khedut Setu",
+        "brand": "Agro Link",
         "loading": "AgroLink is ripening...",
         "back": "Go Back",
         "next": "Next",
@@ -296,10 +296,24 @@
         "delete": "Delete",
         "edit": "Edit",
         "phone": "+91 98765 43210",
-        "email": "support@khedutsetu.guj",
+        "email": "support@agrolink.in",
         "address": "Gandhinagar, Gujarat",
         "newsTitle": "Agriculture News",
-        "or": "OR"
+        "or": "OR",
+        "logout": "Logout",
+        "logoutSuccess": "Logout successful!",
+        "logoutError": "Error during logout"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "myProducts": "My Products",
+        "marketplace": "Marketplace",
+        "cart": "My Cart",
+        "orders": "Orders",
+        "myOrders": "My Orders",
+        "bids": "Bids",
+        "wishlist": "Wishlist",
+        "profile": "Profile"
     },
     "marketRates": {
         "title": "Live Market Rates",

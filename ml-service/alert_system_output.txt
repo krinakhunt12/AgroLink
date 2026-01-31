@@ -1,0 +1,12 @@
+System: Price Alert set for User 101 (Onion in Ahmedabad at Rs.2400)
+
+--- AGROLINK AUTOMATED ALERT SYSTEM LIVE ---
+Worker: Background Monitor started...
+
+[NOTIFIER] Sent Push Alert to User: Global
+ > Type: Market Demand Spike
+ > Crop: Onion | Region: Ahmedabad
+ > REASON: Sudden intensive demand (Index: 0.93) detected in Ahmedabad
+ > ACTION: HOLD / WAIT (Price Rise Expected)
+
+--- AGROLINK AUTOMATED ALERT SYSTEM STOPPED ---

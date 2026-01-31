@@ -30,5 +30,26 @@
     ],
     "detail": {
         "contactInfo": "For more details, please contact your nearest APMC center or Agriculture Bhavan."
+    },
+    "hub": {
+        "title": "Agriculture Knowledge Hub",
+        "subtitle": "Curated, high-relevance information for modern farming and government benefits.",
+        "smartIntelligence": "Smart Intelligence",
+        "searchPlaceholder": "Search crop, scheme, fertilizer...",
+        "searchBtn": "Search",
+        "timeframe": "Timeframe",
+        "allTime": "All Time",
+        "today": "Today",
+        "last7Days": "Last 7 Days",
+        "last30Days": "Last 30 Days",
+        "featuredTitle": "Highly Useful Updates",
+        "unifiedFeed": "Unified Feed",
+        "govtSchemes": "Govt Schemes",
+        "agriNews": "Agri News",
+        "videoGuides": "Video Guides",
+        "scanning": "Scanning RSS feeds...",
+        "noResults": "No results found",
+        "noResultsDesc": "Try adjusting your search query or filters.",
+        "verified": "Verified"
     }
 }

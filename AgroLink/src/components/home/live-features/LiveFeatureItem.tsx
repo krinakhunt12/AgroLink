@@ -18,7 +18,7 @@ export const LiveFeatureItem: React.FC<LiveFeatureItemProps> = ({
                 <Icon size={28} className="text-brand-primary-light group-hover:text-brand-primary transition-colors" />
             </div>
             <div className="flex flex-col justify-center">
-                <h3 className="text-xl font-black text-white group-hover:text-brand-primary-light transition-colors duration-300 tracking-tight">
+                <h3 className="text-xl font-black text-black group-hover:text-brand-primary-light transition-colors duration-300 tracking-tight">
                     {title}
                 </h3>
                 <p className="text-text-on-brand/60 mt-2 leading-relaxed text-sm lg:text-base max-w-md font-medium">

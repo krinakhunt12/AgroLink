@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
     Menu, X, Sprout, LogOut, User, Settings,
     LayoutDashboard, Package, ShoppingBag, MessageSquare,
@@ -18,25 +19,25 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { showToast } = useToast();
+    const { t } = useTranslation(['common', 'dashboard']);
     const user = authAPI.getCurrentUser();
 
     // Navigation items based on user type
     const farmerNavItems = [
-        { path: '/dashboard', label: 'ડેશબોર્ડ', icon: LayoutDashboard },
-        { path: '/dashboard/products', label: 'મારા ઉત્પાદનો', icon: Package },
-        { path: '/dashboard/orders', label: 'ઓર્ડર્સ', icon: ShoppingBag },
-        { path: '/dashboard/bids', label: 'બિડ્સ', icon: MessageSquare },
-        { path: '/dashboard/profile', label: 'પ્રોફાઇલ', icon: User },
+        { path: '/dashboard', label: t('sidebar.dashboard'), icon: LayoutDashboard },
+        { path: '/dashboard/products', label: t('sidebar.myProducts'), icon: Package },
+        { path: '/dashboard/orders', label: t('sidebar.orders'), icon: ShoppingBag },
+        { path: '/dashboard/bids', label: t('sidebar.bids'), icon: MessageSquare },
+        { path: '/dashboard/profile', label: t('sidebar.profile'), icon: User },
     ];
 
     const buyerNavItems = [
-        { path: '/buyer/dashboard', label: 'ડેશબોર્ડ', icon: LayoutDashboard },
-        { path: '/buyer/marketplace', label: 'માર્કેટપ્લેસ', icon: Search },
-        { path: '/buyer/cart', label: 'કાર્ટ', icon: ShoppingCart },
-        { path: '/buyer/orders', label: 'મારા ઓર્ડર્સ', icon: ShoppingBag },
-        { path: '/buyer/wishlist', label: 'વિશલિસ્ટ', icon: Heart },
-        { path: '/buyer/profile', label: 'પ્રોફાઇલ', icon: User },
+        { path: '/buyer/dashboard', label: t('sidebar.dashboard'), icon: LayoutDashboard },
+        { path: '/buyer/marketplace', label: t('sidebar.marketplace'), icon: Search },
+        { path: '/buyer/cart', label: t('sidebar.cart'), icon: ShoppingCart },
+        { path: '/buyer/orders', label: t('sidebar.myOrders'), icon: ShoppingBag },
+        { path: '/buyer/wishlist', label: t('sidebar.wishlist'), icon: Heart },
+        { path: '/buyer/profile', label: t('sidebar.profile'), icon: User },
     ];
 
     const navItems = userType === 'farmer' ? farmerNavItems : buyerNavItems;
@@ -50,7 +51,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
             queryClient.clear();
 
             // Show success message
-            showToast('લોગઆઉટ સફળ રહ્યું!', 'success');
+            showToast(t('common.logoutSuccess'), 'success');
 
             // Log the action
             AppLogger.info('Auth', { message: 'User logged out successfully' });
@@ -59,7 +60,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
             navigate('/', { replace: true });
         } catch (error) {
             AppLogger.error('Auth', error);
-            showToast('લોગઆઉટમાં ભૂલ થઈ', 'error');
+            showToast(t('common.logoutError'), 'error');
         }
     };
 
@@ -73,7 +74,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
                         <div className="bg-green-100 rounded-full p-1.5 group-hover:rotate-12 transition-transform">
                             <Sprout className="h-5 w-5 text-green-700" />
                         </div>
-                        <span className="font-bold text-lg text-gray-900">ખેડૂત સેતુ</span>
+                        <span className="font-bold text-lg text-gray-900">{t('common.brand')}</span>
                     </Link>
                 </div>
 
@@ -117,7 +118,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
                     >
                         <LogOut className="w-5 h-5" />
-                        લોગઆઉટ
+                        {t('common.logout')}
                     </button>
                 </div>
             </aside>
@@ -130,7 +131,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ userType }) => {
                         <div className="bg-green-100 rounded-full p-1.5">
                             <Sprout className="h-5 w-5 text-green-700" />
                         </div>
-                        <span className="font-bold text-lg text-gray-900">ખેડૂત સેતુ</span>
+                        <span className="font-bold text-lg text-gray-900">{t('common.brand')}</span>
                     </Link>
 
                     <button

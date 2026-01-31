@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import {
     Search, Calendar, Award, Filter,
     ExternalLink, Play, Newspaper, ShieldCheck,
@@ -9,6 +10,7 @@ import { agricultureService } from '../services/agricultureService';
 import type { AgricultureContent } from '../services/agricultureService';
 
 const AgricultureDashboard: React.FC = () => {
+    const { t } = useTranslation(['news', 'common']);
     const [search, setSearch] = useState('');
     const [dateFilter, setDateFilter] = useState('');
     const [activeTab, setActiveTab] = useState<'all' | 'videos' | 'news' | 'schemes'>('all');
@@ -57,7 +59,7 @@ const AgricultureDashboard: React.FC = () => {
                     </div>
                     {item.isTrusted && (
                         <div className="flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-100 rounded text-[10px] font-bold uppercase tracking-wider">
-                            <Award className="w-3 h-3" /> Verified
+                            <Award className="w-3 h-3" /> {t('news:hub.verified')}
                         </div>
                     )}
                 </div>
@@ -115,17 +117,17 @@ const AgricultureDashboard: React.FC = () => {
                             <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center text-white">
                                 <BrainCircuit className="w-5 h-5" />
                             </div>
-                            <span className="text-brand-primary font-bold text-sm tracking-widest uppercase">Smart Intelligence</span>
+                            <span className="text-brand-primary font-bold text-sm tracking-widest uppercase">{t('news:hub.smartIntelligence')}</span>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-text-primary tracking-tight">Agriculture Knowledge Hub</h1>
-                        <p className="text-text-muted mt-2 max-w-xl">Curated, high-relevance information for modern farming and government benefits.</p>
+                        <h1 className="text-3xl md:text-4xl font-black text-text-primary tracking-tight">{t('news:hub.title')}</h1>
+                        <p className="text-text-muted mt-2 max-w-xl">{t('news:hub.subtitle')}</p>
                     </div>
 
                     <form onSubmit={handleSearch} className="flex-1 max-w-md w-full">
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Search crop, scheme, fertilizer..."
+                                placeholder={t('news:hub.searchPlaceholder')}
                                 className="w-full bg-bg-surface border border-border-base rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-sm"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -135,7 +137,7 @@ const AgricultureDashboard: React.FC = () => {
                                 type="submit"
                                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-primary text-white py-1.5 px-4 rounded-lg text-xs font-bold hover:opacity-90 transition-opacity"
                             >
-                                Search
+                                {t('news:hub.searchBtn')}
                             </button>
                         </div>
                     </form>
@@ -144,12 +146,12 @@ const AgricultureDashboard: React.FC = () => {
                 {/* Filters Row */}
                 <div className="flex flex-wrap items-center gap-4 mb-8">
                     <div className="flex items-center gap-2 text-text-muted text-xs font-bold uppercase tracking-wider mr-2">
-                        <Calendar className="w-4 h-4" /> Timeframe:
+                        <Calendar className="w-4 h-4" /> {t('news:hub.timeframe')}:
                     </div>
-                    <DateFilterBadge label="All Time" value="" />
-                    <DateFilterBadge label="Today" value="Today" />
-                    <DateFilterBadge label="Last 7 Days" value="Last 7 Days" />
-                    <DateFilterBadge label="Last 30 Days" value="Last 30 Days" />
+                    <DateFilterBadge label={t('news:hub.allTime')} value="" />
+                    <DateFilterBadge label={t('news:hub.today')} value="Today" />
+                    <DateFilterBadge label={t('news:hub.last7Days')} value="Last 7 Days" />
+                    <DateFilterBadge label={t('news:hub.last30Days')} value="Last 30 Days" />
                 </div>
 
                 {/* Featured Section */}
@@ -157,7 +159,7 @@ const AgricultureDashboard: React.FC = () => {
                     <div className="mb-12">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
-                                <Award className="w-6 h-6 text-amber-500" /> Highly Useful Updates
+                                <Award className="w-6 h-6 text-amber-500" /> {t('news:hub.featuredTitle')}
                             </h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -175,28 +177,28 @@ const AgricultureDashboard: React.FC = () => {
                             onClick={() => setActiveTab('all')}
                             className={`pb-4 px-6 text-sm font-bold transition-all relative ${activeTab === 'all' ? 'text-brand-primary' : 'text-text-muted hover:text-text-primary'}`}
                         >
-                            Unified Feed
+                            {t('news:hub.unifiedFeed')}
                             {activeTab === 'all' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-primary rounded-t-full" />}
                         </button>
                         <button
                             onClick={() => setActiveTab('schemes')}
                             className={`pb-4 px-6 text-sm font-bold transition-all relative ${activeTab === 'schemes' ? 'text-brand-primary' : 'text-text-muted hover:text-text-primary'}`}
                         >
-                            Govt Schemes
+                            {t('news:hub.govtSchemes')}
                             {activeTab === 'schemes' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-primary rounded-t-full" />}
                         </button>
                         <button
                             onClick={() => setActiveTab('news')}
                             className={`pb-4 px-6 text-sm font-bold transition-all relative ${activeTab === 'news' ? 'text-brand-primary' : 'text-text-muted hover:text-text-primary'}`}
                         >
-                            Agri News
+                            {t('news:hub.agriNews')}
                             {activeTab === 'news' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-primary rounded-t-full" />}
                         </button>
                         <button
                             onClick={() => setActiveTab('videos')}
                             className={`pb-4 px-6 text-sm font-bold transition-all relative ${activeTab === 'videos' ? 'text-brand-primary' : 'text-text-muted hover:text-text-primary'}`}
                         >
-                            Video Guides
+                            {t('news:hub.videoGuides')}
                             {activeTab === 'videos' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-primary rounded-t-full" />}
                         </button>
                     </div>
@@ -204,7 +206,7 @@ const AgricultureDashboard: React.FC = () => {
                     {isLoading ? (
                         <div className="py-20 flex flex-col items-center justify-center">
                             <div className="w-12 h-12 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
-                            <p className="mt-4 text-text-muted font-bold">Scanning RSS feeds...</p>
+                            <p className="mt-4 text-text-muted font-bold">{t('news:hub.scanning')}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -228,8 +230,8 @@ const AgricultureDashboard: React.FC = () => {
                             <div className="w-16 h-16 bg-bg-muted rounded-full flex items-center justify-center mx-auto mb-4 text-text-muted">
                                 <Filter className="w-8 h-8" />
                             </div>
-                            <h3 className="font-bold text-text-primary">No results found</h3>
-                            <p className="text-text-muted text-sm mt-1">Try adjusting your search query or filters.</p>
+                            <h3 className="font-bold text-text-primary">{t('news:hub.noResults')}</h3>
+                            <p className="text-text-muted text-sm mt-1">{t('news:hub.noResultsDesc')}</p>
                         </div>
                     )}
                 </div>
