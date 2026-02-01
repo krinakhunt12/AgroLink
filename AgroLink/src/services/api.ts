@@ -124,6 +124,21 @@ export const authAPI = {
         return user ? JSON.parse(user) : null;
     },
 
+    // Refresh user data from server
+    refreshUser: async () => {
+        try {
+            const data = await apiRequest('/auth/me');
+            if (data.user) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                return data.user;
+            }
+            return null;
+        } catch (error) {
+            console.error('Failed to refresh user:', error);
+            return null;
+        }
+    },
+
     // Forgot password
     forgotPassword: async (email: string) => {
         return await apiRequest('/auth/forgot-password', {
@@ -307,8 +322,39 @@ export const usersAPI = {
         if (!response.ok) {
             throw new Error(data.message || 'Failed to update profile');
         }
+
+        // Update user in localStorage
+        if (data.user) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+        }
+
         return data;
     },
+
+    // Submit verification documents (farmer only)
+    submitVerification: async (verificationData: FormData) => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/users/verify`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: verificationData,
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to submit verification');
+        }
+
+        // Update user in localStorage with new verification status
+        if (data.user) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+        }
+
+        return data;
+    },
+
     // Delete account
     deleteAccount: async () => {
         return await apiRequest('/users/me', { method: 'DELETE' });
@@ -352,7 +398,7 @@ export const schemesAPI = {
 export const intelligenceAPI = {
     // Get crop price prediction
     predictPrice: async (data: any) => {
-        return await apiRequest('/ml/predict-price', {
+        return await apiRequest('/intelligence/predict-price', {
             method: 'POST',
             body: JSON.stringify(data),
         });
@@ -360,7 +406,7 @@ export const intelligenceAPI = {
 
     // Analyze Demand-Supply gap
     analyzeGap: async (data: any) => {
-        return await apiRequest('/ml/analyze-gap', {
+        return await apiRequest('/intelligence/analyze-gap', {
             method: 'POST',
             body: JSON.stringify(data),
         });
@@ -368,7 +414,7 @@ export const intelligenceAPI = {
 
     // Evaluate Buyer Trust
     evaluateBuyer: async (buyerId: string, history: any) => {
-        return await apiRequest(`/ml/buyer-trust/${buyerId}`, {
+        return await apiRequest(`/intelligence/buyer-trust/${buyerId}`, {
             method: 'POST',
             body: JSON.stringify(history),
         });
@@ -376,7 +422,7 @@ export const intelligenceAPI = {
 
     // Get Farmer Profit analytics
     getProfitDashboard: async (transactions: any[]) => {
-        return await apiRequest('/ml/profit-dashboard', {
+        return await apiRequest('/intelligence/profit-dashboard', {
             method: 'POST',
             body: JSON.stringify(transactions),
         });
@@ -385,12 +431,12 @@ export const intelligenceAPI = {
     // Check MSP and Policy awareness
     getPolicyAwareness: async (params: any) => {
         const queryParams = new URLSearchParams(params).toString();
-        return await apiRequest(`/ml/policy-awareness?${queryParams}`);
+        return await apiRequest(`/intelligence/policy-awareness?${queryParams}`);
     },
 
     // Blockchain: Seal a trade
     sealTrade: async (tradeData: any) => {
-        return await apiRequest('/ml/blockchain/seal', {
+        return await apiRequest('/intelligence/blockchain/seal', {
             method: 'POST',
             body: JSON.stringify(tradeData),
         });
@@ -398,12 +444,12 @@ export const intelligenceAPI = {
 
     // Blockchain: Verify ledger
     verifyBlockchain: async () => {
-        return await apiRequest('/ml/blockchain/verify');
+        return await apiRequest('/intelligence/blockchain/verify');
     },
 
     // Smart Contracts: Initiate Escrow
     startContract: async (contractData: any) => {
-        return await apiRequest('/ml/contracts/start-escrow', {
+        return await apiRequest('/intelligence/contracts/start-escrow', {
             method: 'POST',
             body: JSON.stringify(contractData),
         });
@@ -411,26 +457,26 @@ export const intelligenceAPI = {
 
     // Smart Contracts: Dispatch order
     dispatchTrade: async (contractId: string) => {
-        return await apiRequest(`/ml/contracts/dispatch/${contractId}`, {
+        return await apiRequest(`/intelligence/contracts/dispatch/${contractId}`, {
             method: 'POST',
         });
     },
 
     // Smart Contracts: Confirm delivery
     confirmDelivery: async (contractId: string) => {
-        return await apiRequest(`/ml/contracts/confirm-delivery/${contractId}`, {
+        return await apiRequest(`/intelligence/contracts/confirm-delivery/${contractId}`, {
             method: 'POST',
         });
     },
 
     // Smart Contracts: Get status
     getContractStatus: async (contractId: string) => {
-        return await apiRequest(`/ml/contracts/get/${contractId}`);
+        return await apiRequest(`/intelligence/contracts/get/${contractId}`);
     },
 
     // AI Anomaly Detection: Audit a transaction
     auditTransaction: async (auditData: { transaction_data: any; user_data: any }) => {
-        return await apiRequest('/ml/audit', {
+        return await apiRequest('/intelligence/audit', {
             method: 'POST',
             body: JSON.stringify(auditData),
         });

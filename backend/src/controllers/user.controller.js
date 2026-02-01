@@ -76,6 +76,107 @@ export const updateProfile = async (req, res, next) => {
 };
 
 /**
+ * @desc    Submit verification documents (Farmer only)
+ * @route   POST /api/users/verify
+ * @access  Private (Farmers only, unverified allowed)
+ * 
+ * This endpoint allows unverified farmers to submit their verification documents.
+ * Documents include: Government ID, Land ownership proof, etc.
+ * 
+ * IMPORTANT: This route should NOT require verification (verifiedFarmerOnly middleware)
+ * because unverified farmers need access to submit their verification.
+ */
+export const submitVerification = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
+        }
+
+        // Only farmers can submit verification
+        if (user.userType !== 'farmer') {
+            return res.status(403).json({
+                success: false,
+                message: 'Only farmers can submit verification documents.'
+            });
+        }
+
+        // Check if already verified
+        if (user.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: 'Your profile is already verified.'
+            });
+        }
+
+        // Extract verification data from request
+        const {
+            govtIdType,
+            govtIdNumber,
+            address,
+            farmSize,
+            primaryCrops
+        } = req.body;
+
+        // Validate required fields
+        if (!govtIdType || !govtIdNumber || !address) {
+            return res.status(400).json({
+                success: false,
+                message: 'Government ID type, number, and address are required.'
+            });
+        }
+
+        // Store verification data
+        user.verificationData = {
+            govtIdType,
+            govtIdNumber,
+            address,
+            farmSize: farmSize || '',
+            primaryCrops: primaryCrops || '',
+            submittedAt: new Date(),
+            status: 'pending' // pending, approved, rejected
+        };
+
+        // In a real implementation, you would:
+        // 1. Store uploaded documents (govtIdProof, landOwnershipProof) in cloud storage
+        // 2. Create a verification request in a separate collection
+        // 3. Notify admin for manual review
+        // 4. Send confirmation email to farmer
+
+        // For demo purposes, we'll auto-verify after submission
+        // In production, this would be done by admin after document review
+        user.isVerified = true; // Auto-verify for demo
+        user.verificationData.status = 'approved';
+        user.verificationData.approvedAt = new Date();
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Verification documents submitted successfully. Your profile has been verified!',
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                userType: user.userType,
+                location: user.location,
+                isVerified: user.isVerified,
+                avatar: user.avatar,
+                language: user.language
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
  * @desc    Delete user account (Permanent Anonymization Logic)
  * @route   DELETE /api/users/me
  * @access  Private (Self-only)

@@ -129,7 +129,19 @@ export const useAuth = () => {
     });
 
     /**
-     * 6. DELETE ACCOUNT WORKFLOW (Mutation)
+     * 6. REFRESH USER DATA
+     * Manually refresh user data from server (useful after verification)
+     */
+    const refreshUser = async () => {
+        const updatedUser = await authAPI.refreshUser();
+        if (updatedUser) {
+            queryClient.setQueryData(QUERY_KEYS.AUTH.USER, updatedUser);
+        }
+        return updatedUser;
+    };
+
+    /**
+     * 7. DELETE ACCOUNT WORKFLOW (Mutation)
      * Permanently withdraws a user from the platform after multi-step confirmation.
      */
     const deleteAccountMutation = useMutation({
@@ -161,6 +173,8 @@ export const useAuth = () => {
         isLoginLoading: loginMutation.isPending,
 
         logout,
+
+        refreshUser, // New: Manual user data refresh
 
         register: registerMutation.mutate,
         isRegisterLoading: registerMutation.isPending,

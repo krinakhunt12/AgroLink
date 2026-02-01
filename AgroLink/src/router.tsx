@@ -23,6 +23,7 @@ import EditProduct from './pages/EditProduct';
 import Cart from './pages/Cart';
 import ProductDetail from './pages/ProductDetail';
 import AgricultureDashboard from './pages/AgricultureDashboard';
+import ProfileVerification from './pages/ProfileVerification';
 
 // Farmer Dashboard Pages
 import FarmerDashboardHome from './pages/FarmerDashboardHome';
@@ -43,6 +44,7 @@ import AdminPlaceholder from './pages/admin/AdminPlaceholder';
 import SystemHealth from './pages/admin/SystemHealth';
 import MLOpsDashboard from './pages/admin/MLOpsDashboard';
 import RulesEngine from './pages/admin/RulesEngine';
+import AdminVerifications from './pages/admin/AdminVerifications';
 
 /**
  * MainLayout provides the common UI wrapper (Navbar, Footer, AI Chat)
@@ -97,12 +99,25 @@ const AppRouter = () => {
                     <Route path="/privacy" element={<Legal type="privacy" />} />
                 </Route>
 
-                {/* Farmer Routes (Protected) */}
+                {/* ============= PROFILE VERIFICATION (Farmer Only, No Verification Required) ============= */}
+                {/* This route is accessible to unverified farmers */}
                 <Route element={<ProtectedRoute requiredRole="farmer" />}>
                     <Route element={<MainLayout />}>
+                        <Route path="/verify-profile" element={<ProfileVerification />} />
+                    </Route>
+                </Route>
+
+                {/* Farmer Routes (Protected + Verification Required for Product Creation) */}
+                <Route element={<ProtectedRoute requiredRole="farmer" />}>
+                    <Route element={<MainLayout />}>
+                        {/* Dashboard - No verification required */}
                         <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
-                        <Route path="/farmer/products/add" element={<AddProduct />} />
-                        <Route path="/farmer/products/edit/:id" element={<EditProduct />} />
+
+                        {/* Product creation - Verification required */}
+                        <Route element={<ProtectedRoute requireVerification={true} />}>
+                            <Route path="/farmer/products/add" element={<AddProduct />} />
+                            <Route path="/farmer/products/edit/:id" element={<EditProduct />} />
+                        </Route>
                     </Route>
                 </Route>
 
@@ -163,6 +178,7 @@ const AppRouter = () => {
                         <Route path="/admin/orders" element={<AdminPlaceholder title="Transactions & Orders" />} />
                         <Route path="/admin/ml-ops" element={<MLOpsDashboard />} />
                         <Route path="/admin/rules" element={<RulesEngine />} />
+                        <Route path="/admin/verifications" element={<AdminVerifications />} />
                         <Route path="/admin/health" element={<SystemHealth />} />
                         <Route path="/admin/settings" element={<AdminPlaceholder title="Settings" />} />
                     </Route>

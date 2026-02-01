@@ -1,0 +1,106 @@
+{
+    "verification": {
+        "title": "Complete Profile Verification",
+        "subtitle": "Verify your profile to start listing products",
+        "whyRequired": "Why verification is required?",
+        "whyRequiredText": "To maintain marketplace integrity and protect buyers, we verify all farmers before they can create listings. This process typically takes 24-48 hours.",
+        "successTitle": "Verification Submitted Successfully!",
+        "successMessage": "Your verification request has been submitted. We'll review it within 24-48 hours.",
+        "pendingTitle": "Verification Pending",
+        "pendingMessage": "Your verification is under review. You'll be notified once approved.",
+        "rejectedTitle": "Verification Rejected",
+        "rejectedMessage": "Your verification was rejected. Please contact support for details.",
+        "alreadyVerified": "Your profile is already verified",
+        "governmentId": {
+            "title": "Government ID Verification",
+            "idType": "ID Type",
+            "idNumber": "ID Number",
+            "idNumberPlaceholder": "Enter your ID number",
+            "uploadProof": "Upload ID Proof",
+            "uploadText": "Click to upload or drag and drop",
+            "fileFormat": "JPG, PNG or PDF (max 5MB)",
+            "chooseFile": "Choose File",
+            "types": {
+                "aadhaar": "Aadhaar Card",
+                "pan": "PAN Card",
+                "voter": "Voter ID",
+                "driving": "Driving License"
+            }
+        },
+        "landOwnership": {
+            "title": "Land Ownership Verification",
+            "uploadProof": "Upload Land Ownership Proof",
+            "uploadText": "Upload land records, 7/12 extract, or lease agreement",
+            "farmSize": "Farm Size (in acres)",
+            "farmSizePlaceholder": "e.g., 5",
+            "primaryCrops": "Primary Crops",
+            "primaryCropsPlaceholder": "e.g., Wheat, Rice, Cotton"
+        },
+        "address": {
+            "title": "Complete Address",
+            "placeholder": "Enter your complete address including village, taluka, district, and state"
+        },
+        "buttons": {
+            "submit": "Submit for Verification",
+            "submitting": "Submitting Verification...",
+            "submitted": "Verification Submitted",
+            "completeVerification": "Complete Verification"
+        },
+        "errors": {
+            "idNumberRequired": "Government ID number is required",
+            "idProofRequired": "Government ID proof document is required",
+            "landProofRequired": "Land ownership proof is required",
+            "addressRequired": "Address is required",
+            "fileTooLarge": "File size must be less than 5MB",
+            "invalidFileType": "Only JPG, PNG, or PDF files are allowed",
+            "submissionFailed": "Verification submission failed. Please try again."
+        },
+        "required": "Verification Required",
+        "requiredMessage": "To ensure marketplace integrity, only Verified Farmers can create new crop listings. Please complete your profile verification to unlock this feature."
+    },
+    "admin": {
+        "verification": {
+            "title": "Farmer Verification Requests",
+            "subtitle": "Review and approve farmer verification submissions",
+            "noRequests": "No verification requests found",
+            "viewDetails": "View Details",
+            "approve": "Approve",
+            "reject": "Reject",
+            "delete": "Delete",
+            "approved": "Approved",
+            "rejected": "Rejected",
+            "pending": "Pending",
+            "table": {
+                "farmerName": "Farmer Name",
+                "email": "Email",
+                "phone": "Phone",
+                "location": "Location",
+                "submittedDate": "Submitted Date",
+                "status": "Status",
+                "actions": "Actions"
+            },
+            "details": {
+                "title": "Verification Details",
+                "personalInfo": "Personal Information",
+                "verificationData": "Verification Data",
+                "documents": "Uploaded Documents",
+                "govtIdType": "Government ID Type",
+                "govtIdNumber": "ID Number",
+                "address": "Address",
+                "farmSize": "Farm Size",
+                "primaryCrops": "Primary Crops",
+                "submittedAt": "Submitted At",
+                "viewDocument": "View Document"
+            },
+            "actions": {
+                "approveConfirm": "Are you sure you want to approve this verification?",
+                "rejectConfirm": "Are you sure you want to reject this verification?",
+                "deleteConfirm": "Are you sure you want to delete this verification request?",
+                "approveSuccess": "Verification approved successfully",
+                "rejectSuccess": "Verification rejected successfully",
+                "deleteSuccess": "Verification request deleted successfully",
+                "actionFailed": "Action failed. Please try again."
+            }
+        }
+    }
+}

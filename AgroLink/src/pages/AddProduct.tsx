@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const AddProduct: React.FC = () => {
-    const { t } = useTranslation(['dashboard', 'common']);
+    const { t } = useTranslation(['dashboard', 'common', 'verification']);
     const navigate = useNavigate();
     const { user } = useAuth();
 
@@ -44,17 +44,18 @@ const AddProduct: React.FC = () => {
                             <ShieldAlert size={40} />
                         </div>
                         <div className="max-w-md mx-auto space-y-2">
-                            <h2 className="text-xl font-black uppercase text-status-warning tracking-tight">Verification Required</h2>
+                            <h2 className="text-xl font-black uppercase text-status-warning tracking-tight">
+                                {t('verification:verification.required')}
+                            </h2>
                             <p className="text-sm text-text-muted leading-relaxed">
-                                To ensure marketplace integrity, only <strong>Verified Farmers</strong> can create new crop listings.
-                                Please complete your profile verification in settings to unlock this feature.
+                                {t('verification:verification.requiredMessage')}
                             </p>
                         </div>
                         <button
-                            onClick={() => navigate('/farmer/profile')}
+                            onClick={() => navigate('/verify-profile')}
                             className="bg-status-warning text-white px-8 py-3 rounded-md font-black uppercase tracking-widest text-xs hover:bg-status-warning/90 transition-all shadow-lg shadow-status-warning/20"
                         >
-                            Complete Verification
+                            {t('verification:verification.buttons.completeVerification')}
                         </button>
                     </div>
                 ) : (

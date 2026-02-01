@@ -9,6 +9,7 @@ import enDashboard from "./locales/en/dashboard.json";
 import enProducts from "./locales/en/products.json";
 import enErrors from "./locales/en/errors.json";
 import enNews from "./locales/en/news.json";
+import enVerification from "./locales/en/verification.json";
 
 // Hindi Locales
 import hiCommon from "./locales/hi/common.json";
@@ -17,6 +18,7 @@ import hiDashboard from "./locales/hi/dashboard.json";
 import hiProducts from "./locales/hi/products.json";
 import hiErrors from "./locales/hi/errors.json";
 import hiNews from "./locales/hi/news.json";
+import hiVerification from "./locales/hi/verification.json";
 
 // Gujarati Locales
 import guCommon from "./locales/gu/common.json";
@@ -25,6 +27,7 @@ import guDashboard from "./locales/gu/dashboard.json";
 import guProducts from "./locales/gu/products.json";
 import guErrors from "./locales/gu/errors.json";
 import guNews from "./locales/gu/news.json";
+import guVerification from "./locales/gu/verification.json";
 
 i18n
   .use(LanguageDetector)
@@ -37,7 +40,8 @@ i18n
         dashboard: enDashboard,
         products: enProducts,
         errors: enErrors,
-        news: enNews
+        news: enNews,
+        verification: enVerification
       },
       hi: {
         common: hiCommon,
@@ -45,7 +49,8 @@ i18n
         dashboard: hiDashboard,
         products: hiProducts,
         errors: hiErrors,
-        news: hiNews
+        news: hiNews,
+        verification: hiVerification
       },
       gu: {
         common: guCommon,
@@ -53,12 +58,13 @@ i18n
         dashboard: guDashboard,
         products: guProducts,
         errors: guErrors,
-        news: guNews
+        news: guNews,
+        verification: guVerification
       }
     },
     fallbackLng: "en",
     defaultNS: "common",
-    ns: ["common", "auth", "dashboard", "products", "errors", "news"],
+    ns: ["common", "auth", "dashboard", "products", "errors", "news", "verification"],
     interpolation: {
       escapeValue: false
     },

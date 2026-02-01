@@ -352,6 +352,16 @@ export const logSecurityEvent = (eventType, details) => {
     // In production, send to centralized logging service
 };
 
+// Named exports for direct imports
+export {
+    ALLOWED_EXTENSIONS,
+    ALLOWED_MIME_TYPES,
+    MAX_FILE_SIZE,
+    MIN_FILE_SIZE,
+    DANGEROUS_EXTENSIONS,
+    MAGIC_NUMBERS
+};
+
 export default {
     validateExtension,
     validateMimeType,

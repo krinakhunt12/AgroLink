@@ -364,6 +364,9 @@ export const exportUserData = async (userId) => {
     return exportData;
 };
 
+// Named exports for direct imports
+export { DATA_ACCESS_PURPOSES, SENSITIVE_FIELDS };
+
 export default {
     privacyEnforcement,
     enforceDataMinimization,

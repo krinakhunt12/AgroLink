@@ -23,6 +23,11 @@ import agricultureSchemeRoutes from './src/routes/schemeRoutes.js';
 import marketPriceRoutes from './src/routes/marketPrice.routes.js';
 import agricultureDashboardRoutes from './src/routes/agricultureDashboardRoutes.js';
 import mlRoutes from './src/routes/ml.routes.js';
+import securityRoutes from './src/routes/security.routes.js';
+import privacyRoutes from './src/routes/privacy.routes.js';
+import auditRoutes from './src/routes/audit.routes.js';
+import uploadRoutes from './src/routes/upload.routes.js';
+import adminVerificationRoutes from './src/routes/adminVerification.routes.js';
 
 // Initialize Express app
 const app = express();
@@ -71,6 +76,11 @@ app.use("/api/agriculture-news", agricultureNewsRoutes);
 app.use("/api/agriculture-schemes", agricultureSchemeRoutes);
 app.use("/api/agriculture", agricultureDashboardRoutes);
 app.use("/api/intelligence", mlRoutes);
+app.use("/api/security", securityRoutes);
+app.use("/api/privacy", privacyRoutes);
+app.use("/api/audit", auditRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/admin/verifications", adminVerificationRoutes); // Admin verification management
 
 // 404 handler
 app.use((req, res) => {
